@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">BigFoot</string>
+    <string name="verification_complete">Verification Completed successfully</string>
+    <string name="verification_failed_try_again">Verification failed. Please try again later.</string>
+    <string name="quota_exceeded">Too many requests. Please try again later.</string>
+    <string name="code_sent">OTP code has been sent</string>
+    <string name="phone_auth_success">Successfully signed in</string>
+    <string name="invalid_code">The code is invalid</string>
+    <string name="code_will_be_sent">The OTP code is on the way.</string>
+    <string name="verify_phone">Verify Phone</string>
+    <string name="verify_button">Verify</string>
+    <string name="next">Next</string>
+    <string name="gif_momo_sign_up_message">Sign up</string>
+    <string name="phone_number_text">Enter Your Phone Number</string>
+    <string name="login_text">Log In</string>
+    <string name="code">OTP code</string>
+    <string name="enter_digits_code">Enter codes manually</string>
+    <string name="generic_error">Error occured</string>
+    <string name="try_">Retry</string>
+    <string name="profile_image_description">User profile image</string>
+    <string name="logout">Log Out</string>
+</resources>

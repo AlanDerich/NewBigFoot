@@ -25,7 +25,9 @@ class ContributionsViewModel(
     init {
     viewModelScope.launch {
         firebaseDataSource.getMemberDetails().collect { memberDetails ->
-            updateUI(memberDetails)
+            if (memberDetails.size!=members.value.size){
+                updateUI(memberDetails)
+            }
         }
     }
     }

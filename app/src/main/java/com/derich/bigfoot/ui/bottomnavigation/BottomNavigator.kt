@@ -32,6 +32,7 @@ import com.derich.bigfoot.ui.screens.loans.LoansComposable
 import com.derich.bigfoot.ui.screens.loans.LoansViewModel
 import com.derich.bigfoot.ui.screens.login.AuthViewModel
 import com.derich.bigfoot.ui.screens.login.LoginErrorUi
+import com.derich.bigfoot.ui.screens.transactions.AddTransactionScreen
 import com.derich.bigfoot.ui.screens.transactions.TransactionsComposable
 import com.derich.bigfoot.ui.screens.transactions.TransactionsViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -133,9 +134,9 @@ fun NavigationGraph(
                 AccountsComposable(authViewModel = authVm,
                     memberInfo = memberDetails)
             }
-//            composable(BottomNavItem.AddTransaction.screen_route) {
-//                AddTransactionScreen(transactionsViewModel = transactionsViewModel, navController = navController, contViewModel = contViewModel)
-//            }
+            composable(BottomNavItem.AddTransaction.screen_route) {
+                AddTransactionScreen(transactionsViewModel = transactionsViewModel, navController = navController, contViewModel = contViewModel)
+            }
             }
         }
     }

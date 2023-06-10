@@ -5,5 +5,6 @@ data class Transactions (
     var depositFor:String = "",
     var depositBy:String = "",
     var transactionAmount:Int = 0,
-    var transactionConfirmation:String = ""
+    var transactionConfirmation:String = "",
+    var savedBy: String = ""
 )

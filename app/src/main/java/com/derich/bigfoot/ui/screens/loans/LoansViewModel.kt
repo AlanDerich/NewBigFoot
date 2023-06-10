@@ -16,7 +16,9 @@ class LoansViewModel (
     init {
         viewModelScope.launch {
             firebaseDataSource.getAllLoans().collect { loansDetails ->
-                updateUI(loansDetails)
+                if (loansDetails.size!=loans.value.size){
+                    updateUI(loansDetails)
+                }
             }
         }
     }

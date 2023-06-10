@@ -8,5 +8,6 @@ data class MemberDetails (
     var fullNames: String= "",
     var totalAmount: String = "",
     var contributionsDate: String = "",
+    var memberRole: String = "member",
     var profPicUrl: String = ""
 )

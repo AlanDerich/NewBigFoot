@@ -7,6 +7,7 @@ import com.derich.bigfoot.model.Transactions
 import com.derich.bigfoot.model.firebase.FirebaseDataSource
 import com.derich.bigfoot.ui.bottomnavigation.BottomNavItem
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -16,12 +17,15 @@ import java.util.Locale
 class TransactionsViewModel (
     private val firebaseDataSource: FirebaseDataSource
 ) : ViewModel() {
+    var uploadValue= MutableStateFlow(0)
     var transactions = MutableStateFlow<List<Transactions>>(listOf())
 
     init {
         viewModelScope.launch {
-            firebaseDataSource.getAllTransactions().collect { transactions ->
-                updateUI(transactions)
+            firebaseDataSource.getAllTransactions().collect { transactionsDetails ->
+                if (transactionsDetails.size!=transactions.value.size) {
+                    updateUI(transactionsDetails)
+                }
             }
         }
     }
@@ -30,6 +34,26 @@ class TransactionsViewModel (
     }
     fun launchAddTransactionScreen(navController: NavController) {
         navController.navigate(BottomNavItem.AddTransaction.screen_route)
+    }
+    fun launchTransactionScreen(navController: NavController) {
+        navController.navigate(BottomNavItem.Transactions.screen_route)
+    }
+    fun addTransaction(transactionDetails: Transactions, previousAmount: Int, memberPhone: String) {
+        uploadValue.update { 5 }
+        var transactionStatus = firebaseDataSource.uploadToTransactions(transactionDetails)
+        var memberDetailsStatus = firebaseDataSource.updateContributionsDetails(memberPhone,
+            transactionDetails.depositFor,
+            calculateResultingDate(previousAmount + transactionDetails.transactionAmount),
+            newUserAmount = (previousAmount + (transactionDetails.transactionAmount)).toString())
+        if (transactionStatus.value==1 && memberDetailsStatus.value==1){
+            uploadValue.update{1}
+        }
+        else if (memberDetailsStatus.value==2 || memberDetailsStatus.value==2){
+            uploadValue.update{2}
+        }
+        else{
+            uploadValue.update { 3 }
+        }
     }
 //    fun launchTransactionScreen(navController: NavController) {
 //        navController.navigate(BottomNavItem.Transactions.screen_route)

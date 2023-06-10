@@ -1,6 +1,5 @@
 package com.derich.bigfoot.ui.screens.transactions
 
-import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -14,16 +13,26 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -32,6 +41,7 @@ import com.derich.bigfoot.model.MemberDetails
 import com.derich.bigfoot.model.Transactions
 import com.derich.bigfoot.ui.common.composables.CircularProgressBar
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import java.util.Locale
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
@@ -43,36 +53,45 @@ fun TransactionsComposable(modifier: Modifier = Modifier,
 ) {
 
     val context = LocalContext.current
-    val transactions = allTransactions.value
+    val textState = remember { mutableStateOf(TextFieldValue("")) }
+    var transactions = filterShopsList(textState, allTransactions.value)
 //    DropdownMenu(expanded = , onDismissRequest = { /*TODO*/ }) {
 //
 //    }
-    Box(modifier = modifier,
-        contentAlignment = Alignment.BottomEnd) {
+    Column {
+        SearchView(textState)
+        Box(
+            modifier = modifier,
+            contentAlignment = Alignment.BottomEnd
+        ) {
 //display all the transactions as a horizontal list
-        LazyColumn{
-            items(
-                items = transactions
-            ){ transaction ->
-                TransactionCard( transaction = transaction,
-                    modifier = modifier)
+            LazyColumn {
+                items(
+                    items = transactions
+                ) { transaction ->
+                    TransactionCard(
+                        transaction = transaction,
+                        modifier = modifier
+                    )
+                }
             }
-        }
-        //check if member is admin and launch addTransaction page
-        if (memberInfo!!.phoneNumber == "+254792705723"){
-            IconButton(
-                onClick = {
-                    Toast.makeText(context, "Add Button Clicked", Toast.LENGTH_SHORT).show()
-                    transactionsViewModel.launchAddTransactionScreen(navController)
-                },
-                enabled = true
-            )
-            {
-                Image(
-                    painterResource(id = R.drawable.baseline_add),
-                    contentDescription = "Add Icon",
-                    modifier = Modifier
-                        .size(64.dp))
+            //check if member is admin and launch addTransaction page
+            if (memberInfo!!.memberRole == "admin") {
+                IconButton(
+                    onClick = {
+//                    Toast.makeText(context, "Add Button Clicked", Toast.LENGTH_SHORT).show()
+                        transactionsViewModel.launchAddTransactionScreen(navController)
+                    },
+                    enabled = true
+                )
+                {
+                    Image(
+                        painterResource(id = R.drawable.baseline_add),
+                        contentDescription = "Add Icon",
+                        modifier = Modifier
+                            .size(64.dp)
+                    )
+                }
             }
         }
     }
@@ -113,4 +132,86 @@ fun TransactionCard(transaction: Transactions,
                 maxLines = 4,
                 overflow = TextOverflow.Ellipsis)
         }
+}
+
+@Composable
+fun SearchView(state: MutableState<TextFieldValue>) {
+    TextField(
+        value = state.value,
+        onValueChange = { value ->
+            state.value = value
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(4.dp),
+//        textStyle = TextStyle(color = Color.White, fontSize = 18.sp),
+        leadingIcon = {
+            Icon(
+                Icons.Default.Search,
+                contentDescription = "",
+                modifier = Modifier
+                    .padding(15.dp)
+                    .size(24.dp)
+            )
+        },
+        trailingIcon = {
+            if (state.value != TextFieldValue("")) {
+                IconButton(
+                    onClick = {
+                        state.value =
+                            TextFieldValue("") // Remove text from TextField when you press the 'X' icon
+                    }
+                ) {
+                    Icon(
+                        Icons.Default.Close,
+                        contentDescription = "",
+                        modifier = Modifier
+                            .padding(15.dp)
+                            .size(24.dp)
+                    )
+                }
+            }
+        },
+        singleLine = true,
+        shape = MaterialTheme.shapes.medium, // The TextFiled has rounded corners top left and right by default
+        colors = TextFieldDefaults.textFieldColors(
+            cursorColor = MaterialTheme.colors.primary,
+            leadingIconColor = MaterialTheme.colors.primary,
+            trailingIconColor = MaterialTheme.colors.primary,
+            backgroundColor = MaterialTheme.colors.secondary,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            disabledIndicatorColor = Color.Transparent
+        )
+    )
+}
+
+
+
+
+
+fun filterShopsList(state: MutableState<TextFieldValue>, shopsList: List<Transactions>): List<Transactions> {
+
+    var filteredItems: List<Transactions>
+    val searchedText = state.value.text
+    filteredItems = if (searchedText.isEmpty()) {
+        shopsList
+    } else {
+        val resultList = ArrayList<Transactions>()
+        for (item in shopsList) {
+            if (item.transactionDate.lowercase(Locale.getDefault())
+                    .contains(searchedText.lowercase(Locale.getDefault()))
+                ||item.depositFor.lowercase(Locale.getDefault())
+                    .contains(searchedText.lowercase(Locale.getDefault()))
+                ||item.transactionAmount.toString().lowercase(Locale.getDefault())
+                    .contains(searchedText.lowercase(Locale.getDefault()))
+                ||item.transactionConfirmation.lowercase(Locale.getDefault())
+                    .contains(searchedText.lowercase(Locale.getDefault()))
+            ) {
+                resultList.add(item)
+            }
+        }
+        resultList
+    }
+    return filteredItems
 }

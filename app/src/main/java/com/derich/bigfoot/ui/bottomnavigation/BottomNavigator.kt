@@ -62,10 +62,10 @@ fun BottomNavigator(
                 selectedContentColor = Color.Black,
                 unselectedContentColor = Color.Black.copy(0.4f),
                 alwaysShowLabel = true,
-                selected = currentRoute == item.screen_route,
+                selected = currentRoute == item.screenRoute,
                 enabled = allMemberInfo.value.isNotEmpty(),
                 onClick = {
-                    navController.navigate(item.screen_route) {
+                    navController.navigate(item.screenRoute) {
 
                         navController.graph.startDestinationRoute?.let { screenRoute ->
                             popUpTo(screenRoute) {
@@ -106,10 +106,10 @@ fun NavigationGraph(
             memberDetails = getMemberData(allMemberInfo.value)!!
             NavHost(
                 navController,
-                startDestination = BottomNavItem.Home.screen_route,
+                startDestination = BottomNavItem.Home.screenRoute,
                 modifier = modifier
             ) {
-                composable(BottomNavItem.Home.screen_route) {
+                composable(BottomNavItem.Home.screenRoute) {
                     HomeComposable(
                         viewModel = contViewModel,
                         specificMemberDetails = memberDetails,
@@ -117,7 +117,7 @@ fun NavigationGraph(
                     )
                 }
 
-                composable(BottomNavItem.Transactions.screen_route) {
+                composable(BottomNavItem.Transactions.screenRoute) {
                     TransactionsComposable(
                         transactionsViewModel = transactionsViewModel,
                         memberInfo = memberDetails,
@@ -125,17 +125,20 @@ fun NavigationGraph(
                         allTransactions = allTransactions
                     )
                 }
-            composable(BottomNavItem.Loans.screen_route) {
+            composable(BottomNavItem.Loans.screenRoute) {
                     LoansComposable(loansViewModel = loansVm,
                         memberInfo = memberDetails,
                         allLoans= allLoans)
             }
-            composable(BottomNavItem.Account.screen_route) {
+            composable(BottomNavItem.Account.screenRoute) {
                 AccountsComposable(authViewModel = authVm,
                     memberInfo = memberDetails)
             }
-            composable(BottomNavItem.AddTransaction.screen_route) {
-                AddTransactionScreen(transactionsViewModel = transactionsViewModel, navController = navController, contViewModel = contViewModel)
+            composable(BottomNavItem.AddTransaction.screenRoute) {
+                AddTransactionScreen(
+                    transactionsViewModel = transactionsViewModel,
+                    contViewModel = contViewModel,
+                    navController = navController)
             }
             }
         }

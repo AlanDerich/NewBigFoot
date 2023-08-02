@@ -2,7 +2,7 @@ package com.derich.bigfoot.ui.bottomnavigation
 
 import com.derich.bigfoot.R
 
-sealed class BottomNavItem(var title:String, var icon:Int, var screen_route:String){
+sealed class BottomNavItem(var title:String, var icon:Int, var screenRoute:String){
 
     object Home : BottomNavItem("Home", R.drawable.ic_home,"home")
     object Loans: BottomNavItem("Loans",R.drawable.ic_loans,"loans")

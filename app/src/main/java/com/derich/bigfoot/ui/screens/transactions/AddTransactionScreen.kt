@@ -1,6 +1,7 @@
 package com.derich.bigfoot.ui.screens.transactions
 
 import android.app.DatePickerDialog
+import android.content.Context
 import android.widget.DatePicker
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -38,6 +39,7 @@ import com.derich.bigfoot.ui.screens.home.ContributionsViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
 import java.util.Calendar
 import java.util.Date
 
@@ -45,11 +47,12 @@ import java.util.Date
 fun AddTransactionScreen(
     transactionsViewModel: TransactionsViewModel,
     modifier: Modifier = Modifier,
-    navController: NavController,
-    contViewModel: ContributionsViewModel) {
+    contViewModel: ContributionsViewModel,
+    navController: NavController
+) {
 //    var requestToOpen by remember { mutableStateOf(false) }
     Column(modifier = modifier.padding(8.dp)) {
-        var allMemberInfo = contViewModel.members.collectAsState()
+        val allMemberInfo = contViewModel.members.collectAsState()
         var selectedMember by remember { mutableStateOf(allMemberInfo.value[0]) }
         val isOpen = rememberSaveable { mutableStateOf(false) } // initial value
         val openCloseOfDropDownList: (Boolean) -> Unit = {
@@ -92,7 +95,8 @@ fun AddTransactionScreen(
 @OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 fun AddTransactionPage(selectedMember: MemberDetails,
-                       transactionsViewModel: TransactionsViewModel, navController: NavController) {
+                       transactionsViewModel: TransactionsViewModel,
+                       navController: NavController) {
     var dateOfTransaction by rememberSaveable { mutableStateOf("2020/01/01") }
     var reversedDateOfTransaction by rememberSaveable { mutableStateOf("01/01/2020") }
     var transactionPaidBy by rememberSaveable { mutableStateOf("") }
@@ -155,32 +159,40 @@ fun AddTransactionPage(selectedMember: MemberDetails,
         enabled = buttonEnabled,
         onClick = {
             if (dateOfTransaction != "2020/01/01"
-                    && transactionConfirmation  != ""
-                    && transactionAmountPaid != "0"
-                    && transactionPaidBy != "")
-                {
+                && transactionConfirmation  != ""
+                && transactionAmountPaid != "0"
+                && transactionPaidBy != "")
+            {
                 buttonEnabled = false
-                    transactionsViewModel.addTransaction(
+                runBlocking {
+                    val task = transactionsViewModel.addTransaction(
                         transactionDetails = Transactions(
-                        transactionDate = dateOfTransaction,
-                        depositFor = selectedMember.fullNames,
-                        depositBy = transactionPaidBy,
-                        transactionAmount = transactionAmountPaid.toInt(),
-                        transactionConfirmation = transactionConfirmation,
-                        savedBy = Firebase.auth.currentUser!!.phoneNumber.toString()
-                    ),
-                    previousAmount = selectedMember.totalAmount.toInt(),
-                    memberPhone = selectedMember.phoneNumber)
-                    if(transactionsViewModel.uploadValue.value==2) {
-                        Toast.makeText(mContext, "Error occurred when uploading", Toast.LENGTH_SHORT).show()
+                            transactionDate = dateOfTransaction,
+                            depositFor = selectedMember.fullNames,
+                            depositBy = transactionPaidBy,
+                            transactionAmount = transactionAmountPaid.toInt(),
+                            transactionConfirmation = transactionConfirmation,
+                            savedBy = Firebase.auth.currentUser!!.phoneNumber.toString()
+                        ),
+                        previousAmount = selectedMember.totalAmount.toInt(),
+                        memberPhone = selectedMember.phoneNumber)
+                    task.addOnSuccessListener {
+                //do this if the upload was successful
+                        updateContributions(
+                            selectedMember.phoneNumber,
+                            selectedMember.fullNames,
+                            transactionsViewModel.calculateResultingDate(selectedMember.totalAmount.toInt() + transactionAmountPaid.toInt()),
+                            newUserAmount = (selectedMember.totalAmount.toInt() + transactionAmountPaid.toInt()).toString(),
+                            transactionsViewModel,
+                            mContext,
+                            navController = navController)
                     }
-                    else if(transactionsViewModel.uploadValue.value==1){
-                        //check if both transactions and contributions were updated successfully
-                            Toast.makeText(mContext, "Both transactions and MemberContributions Uploaded successfully", Toast.LENGTH_SHORT).show()
-                            transactionsViewModel.launchTransactionScreen(navController)
-
+                    task.addOnFailureListener{
+                //do this if the upload failed due to some reason
+                        Toast.makeText(mContext, "An error occurred during upload ${it.message.toString()}!", Toast.LENGTH_SHORT).show()
                     }
                 }
+            }
                 else {
                     Toast.makeText(mContext, "Please confirm the details again", Toast.LENGTH_SHORT).show()
                 }
@@ -190,13 +202,32 @@ fun AddTransactionPage(selectedMember: MemberDetails,
         {
             Text(text = "Add Transaction")
         }
-    var isDisplayed: Boolean
-    isDisplayed = transactionsViewModel.uploadValue.collectAsState().value==5
+    val isDisplayed: Boolean = !transactionsViewModel.uploadStatus.collectAsState().value
     CircularProgressBar(
         isDisplayed
     )
 }
+fun updateContributions(memberPhoneNumber: String,
+                        memberFullNames: String,
+                        resultingDate: String,
+                        newUserAmount: String,
+                        transactionsViewModel: TransactionsViewModel,
+                        mContext: Context,
+                        navController: NavController) {
+    runBlocking {
+        val task = transactionsViewModel.updateContributions(memberPhoneNumber,memberFullNames,resultingDate, newUserAmount)
+        task.addOnSuccessListener {
+            //do this if the upload was successful
+            Toast.makeText(mContext, "The transaction was updated successfully!", Toast.LENGTH_SHORT).show()
+            transactionsViewModel.launchTransactionScreen(navController = navController)
 
+        }
+        task.addOnFailureListener{
+            //do this if the upload failed due to some reason
+            Toast.makeText(mContext, "An error occurred during upload ${it.message.toString()}!", Toast.LENGTH_SHORT).show()
+        }
+    }
+}
 @Composable
 fun DropDownList(
     requestToOpen: Boolean = false,

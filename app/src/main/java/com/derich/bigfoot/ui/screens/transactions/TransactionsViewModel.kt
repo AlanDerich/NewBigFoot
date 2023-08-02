@@ -6,8 +6,8 @@ import androidx.navigation.NavController
 import com.derich.bigfoot.model.Transactions
 import com.derich.bigfoot.model.firebase.FirebaseDataSource
 import com.derich.bigfoot.ui.bottomnavigation.BottomNavItem
+import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -18,6 +18,8 @@ class TransactionsViewModel (
     private val firebaseDataSource: FirebaseDataSource
 ) : ViewModel() {
     var uploadValue= MutableStateFlow(0)
+    var uploadStatus = MutableStateFlow(false)
+    var uploadError = MutableStateFlow("")
     var transactions = MutableStateFlow<List<Transactions>>(listOf())
 
     init {
@@ -33,27 +35,19 @@ class TransactionsViewModel (
         transactions.value = transactionsList
     }
     fun launchAddTransactionScreen(navController: NavController) {
-        navController.navigate(BottomNavItem.AddTransaction.screen_route)
+        navController.navigate(BottomNavItem.AddTransaction.screenRoute)
     }
     fun launchTransactionScreen(navController: NavController) {
-        navController.navigate(BottomNavItem.Transactions.screen_route)
+        navController.navigate(BottomNavItem.Transactions.screenRoute)
     }
-    fun addTransaction(transactionDetails: Transactions, previousAmount: Int, memberPhone: String) {
-        uploadValue.update { 5 }
-        var transactionStatus = firebaseDataSource.uploadToTransactions(transactionDetails)
-        var memberDetailsStatus = firebaseDataSource.updateContributionsDetails(memberPhone,
-            transactionDetails.depositFor,
-            calculateResultingDate(previousAmount + transactionDetails.transactionAmount),
-            newUserAmount = (previousAmount + (transactionDetails.transactionAmount)).toString())
-        if (transactionStatus.value==1 && memberDetailsStatus.value==1){
-            uploadValue.update{1}
-        }
-        else if (memberDetailsStatus.value==2 || memberDetailsStatus.value==2){
-            uploadValue.update{2}
-        }
-        else{
-            uploadValue.update { 3 }
-        }
+    fun addTransaction(transactionDetails: Transactions, previousAmount: Int, memberPhone: String): Task<Void> {
+            return firebaseDataSource.uploadTransactions(transactionDetails)
+    }
+    fun updateContributions(memberPhoneNumber: String,
+                                    memberFullNames: String,
+                                    resultingDate: String,
+                                    newUserAmount: String): Task<Void> {
+            return firebaseDataSource.updateContributions(memberPhoneNumber,memberFullNames,resultingDate, newUserAmount)
     }
 //    fun launchTransactionScreen(navController: NavController) {
 //        navController.navigate(BottomNavItem.Transactions.screen_route)
@@ -72,7 +66,7 @@ class TransactionsViewModel (
 //        }.isActive
 //        uploadStatus.value = waitingForResponse
 //    }
-    private fun calculateResultingDate(newUserAmount: Int): String {
+    fun calculateResultingDate(newUserAmount: Int): String {
         val totalDays: Int = (newUserAmount / 20)
         //add number of days to the start date
         var sdf = SimpleDateFormat("dd/MM/yyyy", Locale.US)

@@ -96,9 +96,38 @@ fun HomeComposable(modifier: Modifier = Modifier,
     }
 }
 
+//function to generate pdf
+//fun ConvertToPdf(activity: Activity, context: Context, allMemberInfo: List<MemberDetails>) {
+//
+//    /*
+//    * var userslist: ArrayList<User> = ArrayList()
+//    userslist.add(User(name = "Mostafa",age =  15 ,  country = "Egypt"))
+//    userslist.add(User(name = "Ahmed", age = 25 ,  country = "Egypt"))
+//    userslist.add(User(name = "Mohammed",age =  35 ,  country = "Egypt"))
+//    userslist.add(User(name = "Kareem", age = 40,  country = "Egypt"))
+//*
+//    * */
+//
+//    if (ContextCompat.checkSelfPermission(context,
+//            Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//        == PackageManager.PERMISSION_GRANTED) {
+//        PdfExtractor().Builder()
+//            .setDocsName("Gad")
+//            .setDocumentTitle("Gad Title")
+//            .setHeaders(allMemberInfo)
+//            .setDocumentContent(allMemberInfo)
+//            .build(context)
+//    } else {
+//        val permission = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//        requestPermissions(
+//            context as Activity, permission,
+//            212)
+//    }
+//
+//}
 fun calculateTotalContributions(allMemberInfo: State<List<MemberDetails>>): Int {
     var totalAmount =0
-        allMemberInfo.value.forEach {
+    allMemberInfo.value.forEach {
         totalAmount+=it.totalAmount.toInt()
     }
     return totalAmount

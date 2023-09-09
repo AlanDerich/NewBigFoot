@@ -103,6 +103,7 @@ fun AddTransactionPage(selectedMember: MemberDetails,
     var transactionAmountPaid by rememberSaveable { mutableStateOf("0") }
     var transactionConfirmation by rememberSaveable { mutableStateOf("") }
     var buttonEnabled by rememberSaveable { mutableStateOf(true) }
+    var isDisplayed = false
     // Fetching the Local Context
     val mContext = LocalContext.current
     OutlinedButton(onClick = {
@@ -164,6 +165,7 @@ fun AddTransactionPage(selectedMember: MemberDetails,
                 && transactionPaidBy != "")
             {
                 buttonEnabled = false
+                isDisplayed = true
                 runBlocking {
                     val task = transactionsViewModel.addTransaction(
                         transactionDetails = Transactions(
@@ -186,6 +188,7 @@ fun AddTransactionPage(selectedMember: MemberDetails,
                             transactionsViewModel,
                             mContext,
                             navController = navController)
+                        isDisplayed= false
                     }
                     task.addOnFailureListener{
                 //do this if the upload failed due to some reason
@@ -202,7 +205,6 @@ fun AddTransactionPage(selectedMember: MemberDetails,
         {
             Text(text = "Add Transaction")
         }
-    val isDisplayed: Boolean = !transactionsViewModel.uploadStatus.collectAsState().value
     CircularProgressBar(
         isDisplayed
     )

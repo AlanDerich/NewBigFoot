@@ -29,7 +29,6 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.derich.bigfoot.R
 import com.derich.bigfoot.model.MemberDetails
-import com.derich.bigfoot.ui.common.composables.CircularProgressBar
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 
@@ -45,47 +44,95 @@ fun HomeComposable(modifier: Modifier = Modifier,
     if(specificMemberDetails != null){
         val allMembersInfo = allMemberInfo.value
 //        val memberCont = contributions!!.contains("", )
-        Column(modifier = modifier.padding(8.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                val differenceInContributions = viewModel.calculateContributionsDifference(
-                    specificMemberDetails.totalAmount.toInt())
+        Column(modifier = modifier.fillMaxSize()) {
+            val differenceInContributions = viewModel.calculateContributionsDifference(
+                specificMemberDetails.totalAmount.toInt())
+            Row(horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically) {
                 if( differenceInContributions < 0){
                     Icon(painter = painterResource(id = R.drawable.baseline_check_circle_24),
                         contentDescription = "Status of Contribution",
-                        modifier = Modifier.size(68.dp))
-                    Spacer(modifier = Modifier.padding(2.dp))
-                    Text(text = "Hello ${specificMemberDetails.firstName}, you\'re on ${specificMemberDetails.contributionsDate}. Congrats! You are KSH ${-differenceInContributions} ahead on schedule")
+                        modifier = Modifier.size(68.dp)
+                            .weight(0.5f))
+                    Column(horizontalAlignment = Alignment.Start,
+                        verticalArrangement = Arrangement.Center,
+                        modifier = Modifier.weight(1f)) {
+//                        Spacer(modifier = Modifier.padding(2.dp))
+                        Text(text = "KSH ${specificMemberDetails.totalAmount.toInt()}",
+                            fontWeight = Bold)
+                        Text(text = specificMemberDetails.contributionsDate,
+                            fontWeight = Bold,
+                            modifier= Modifier.padding(2.dp))
 
                     }
+                }
                 else{
                     Icon(painter = painterResource(id = R.drawable.baseline_cancel_24),
                         contentDescription = "Status of Contribution",
-                        modifier = Modifier.size(68.dp))
-                    Text(text = "Hello ${specificMemberDetails.firstName}, you\'re on ${specificMemberDetails.contributionsDate}. You need KSH $differenceInContributions to be back on track.")
+                        modifier = Modifier.size(68.dp)
+                            .weight(0.5f))
+                    Column (modifier = Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
+//                        Spacer(modifier = Modifier.padding(2.dp))
+                        Text(text = "KSH ${specificMemberDetails.totalAmount.toInt()}",
+                            fontWeight = Bold)
+                        Text(text = specificMemberDetails.contributionsDate,
+                            fontWeight = Bold,
+                            modifier= Modifier.padding(2.dp))
+
+                    }
                 }
-                Spacer(modifier = Modifier.size(8.dp))
+                Column (modifier = Modifier
+                    .weight(1f).padding(end = 8.dp),
+                    horizontalAlignment = Alignment.End,
+                    verticalArrangement = Arrangement.Center) {
+//                        Spacer(modifier = Modifier.padding(2.dp))
+                    Text(text = "Group Total", fontWeight = Bold)
+                    Text(text = "KSH ${calculateTotalContributions(allMemberInfo)}",
+                        fontWeight = Bold,modifier= Modifier.padding(2.dp), fontSize = 16.sp)
+
+                }
             }
-            Text(text = "The group's total contributions so far amount to ${calculateTotalContributions(allMemberInfo)}",
-                fontWeight = Bold,modifier= Modifier.padding(8.dp), fontSize = 24.sp)
+            //row here
             LazyColumn(modifier = Modifier.padding(top= 8.dp)) {
                 items(
                     items = allMembersInfo
-                    ) { contribution ->
+                ) { contribution ->
                     ContributionCard(contribution = contribution,
                         modifier = modifier)
-                    }
                 }
             }
-        Column(
-            modifier = modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            CircularProgressBar(
-                isDisplayed = allMembersInfo.isEmpty()
-            )
-
         }
+//        Column(modifier = modifier.padding(8.dp)) {
+//            Row(verticalAlignment = Alignment.CenterVertically) {
+//                val differenceInContributions = viewModel.calculateContributionsDifference(
+//                    specificMemberDetails.totalAmount.toInt())
+//                if( differenceInContributions < 0){
+//                    Icon(painter = painterResource(id = R.drawable.baseline_check_circle_24),
+//                        contentDescription = "Status of Contribution",
+//                        modifier = Modifier.size(68.dp))
+//                    Column {
+//                        Spacer(modifier = Modifier.padding(2.dp))
+////                    Text(text = "Hello ${specificMemberDetails.firstName}, you\'re on ${specificMemberDetails.contributionsDate}. Congrats! You are KSH ${-differenceInContributions} ahead on schedule")
+//                        Text(text = "KSH ${-differenceInContributions}")
+//                        Text(text = specificMemberDetails.contributionsDate)
+//
+//                    }
+//
+//
+//                    }
+//                else{
+//                    Icon(painter = painterResource(id = R.drawable.baseline_cancel_24),
+//                        contentDescription = "Status of Contribution",
+//                        modifier = Modifier.size(68.dp))
+////                    Text(text = "Hello ${specificMemberDetails.firstName}, you\'re on ${specificMemberDetails.contributionsDate}. You need KSH $differenceInContributions to be back on track.")
+//                    Text(text = specificMemberDetails.contributionsDate)
+//                    Text(text = "${-differenceInContributions}")
+//                }
+//                Spacer(modifier = Modifier.size(8.dp))
+//            }
+////            Text(text = "The group's total contributions so far amount to ${calculateTotalContributions(allMemberInfo)}",
+////                fontWeight = Bold,modifier= Modifier.padding(8.dp), fontSize = 24.sp)
+//            }
         BackHandler {
             val activity = (context as? Activity)
             activity?.finish()

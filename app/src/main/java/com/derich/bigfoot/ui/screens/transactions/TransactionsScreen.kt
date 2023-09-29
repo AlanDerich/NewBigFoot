@@ -30,7 +30,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
@@ -52,9 +51,9 @@ fun TransactionsComposable(modifier: Modifier = Modifier,
                            allTransactions: State<List<Transactions>>
 ) {
 
-    val context = LocalContext.current
+//    val context = LocalContext.current
     val textState = remember { mutableStateOf(TextFieldValue("")) }
-    var transactions = filterShopsList(textState, allTransactions.value)
+    val transactions = filterShopsList(textState, allTransactions.value)
 //    DropdownMenu(expanded = , onDismissRequest = { /*TODO*/ }) {
 //
 //    }
@@ -192,7 +191,7 @@ fun SearchView(state: MutableState<TextFieldValue>) {
 
 fun filterShopsList(state: MutableState<TextFieldValue>, shopsList: List<Transactions>): List<Transactions> {
 
-    var filteredItems: List<Transactions>
+    val filteredItems: List<Transactions>
     val searchedText = state.value.text
     filteredItems = if (searchedText.isEmpty()) {
         shopsList

@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalCoroutinesApi::class)
-
 package com.derich.bigfoot.ui.bottomnavigation
 
 import androidx.compose.material.BottomNavigation
@@ -24,7 +22,6 @@ import com.derich.bigfoot.R
 import com.derich.bigfoot.model.Loan
 import com.derich.bigfoot.model.MemberDetails
 import com.derich.bigfoot.model.Transactions
-import com.derich.bigfoot.ui.common.composables.CircularProgressBar
 import com.derich.bigfoot.ui.screens.account.AccountsComposable
 import com.derich.bigfoot.ui.screens.home.ContributionsViewModel
 import com.derich.bigfoot.ui.screens.home.HomeComposable
@@ -36,7 +33,6 @@ import com.derich.bigfoot.ui.screens.transactions.AddTransactionScreen
 import com.derich.bigfoot.ui.screens.transactions.TransactionsComposable
 import com.derich.bigfoot.ui.screens.transactions.TransactionsViewModel
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @Composable
 fun BottomNavigator(
@@ -95,60 +91,53 @@ fun NavigationGraph(
 //    var allMemberInfo by remember { mutableStateOf(List<MemberDetails>) }
     val memberDetails: MemberDetails
     val context = LocalContext.current
-    if (allMemberInfo != null) {
-        if (allMemberInfo.value.isNotEmpty()) {
-            if (getMemberData(allMemberInfo.value) == null) {
-                LoginErrorUi(message = "User not found. Contact system administrator to get you setup") {
-                    authVm.logOut(context)
-                }
+    if (allMemberInfo.value.isNotEmpty()) {
+        if (getMemberData(allMemberInfo.value) == null) {
+            LoginErrorUi(message = "User not found. Contact system administrator to get you setup") {
+                authVm.logOut(context)
             }
-            else{
-            memberDetails = getMemberData(allMemberInfo.value)!!
-            NavHost(
-                navController,
-                startDestination = BottomNavItem.Home.screenRoute,
-                modifier = modifier
-            ) {
-                composable(BottomNavItem.Home.screenRoute) {
-                    HomeComposable(
-                        viewModel = contViewModel,
-                        specificMemberDetails = memberDetails,
-                        allMemberInfo = allMemberInfo
-                    )
-                }
+        }
+        else{
+        memberDetails = getMemberData(allMemberInfo.value)!!
+        NavHost(
+            navController,
+            startDestination = BottomNavItem.Home.screenRoute,
+            modifier = modifier
+        ) {
+            composable(BottomNavItem.Home.screenRoute) {
+                HomeComposable(
+                    viewModel = contViewModel,
+                    specificMemberDetails = memberDetails,
+                    allMemberInfo = allMemberInfo
+                )
+            }
 
-                composable(BottomNavItem.Transactions.screenRoute) {
-                    TransactionsComposable(
-                        transactionsViewModel = transactionsViewModel,
-                        memberInfo = memberDetails,
-                        navController = navController,
-                        allTransactions = allTransactions
-                    )
-                }
-            composable(BottomNavItem.Loans.screenRoute) {
-                    LoansComposable(loansViewModel = loansVm,
-                        memberInfo = memberDetails,
-                        allLoans= allLoans)
-            }
-            composable(BottomNavItem.Account.screenRoute) {
-                AccountsComposable(authViewModel = authVm,
-                    memberInfo = memberDetails)
-            }
-            composable(BottomNavItem.AddTransaction.screenRoute) {
-                AddTransactionScreen(
+            composable(BottomNavItem.Transactions.screenRoute) {
+                TransactionsComposable(
                     transactionsViewModel = transactionsViewModel,
-                    contViewModel = contViewModel,
-                    navController = navController)
+                    memberInfo = memberDetails,
+                    navController = navController,
+                    allTransactions = allTransactions
+                )
             }
-            }
+        composable(BottomNavItem.Loans.screenRoute) {
+                LoansComposable(loansViewModel = loansVm,
+                    memberInfo = memberDetails,
+                    allLoans= allLoans)
+        }
+        composable(BottomNavItem.Account.screenRoute) {
+            AccountsComposable(authViewModel = authVm,
+                memberInfo = memberDetails)
+        }
+        composable(BottomNavItem.AddTransaction.screenRoute) {
+            AddTransactionScreen(
+                transactionsViewModel = transactionsViewModel,
+                contViewModel = contViewModel,
+                navController = navController)
+        }
         }
     }
 }
-    else{
-        CircularProgressBar(
-            isDisplayed = allMemberInfo.value.isEmpty()
-        )
-    }
 
 }
 

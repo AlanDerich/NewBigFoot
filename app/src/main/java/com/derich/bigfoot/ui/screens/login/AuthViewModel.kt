@@ -1,11 +1,14 @@
 package com.derich.bigfoot.ui.screens.login
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.derich.bigfoot.LoginActivity
 import com.derich.bigfoot.model.Response
+import com.derich.bigfoot.ui.bottomnavigation.BottomNavItem
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,6 +34,15 @@ class AuthViewModel (private val accountService: AuthService,
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         context.startActivity(intent)
 
+    }
+    fun logOutAndExit(activity: Activity){
+        firebaseAuth.signOut()
+        resetAuthState()
+        activity.finish()
+
+    }
+    fun deleteAccount(context: Context, navController: NavController) {
+        navController.navigate(BottomNavItem.DeleteAccount.screenRoute)
     }
     fun resetAuthState() {
         signUpState.value = Response.NotInitialized

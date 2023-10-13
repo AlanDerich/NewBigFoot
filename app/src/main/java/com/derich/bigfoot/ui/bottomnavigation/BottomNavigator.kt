@@ -22,6 +22,7 @@ import com.derich.bigfoot.R
 import com.derich.bigfoot.model.Loan
 import com.derich.bigfoot.model.MemberDetails
 import com.derich.bigfoot.model.Transactions
+import com.derich.bigfoot.ui.screens.DataDeletionRequest
 import com.derich.bigfoot.ui.screens.account.AccountsComposable
 import com.derich.bigfoot.ui.screens.home.ContributionsViewModel
 import com.derich.bigfoot.ui.screens.home.HomeComposable
@@ -120,21 +121,28 @@ fun NavigationGraph(
                     allTransactions = allTransactions
                 )
             }
-        composable(BottomNavItem.Loans.screenRoute) {
+            composable(BottomNavItem.Loans.screenRoute) {
                 LoansComposable(loansViewModel = loansVm,
                     memberInfo = memberDetails,
                     allLoans= allLoans)
         }
-        composable(BottomNavItem.Account.screenRoute) {
-            AccountsComposable(authViewModel = authVm,
-                memberInfo = memberDetails)
+            composable(BottomNavItem.Account.screenRoute) {
+                AccountsComposable(
+                    navController= navController,
+                    authViewModel = authVm,
+                    memberInfo = memberDetails)
         }
-        composable(BottomNavItem.AddTransaction.screenRoute) {
-            AddTransactionScreen(
+            composable(BottomNavItem.AddTransaction.screenRoute) {
+                AddTransactionScreen(
                 transactionsViewModel = transactionsViewModel,
                 contViewModel = contViewModel,
                 navController = navController)
         }
+            composable(BottomNavItem.DeleteAccount.screenRoute) {
+                DataDeletionRequest(
+                    authViewModel = authVm
+                )
+            }
         }
     }
 }

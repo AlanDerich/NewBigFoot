@@ -9,4 +9,5 @@ sealed class BottomNavItem(var title:String, var icon:Int, var screenRoute:Strin
     object Transactions: BottomNavItem("Transactions",R.drawable.ic_transactions,"transactions")
     object Account: BottomNavItem("Account",R.drawable.ic_account,"account")
     object AddTransaction: BottomNavItem("AddTransaction",R.drawable.baseline_add,"addTransaction")
+    object DeleteAccount: BottomNavItem("DeleteAccount", R.drawable.ic_account, "deleteAccount")
 }

@@ -22,6 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.derich.bigfoot.model.MemberDetails
 import com.derich.bigfoot.ui.screens.login.AuthViewModel
@@ -30,6 +31,7 @@ import com.derich.bigfoot.ui.theme.BigFootTheme
 @Composable
 fun AccountsComposable(
     modifier: Modifier = Modifier,
+    navController: NavController,
     authViewModel: AuthViewModel,
     memberInfo: MemberDetails
 ) {
@@ -69,7 +71,19 @@ fun AccountsComposable(
             Text(text = "Log Out",
                 style = MaterialTheme.typography.button)
         }
+        Button(onClick = {
+            authViewModel.deleteAccount(context, navController)
+        },
+            modifier = Modifier.padding(8.dp)) {
+            Text(text = "Delete Account",
+                style = MaterialTheme.typography.button)
+        }
     }
+}
+
+@Composable
+fun deleteUser() {
+
 }
 
 @Preview

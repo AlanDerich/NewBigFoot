@@ -37,7 +37,6 @@ class LoginActivity: AppCompatActivity() {
 
     // [START auth_fui_result]
     private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
-        val response = result.idpResponse
         if (result.resultCode == RESULT_OK) {
             // Successfully signed in
             val intent = Intent(this, MainActivity::class.java)

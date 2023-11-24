@@ -30,11 +30,9 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.derich.bigfoot.R
 import com.derich.bigfoot.model.MemberDetails
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 
 //this is the default home screen
-@OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 fun HomeComposable(modifier: Modifier = Modifier,
                    viewModel: ContributionsViewModel,
@@ -148,11 +146,11 @@ fun HomeComposable(modifier: Modifier = Modifier,
 //fun ConvertToPdf(activity: Activity, context: Context, allMemberInfo: List<MemberDetails>) {
 //
 //    /*
-//    * var userslist: ArrayList<User> = ArrayList()
-//    userslist.add(User(name = "Mostafa",age =  15 ,  country = "Egypt"))
-//    userslist.add(User(name = "Ahmed", age = 25 ,  country = "Egypt"))
-//    userslist.add(User(name = "Mohammed",age =  35 ,  country = "Egypt"))
-//    userslist.add(User(name = "Kareem", age = 40,  country = "Egypt"))
+//    * var usersList: ArrayList<User> = ArrayList()
+//    usersList.add(User(name = "Mostafa",age =  15 ,  country = "Egypt"))
+//    usersList.add(User(name = "Ahmed", age = 25 ,  country = "Egypt"))
+//    usersList.add(User(name = "Mohammed",age =  35 ,  country = "Egypt"))
+//    usersList.add(User(name = "Kareem", age = 40,  country = "Egypt"))
 //*
 //    * */
 //

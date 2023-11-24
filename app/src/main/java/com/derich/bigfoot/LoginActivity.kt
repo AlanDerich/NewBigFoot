@@ -35,26 +35,6 @@ class LoginActivity: AppCompatActivity() {
         })
     }
 
-    private fun createSignInIntent() {
-        // [START auth_fui_create_intent]
-        // Choose authentication providers
-        val providers = arrayListOf(
-//            AuthUI.IdpConfig.EmailBuilder().build(),
-            AuthUI.IdpConfig.PhoneBuilder().build(),
-            AuthUI.IdpConfig.GoogleBuilder().build(),
-//            AuthUI.IdpConfig.FacebookBuilder().build(),
-//            AuthUI.IdpConfig.TwitterBuilder().build(),
-        )
-
-        // Create and launch sign-in intent
-        val signInIntent = AuthUI.getInstance()
-            .createSignInIntentBuilder()
-            .setAvailableProviders(providers)
-            .build()
-        signInLauncher.launch(signInIntent)
-        // [END auth_fui_create_intent]
-    }
-
     // [START auth_fui_result]
     private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
         val response = result.idpResponse
@@ -77,9 +57,7 @@ class LoginActivity: AppCompatActivity() {
     private fun themeAndLogo() {
 //        val providers = emptyList<AuthUI.IdpConfig>()
         val providers = arrayListOf(
-            AuthUI.IdpConfig.EmailBuilder().build(),
             AuthUI.IdpConfig.PhoneBuilder().build(),
-            AuthUI.IdpConfig.GoogleBuilder().build(),
 //            AuthUI.IdpConfig.FacebookBuilder().build(),
 //            AuthUI.IdpConfig.TwitterBuilder().build(),
         )

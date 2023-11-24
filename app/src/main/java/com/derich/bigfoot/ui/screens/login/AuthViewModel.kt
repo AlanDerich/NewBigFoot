@@ -7,26 +7,25 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.derich.bigfoot.LoginActivity
-import com.derich.bigfoot.model.Response
 import com.derich.bigfoot.ui.bottomnavigation.BottomNavItem
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class AuthViewModel (private val accountService: AuthService,
-            private val firebaseAuth: FirebaseAuth)
+class AuthViewModel (
+    private val firebaseAuth: FirebaseAuth)
     : ViewModel() {
 
-    val signUpState: MutableStateFlow<Response> = accountService.signUpState
+//    val signUpState: MutableStateFlow<Response> = accountService.signUpState
 
     private val _number: MutableStateFlow<String> = MutableStateFlow("")
     val number: StateFlow<String> get() = _number
     private val _code: MutableStateFlow<String> = MutableStateFlow("")
     val code: StateFlow<String> get() = _code
-    fun authenticatePhone(phone: String) {
-        accountService.authenticate(phone)
-    }
+//    fun authenticatePhone(phone: String) {
+//        accountService.authenticate(phone)
+//    }
     fun logOut(context: Context) {
         firebaseAuth.signOut()
         resetAuthState()
@@ -45,7 +44,7 @@ class AuthViewModel (private val accountService: AuthService,
         navController.navigate(BottomNavItem.DeleteAccount.screenRoute)
     }
     fun resetAuthState() {
-        signUpState.value = Response.NotInitialized
+//        signUpState.value = Response.NotInitialized
         _code.value = ""
     }
 
@@ -59,7 +58,7 @@ class AuthViewModel (private val accountService: AuthService,
 
     fun verifyOtp(code: String) {
         viewModelScope.launch {
-            accountService.onVerifyOtp(code)
+//            accountService.onVerifyOtp(code)
         }
     }
 //    fun uploadImageToDb() {}

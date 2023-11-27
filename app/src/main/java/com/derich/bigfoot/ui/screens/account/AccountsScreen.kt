@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.derich.bigfoot.model.MemberDetails
+import com.derich.bigfoot.ui.bottomnavigation.BottomNavItem
 import com.derich.bigfoot.ui.screens.login.AuthViewModel
 import com.derich.bigfoot.ui.theme.BigFootTheme
 
@@ -47,7 +48,7 @@ fun AccountsComposable(
                     .size(16.dp)
                     .clip(MaterialTheme.shapes.medium))
             },
-            onClick = {}) } }) {
+            onClick = {navController.navigate(BottomNavItem.ImageUploader.screenRoute)}) } }) {
             Image(painter = rememberAsyncImagePainter(memberInfo.profPicUrl),
                 contentDescription = "App Icon",
                 modifier = Modifier

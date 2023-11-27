@@ -23,6 +23,7 @@ import com.derich.bigfoot.model.Loan
 import com.derich.bigfoot.model.MemberDetails
 import com.derich.bigfoot.model.Transactions
 import com.derich.bigfoot.ui.screens.DataDeletionRequest
+import com.derich.bigfoot.ui.screens.ImageUploaderScreen
 import com.derich.bigfoot.ui.screens.account.AccountsComposable
 import com.derich.bigfoot.ui.screens.home.ContributionsViewModel
 import com.derich.bigfoot.ui.screens.home.HomeComposable
@@ -142,6 +143,9 @@ fun NavigationGraph(
                 DataDeletionRequest(
                     authViewModel = authVm
                 )
+            }
+            composable(BottomNavItem.ImageUploader.screenRoute) {
+                ImageUploaderScreen(memberDetails, transactionsViewModel)
             }
         }
     }

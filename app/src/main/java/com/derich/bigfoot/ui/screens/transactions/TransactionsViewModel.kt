@@ -49,6 +49,11 @@ class TransactionsViewModel (
                                     newUserAmount: String): Task<Void> {
             return firebaseDataSource.updateContributions(memberPhoneNumber,memberFullNames,resultingDate, newUserAmount)
     }
+    fun updateProfilePic(memberPhoneNumber: String,
+                         memberFullNames: String,
+                         newUserProfileUrl: String): Task<Void> {
+        return firebaseDataSource.updateProfPic(memberPhoneNumber,memberFullNames, newUserProfileUrl)
+    }
 //    fun launchTransactionScreen(navController: NavController) {
 //        navController.navigate(BottomNavItem.Transactions.screen_route)
 //    }

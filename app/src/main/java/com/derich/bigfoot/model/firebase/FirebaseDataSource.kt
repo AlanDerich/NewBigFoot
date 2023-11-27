@@ -106,7 +106,18 @@ class FirebaseDataSource(
 //            }
 //        return _status.asStateFlow()
 //    }
-fun updateContributions(
+fun updateProfPic(
+    memberPhoneNumber: String,
+    memberFullNames: String,
+    newUserProfileUrl: String) =
+    firestore.collection("Members")
+        .document(memberPhoneNumber)
+        .collection("allMembers")
+        .document(memberFullNames)
+        .update(
+            "profPicUrl", newUserProfileUrl
+        )
+    fun updateContributions(
     memberPhoneNumber: String,
     memberFullNames: String,
     resultingDate: String,

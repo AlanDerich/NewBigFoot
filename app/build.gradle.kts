@@ -71,6 +71,7 @@ dependencies {
     implementation("androidx.work:work-runtime-ktx:2.8.1")
     implementation("androidx.navigation:navigation-compose:2.7.5")
     implementation(platform("androidx.compose:compose-bom:2023.03.00"))
+    implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

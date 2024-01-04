@@ -9,4 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="grey_50">#FFF8F9FA</color>
     <color name="grey_900">#FF202124</color>
+    <color name="colorPrimary">#FF6200EE</color>
+    <color name="colorAccent">#FF6200EE</color>
+    <color name="colorPrimaryDark">#FF202124</color>
 </resources>

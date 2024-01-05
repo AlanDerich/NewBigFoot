@@ -37,7 +37,6 @@ class LoginActivity: AppCompatActivity() {
 
     // [START auth_fui_result]
     private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
-        val response = result.idpResponse
         if (result.resultCode == RESULT_OK) {
             // Successfully signed in
             val intent = Intent(this, MainActivity::class.java)
@@ -58,8 +57,6 @@ class LoginActivity: AppCompatActivity() {
 //        val providers = emptyList<AuthUI.IdpConfig>()
         val providers = arrayListOf(
             AuthUI.IdpConfig.PhoneBuilder().build(),
-//            AuthUI.IdpConfig.EmailBuilder().build(),
-//            AuthUI.IdpConfig.GoogleBuilder().build(),
 //            AuthUI.IdpConfig.FacebookBuilder().build(),
 //            AuthUI.IdpConfig.TwitterBuilder().build(),
         )

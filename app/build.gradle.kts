@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.derich.bigfoot"
-        minSdk = 21
+        minSdk = 24
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -63,18 +63,19 @@ dependencies {
     implementation("com.google.android.material:material:1.11.0")
     implementation("com.google.firebase:firebase-firestore-ktx")
     implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
     implementation("androidx.compose.material:material:1.5.4")
     implementation("io.coil-kt:coil-compose:2.5.0")
+    implementation("com.firebaseui:firebase-ui-auth:8.0.2")
     implementation("androidx.navigation:navigation-compose:2.7.6")
-    implementation ("com.firebaseui:firebase-ui-auth:8.0.2")
     implementation(platform("androidx.compose:compose-bom:2023.10.01"))
+    implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.10.01"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.10.01"))
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 }

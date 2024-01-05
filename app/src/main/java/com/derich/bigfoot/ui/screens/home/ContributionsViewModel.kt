@@ -48,10 +48,10 @@ class ContributionsViewModel(
     fun calculateContributionsDifference(totalAmount: Int) : Int {
         val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.US)
         val currentDate = sdf.format(Date())
-        val currDate = sdf.parse(currentDate)
+        val currDate = sdf.parse("29/02/2024")
         val startDate = sdf.parse("31/12/2019")
         val diff: Long = currDate!!.time - startDate!!.time
         val daysRemaining: Long = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)
-        return ((daysRemaining.toInt() * 20) - totalAmount)
+        return (totalAmount - (daysRemaining.toInt() * 20))
     }
 }

@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
             val firebaseDataSource = FirebaseDataSource(firestore)
             val auth = FirebaseAuth.getInstance()
 //            val authServImp = AuthImplementation(LoginActivity(), auth)
-            val authVM = AuthViewModel( auth)
+            val authVM = AuthViewModel(auth)
             //check if user is logged in or not
             if(FirebaseAuth.getInstance().currentUser != null) {
                 //viewmodel handling all actions on contributions

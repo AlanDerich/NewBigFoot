@@ -48,7 +48,7 @@ fun HomeComposable(modifier: Modifier = Modifier,
                 specificMemberDetails.totalAmount.toInt())
             Row(horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically) {
-                if( differenceInContributions < 0){
+                if( differenceInContributions > 0){
                     Icon(painter = painterResource(id = R.drawable.baseline_check_circle_24),
                         contentDescription = "Status of Contribution",
                         modifier = Modifier.size(68.dp)
@@ -58,7 +58,8 @@ fun HomeComposable(modifier: Modifier = Modifier,
                         modifier = Modifier.weight(1f)) {
 //                        Spacer(modifier = Modifier.padding(2.dp))
                         Text(text = "KSH $differenceInContributions",
-                            fontWeight = Bold)
+                            fontWeight = Bold,
+                            modifier= Modifier.padding(2.dp))
                         Text(text = specificMemberDetails.contributionsDate,
                             fontWeight = Bold,
                             modifier= Modifier.padding(2.dp))
@@ -72,8 +73,9 @@ fun HomeComposable(modifier: Modifier = Modifier,
                             .weight(0.5f))
                     Column (modifier = Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
 //                        Spacer(modifier = Modifier.padding(2.dp))
-                        Text(text = "KSH ${specificMemberDetails.totalAmount.toInt()}",
-                            fontWeight = Bold)
+                        Text(text = "KSH $differenceInContributions",
+                            fontWeight = Bold,
+                            modifier= Modifier.padding(2.dp))
                         Text(text = specificMemberDetails.contributionsDate,
                             fontWeight = Bold,
                             modifier= Modifier.padding(2.dp))

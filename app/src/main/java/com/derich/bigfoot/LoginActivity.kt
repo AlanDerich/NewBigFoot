@@ -12,7 +12,6 @@ import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 
 class LoginActivity: AppCompatActivity() {
 
-    // [START auth_fui_create_launcher]
     // See: https://developer.android.com/training/basics/intents/result
     private val signInLauncher = registerForActivityResult(
         FirebaseAuthUIActivityResultContract(),
@@ -35,7 +34,6 @@ class LoginActivity: AppCompatActivity() {
         })
     }
 
-    // [START auth_fui_result]
     private fun onSignInResult(result: FirebaseAuthUIAuthenticationResult) {
         if (result.resultCode == RESULT_OK) {
             // Successfully signed in
@@ -47,21 +45,15 @@ class LoginActivity: AppCompatActivity() {
             // Sign in failed. If response is null the user canceled the
             // sign-in flow using the back button. Otherwise check
             // response.getError().getErrorCode() and handle the error.
-            // ...
             Log.d("Firebase Login", result.resultCode.toString())
             onBackPressedDispatcher.onBackPressed()
         }
     }
 
     private fun themeAndLogo() {
-//        val providers = emptyList<AuthUI.IdpConfig>()
         val providers = arrayListOf(
-            AuthUI.IdpConfig.PhoneBuilder().build(),
-//            AuthUI.IdpConfig.FacebookBuilder().build(),
-//            AuthUI.IdpConfig.TwitterBuilder().build(),
+            AuthUI.IdpConfig.PhoneBuilder().build()
         )
-
-        // [START auth_fui_theme_logo]
         val signInIntent = AuthUI.getInstance()
             .createSignInIntentBuilder()
             .setAvailableProviders(providers)
@@ -74,6 +66,5 @@ class LoginActivity: AppCompatActivity() {
             .build()
 
         signInLauncher.launch(signInIntent)
-        // [END auth_fui_theme_logo]
     }
 }

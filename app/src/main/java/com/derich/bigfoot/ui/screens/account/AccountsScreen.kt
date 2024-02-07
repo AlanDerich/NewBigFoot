@@ -6,15 +6,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Badge
-import androidx.compose.material.BadgedBox
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,6 +30,7 @@ import com.derich.bigfoot.ui.bottomnavigation.BottomNavItem
 import com.derich.bigfoot.ui.screens.login.AuthViewModel
 import com.derich.bigfoot.ui.theme.BigFootTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountsComposable(
     modifier: Modifier = Modifier,
@@ -59,10 +61,10 @@ fun AccountsComposable(
         }
 
         Text(text = " ${ memberInfo.firstName +" "+ memberInfo.secondName +" "+ memberInfo.surname} ",
-            style = MaterialTheme.typography.h5,
+            style = MaterialTheme.typography.headlineSmall,
             modifier = Modifier.padding(8.dp))
         Text(text = memberInfo.phoneNumber,
-            style = MaterialTheme.typography.h2,
+            style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier.padding(8.dp))
         Button(onClick = {
             authViewModel.logOut(context = context)
@@ -70,14 +72,14 @@ fun AccountsComposable(
         },
                 modifier = Modifier.padding(8.dp)) {
             Text(text = "Log Out",
-                style = MaterialTheme.typography.button)
+                style = MaterialTheme.typography.bodyMedium)
         }
         Button(onClick = {
             authViewModel.deleteAccount(context, navController)
         },
             modifier = Modifier.padding(8.dp)) {
             Text(text = "Delete Account",
-                style = MaterialTheme.typography.button)
+                style = MaterialTheme.typography.bodyMedium)
         }
     }
 }

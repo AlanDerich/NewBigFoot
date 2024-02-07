@@ -4,9 +4,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,7 +28,7 @@ fun LoginErrorUi(
         Text(
             text = message,
             modifier = Modifier.padding(16.dp),
-            color = MaterialTheme.colors.error, fontSize = 16.sp
+            color = MaterialTheme.colorScheme.error, fontSize = 16.sp
         )
         Button(onClick = onLogout) {
             Text(text = stringResource(R.string.logout))

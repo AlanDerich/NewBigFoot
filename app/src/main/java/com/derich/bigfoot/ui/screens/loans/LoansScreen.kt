@@ -10,8 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
@@ -44,8 +44,8 @@ fun LoansComposable(modifier: Modifier = Modifier,
             }
         }
         Column(modifier = modifier) {
-            Text(text = "There are $totalOutstandingLoans unpaid loans.", modifier = Modifier.padding(8.dp), style = MaterialTheme.typography.h6)
-            Text(text = "The total amount of unpaid loan is KSH$totalOutstandingLoanAmount.", modifier = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp), style = MaterialTheme.typography.body1)
+            Text(text = "There are $totalOutstandingLoans unpaid loans.", modifier = Modifier.padding(8.dp), style = MaterialTheme.typography.headlineSmall)
+            Text(text = "The total amount of unpaid loan is KSH$totalOutstandingLoanAmount.", modifier = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp), style = MaterialTheme.typography.bodyLarge)
             LazyColumn{
                 items(
                     items = loans
@@ -78,7 +78,7 @@ fun LoansCard(loan: Loan,
             .padding(8.dp)
             .fillMaxWidth()) {
         Text(text = loan.username,
-            style = MaterialTheme.typography.h6,
+            style = MaterialTheme.typography.headlineSmall,
             modifier = Modifier.padding(start = 8.dp, end = 8.dp))
         Spacer(modifier = Modifier.padding(2.dp))
         Text(text = "Date Loaned: ${ loan.dateLoaned }",

@@ -19,6 +19,7 @@ import com.derich.bigfoot.ui.common.composables.BigFutAppBar
 import com.derich.bigfoot.ui.screens.home.ContributionsViewModel
 import com.derich.bigfoot.ui.screens.loans.LoansViewModel
 import com.derich.bigfoot.ui.screens.login.AuthViewModel
+import com.derich.bigfoot.ui.screens.login.PhoneAuthActivity
 import com.derich.bigfoot.ui.screens.transactions.TransactionsViewModel
 import com.derich.bigfoot.ui.theme.BigFootTheme
 import com.google.firebase.FirebaseApp
@@ -85,7 +86,7 @@ class MainActivity : ComponentActivity() {
 
             }
             else {
-                val intent = Intent(mainActivity, LoginActivity::class.java)
+                val intent = Intent(mainActivity, PhoneAuthActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
             }

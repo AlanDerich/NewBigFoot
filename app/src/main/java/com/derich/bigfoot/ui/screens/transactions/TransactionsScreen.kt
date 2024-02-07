@@ -13,15 +13,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
@@ -117,7 +118,7 @@ fun TransactionCard(transaction: Transactions,
                 .padding(8.dp)
                 .fillMaxWidth()) {
             Text(text = transaction.depositFor,
-                style = MaterialTheme.typography.h6,
+                style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier.padding(start = 8.dp, end = 8.dp))
             Spacer(modifier = Modifier.padding(2.dp))
             Text(text = "Date: ${ transaction.transactionDate }",
@@ -133,6 +134,7 @@ fun TransactionCard(transaction: Transactions,
         }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchView(state: MutableState<TextFieldValue>) {
     TextField(
@@ -173,11 +175,8 @@ fun SearchView(state: MutableState<TextFieldValue>) {
         },
         singleLine = true,
         shape = MaterialTheme.shapes.medium, // The TextFiled has rounded corners top left and right by default
-        colors = TextFieldDefaults.textFieldColors(
-            cursorColor = MaterialTheme.colors.primary,
-            leadingIconColor = MaterialTheme.colors.primary,
-            trailingIconColor = MaterialTheme.colors.primary,
-            backgroundColor = MaterialTheme.colors.secondary,
+        colors = TextFieldDefaults.colors(
+            cursorColor = MaterialTheme.colorScheme.primary,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
             disabledIndicatorColor = Color.Transparent

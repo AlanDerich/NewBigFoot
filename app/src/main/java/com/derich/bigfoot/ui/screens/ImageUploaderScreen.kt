@@ -84,7 +84,9 @@ fun reduceAndUploadImage(originalUri: Uri, context: Context): Uri {
     val resizedBitmap = Bitmap.createScaledBitmap(originalBitmap, newWidth, newHeight, true)
 
     // Create a temporary file using File.createTempFile
-    val reducedFile = File.createTempFile("reduced_image", ".jpg", context.cacheDir)
+    val reducedFile = File.createTempFile("reduced_image", ".jpg", context.cacheDir).apply {
+        setReadable(true, false) // Make the file world-readable
+    }
 
     // Save the resized Bitmap to the temporary file
     val outputStream = FileOutputStream(reducedFile)
@@ -92,7 +94,7 @@ fun reduceAndUploadImage(originalUri: Uri, context: Context): Uri {
     outputStream.close()
 
     // Return the URI of the reduced image file
-    return FileProvider.getUriForFile(context, context.packageName + ".provider", reducedFile)
+    return FileProvider.getUriForFile(context, FILE_PROVIDER_AUTHORITY, reducedFile)
 }
 
 fun calculateScaleFactor(originalWidth: Int, originalHeight: Int, maxWidth: Int, maxHeight: Int): Float {

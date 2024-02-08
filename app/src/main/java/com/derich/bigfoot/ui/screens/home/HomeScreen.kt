@@ -30,21 +30,29 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.derich.bigfoot.R
 import com.derich.bigfoot.model.MemberDetails
+import com.derich.bigfoot.ui.screens.transactions.TransactionsViewModel
 
 
 //this is the default home screen
 @Composable
 fun HomeComposable(modifier: Modifier = Modifier,
-                   viewModel: ContributionsViewModel,
+                   transactionsViewModel: TransactionsViewModel,
                    specificMemberDetails: MemberDetails?,
                    allMemberInfo: State<List<MemberDetails>>
 ) {
     val context = LocalContext.current
+
+    //call this function only if I am logged in to sync all changes
     if(specificMemberDetails != null){
+        if (specificMemberDetails.fullNames == "Alan Gitonga Wanjiru"){
+            syncAllChanges(transactionsViewModel,allMemberInfo, context)
+        }
+
+
         val allMembersInfo = allMemberInfo.value
 //        val memberCont = contributions!!.contains("", )
         Column(modifier = modifier.fillMaxSize()) {
-            val differenceInContributions = viewModel.calculateContributionsDifference(
+            val differenceInContributions = calculateContributionsDifference(
                 specificMemberDetails.totalAmount.toInt())
             Row(horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically) {

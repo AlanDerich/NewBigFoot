@@ -104,7 +104,7 @@ fun NavigationGraph(
         ) {
             composable(BottomNavItem.Home.screenRoute) {
                 HomeComposable(
-                    viewModel = contViewModel,
+                    transactionsViewModel = transactionsViewModel,
                     specificMemberDetails = memberDetails,
                     allMemberInfo = allMemberInfo
                 )

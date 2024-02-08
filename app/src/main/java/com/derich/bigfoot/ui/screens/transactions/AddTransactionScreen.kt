@@ -175,15 +175,13 @@ fun AddTransactionPage(selectedMember: MemberDetails,
                             transactionAmount = transactionAmountPaid.toInt(),
                             transactionConfirmation = transactionConfirmation,
                             savedBy = Firebase.auth.currentUser!!.phoneNumber.toString()
-                        ),
-                        previousAmount = selectedMember.totalAmount.toInt(),
-                        memberPhone = selectedMember.phoneNumber)
+                        ))
                     task.addOnSuccessListener {
                 //do this if the upload was successful
                         updateContributions(
                             selectedMember.phoneNumber,
                             selectedMember.fullNames,
-                            transactionsViewModel.calculateResultingDate(selectedMember.totalAmount.toInt() + transactionAmountPaid.toInt()),
+                            calculateResultingDate(selectedMember.totalAmount.toInt() + transactionAmountPaid.toInt()),
                             newUserAmount = (selectedMember.totalAmount.toInt() + transactionAmountPaid.toInt()).toString(),
                             transactionsViewModel,
                             mContext,

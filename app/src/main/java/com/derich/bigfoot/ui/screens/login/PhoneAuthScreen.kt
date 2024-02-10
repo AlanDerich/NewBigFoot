@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -72,14 +73,14 @@ fun PhoneAuthScreen(authVm: AuthViewModel) {
             enabled = !codeSent.value && !loading.value,
             value = phoneNumber.value,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            onValueChange = { if (it.length <= 10) phoneNumber.value = it },
+            onValueChange = { if (it.length <= 13) phoneNumber.value = it },
             placeholder = { Text(text = "Enter your phone number") },
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxWidth(),
             supportingText = {
                 Text(
-                    text = "${phoneNumber.value.length} / 10",
+                    text = "${phoneNumber.value.length} / 13",
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.End,
                 )
@@ -107,12 +108,15 @@ fun PhoneAuthScreen(authVm: AuthViewModel) {
                             context,
                             "Enter a valid phone number",
                             Toast.LENGTH_SHORT
-                        )
-                            .show()
+                        ).show()
                     } else {
                         loading.value = true
-                        val number = "+254${phoneNumber.value}"
-                        sendVerificationCode(number, mAuth, context as Activity, callbacks)//This is the main method to send the code after verification
+                        val number = if (phoneNumber.value.startsWith("+254")) {
+                            phoneNumber.value
+                        } else {
+                            "+254${phoneNumber.value}"
+                        }
+                        sendVerificationCode(number, mAuth, context as Activity, callbacks)
                     }
                 },
                 modifier = Modifier
@@ -204,7 +208,7 @@ fun PhoneAuthScreen(authVm: AuthViewModel) {
     }
 
     if (loading.value) {
-//        LinearProgressIndicator()
+        LinearProgressIndicator()
     }
 
 

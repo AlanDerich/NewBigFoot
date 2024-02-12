@@ -77,7 +77,7 @@ fun TransactionsComposable(modifier: Modifier = Modifier,
             }
             //check if member is admin and launch addTransaction page
             if (memberInfo!!.memberRole == "admin") {
-                IconButton(
+                IconButton(modifier = Modifier.size(24.dp),
                     onClick = {
 //                    Toast.makeText(context, "Add Button Clicked", Toast.LENGTH_SHORT).show()
                         transactionsViewModel.launchAddTransactionScreen(navController)

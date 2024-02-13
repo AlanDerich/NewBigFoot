@@ -1,7 +1,6 @@
 package com.derich.bigfoot.ui.screens.transactions
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,9 +13,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -31,12 +31,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.derich.bigfoot.R
 import com.derich.bigfoot.model.MemberDetails
 import com.derich.bigfoot.model.Transactions
 import com.derich.bigfoot.ui.common.composables.CircularProgressBar
@@ -54,7 +52,7 @@ fun TransactionsComposable(modifier: Modifier = Modifier,
 
 //    val context = LocalContext.current
     val textState = remember { mutableStateOf(TextFieldValue("")) }
-    val transactions = filterShopsList(textState, allTransactions.value)
+    val transactions = filterTransactionsList(textState, allTransactions.value)
 //    DropdownMenu(expanded = , onDismissRequest = { /*TODO*/ }) {
 //
 //    }
@@ -75,22 +73,15 @@ fun TransactionsComposable(modifier: Modifier = Modifier,
                     )
                 }
             }
-            //check if member is admin and launch addTransaction page
+            //check if member is admin and display button to launch addTransaction page
             if (memberInfo!!.memberRole == "admin") {
-                IconButton(modifier = Modifier.size(24.dp),
+                FloatingActionButton(
                     onClick = {
-//                    Toast.makeText(context, "Add Button Clicked", Toast.LENGTH_SHORT).show()
                         transactionsViewModel.launchAddTransactionScreen(navController)
-                    },
-                    enabled = true
+                    }
                 )
                 {
-                    Image(
-                        painterResource(id = R.drawable.baseline_add),
-                        contentDescription = "Add Icon",
-                        modifier = Modifier
-                            .size(64.dp)
-                    )
+                    Icon(imageVector = Icons.Default.AddCircle, contentDescription = "Add Transaction Button")
                 }
             }
         }
@@ -134,7 +125,6 @@ fun TransactionCard(transaction: Transactions,
         }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchView(state: MutableState<TextFieldValue>) {
     TextField(
@@ -188,7 +178,7 @@ fun SearchView(state: MutableState<TextFieldValue>) {
 
 
 
-fun filterShopsList(state: MutableState<TextFieldValue>, shopsList: List<Transactions>): List<Transactions> {
+fun filterTransactionsList(state: MutableState<TextFieldValue>, shopsList: List<Transactions>): List<Transactions> {
 
     val filteredItems: List<Transactions>
     val searchedText = state.value.text

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Button
@@ -14,8 +15,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,18 +24,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.derich.bigfoot.model.MemberDetails
 import com.derich.bigfoot.ui.bottomnavigation.BottomNavItem
+import com.derich.bigfoot.ui.bottomnavigation.memberDetails
 import com.derich.bigfoot.ui.screens.login.AuthViewModel
 import com.derich.bigfoot.ui.theme.BigFootTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountsComposable(
     modifier: Modifier = Modifier,
     navController: NavController,
-    authViewModel: AuthViewModel,
-    memberInfo: MemberDetails
+    authViewModel: AuthViewModel
 ) {
     val context = LocalContext.current
     Column(verticalArrangement = Arrangement.Center,
@@ -51,7 +48,7 @@ fun AccountsComposable(
                     .clip(MaterialTheme.shapes.medium))
             },
             onClick = {navController.navigate(BottomNavItem.ImageUploader.screenRoute)}) } }) {
-            Image(painter = rememberAsyncImagePainter(memberInfo.profPicUrl),
+            Image(painter = rememberAsyncImagePainter(memberDetails.profPicUrl),
                 contentDescription = "App Icon",
                 modifier = Modifier
                     .size(140.dp)
@@ -60,10 +57,10 @@ fun AccountsComposable(
 
         }
 
-        Text(text = " ${ memberInfo.firstName +" "+ memberInfo.secondName +" "+ memberInfo.surname} ",
+        Text(text = " ${ memberDetails.firstName +" "+ memberDetails.secondName +" "+ memberDetails.surname} ",
             style = MaterialTheme.typography.headlineSmall,
             modifier = Modifier.padding(8.dp))
-        Text(text = memberInfo.phoneNumber,
+        Text(text = memberDetails.phoneNumber,
             style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier.padding(8.dp))
         Button(onClick = {
@@ -85,7 +82,7 @@ fun AccountsComposable(
 }
 
 @Composable
-fun deleteUser() {
+fun DeleteUser() {
 
 }
 

@@ -6,7 +6,6 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,9 +18,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.derich.bigfoot.allMemberInformation
-import com.derich.bigfoot.model.Loan
 import com.derich.bigfoot.model.MemberDetails
-import com.derich.bigfoot.model.Transactions
 import com.derich.bigfoot.ui.screens.DataDeletionRequest
 import com.derich.bigfoot.ui.screens.ImageUploaderScreen
 import com.derich.bigfoot.ui.screens.account.AccountsComposable
@@ -36,6 +33,7 @@ import com.derich.bigfoot.ui.screens.transactions.TransactionsComposable
 import com.derich.bigfoot.ui.screens.transactions.TransactionsViewModel
 import com.google.firebase.auth.FirebaseAuth
 
+lateinit var memberDetails: MemberDetails
 @Composable
 fun BottomNavigator(
     navController: NavController) {
@@ -84,7 +82,6 @@ fun NavigationGraph(
     modifier: Modifier
 ) {
 //    var allMemberInfo by remember { mutableStateOf(List<MemberDetails>) }
-    val memberDetails: MemberDetails
     val context = LocalContext.current
     if (allMemberInformation.value.isNotEmpty()) {
         if (getMemberData(allMemberInformation.value) == null) {
@@ -101,27 +98,23 @@ fun NavigationGraph(
         ) {
             composable(BottomNavItem.Home.screenRoute) {
                 HomeComposable(
-                    transactionsViewModel = transactionsViewModel,
-                    specificMemberDetails = memberDetails
+                    transactionsViewModel = transactionsViewModel
                 )
             }
 
             composable(BottomNavItem.Transactions.screenRoute) {
                 TransactionsComposable(
                     transactionsViewModel = transactionsViewModel,
-                    memberInfo = memberDetails,
                     navController = navController
                 )
             }
             composable(BottomNavItem.Loans.screenRoute) {
-                LoansComposable(loansViewModel = loansVm,
-                    memberInfo = memberDetails)
+                LoansComposable(loansViewModel = loansVm)
         }
             composable(BottomNavItem.Account.screenRoute) {
                 AccountsComposable(
                     navController= navController,
-                    authViewModel = authVm,
-                    memberInfo = memberDetails)
+                    authViewModel = authVm)
         }
             composable(BottomNavItem.AddTransaction.screenRoute) {
                 AddTransactionScreen(
@@ -135,7 +128,7 @@ fun NavigationGraph(
                 )
             }
             composable(BottomNavItem.ImageUploader.screenRoute) {
-                ImageUploaderScreen(memberDetails, transactionsViewModel)
+                ImageUploaderScreen(transactionsViewModel)
             }
         }
     }

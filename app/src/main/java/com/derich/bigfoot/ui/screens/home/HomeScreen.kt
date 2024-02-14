@@ -31,20 +31,20 @@ import coil.compose.rememberAsyncImagePainter
 import com.derich.bigfoot.R
 import com.derich.bigfoot.allMemberInformation
 import com.derich.bigfoot.model.MemberDetails
+import com.derich.bigfoot.ui.bottomnavigation.memberDetails
 import com.derich.bigfoot.ui.screens.transactions.TransactionsViewModel
 
 
 //this is the default home screen
 @Composable
 fun HomeComposable(modifier: Modifier = Modifier,
-                   transactionsViewModel: TransactionsViewModel,
-                   specificMemberDetails: MemberDetails?
+                   transactionsViewModel: TransactionsViewModel
 ) {
     val context = LocalContext.current
 
     //call this function only if I am logged in to sync all changes
-    if(specificMemberDetails != null){
-        if (specificMemberDetails.fullNames == "Alan Gitonga Wanjiru"){
+    if(memberDetails != null){
+        if (memberDetails.fullNames == "Alan Gitonga Wanjiru"){
             syncAllChanges(transactionsViewModel, allMemberInformation, context)
         }
 
@@ -53,7 +53,7 @@ fun HomeComposable(modifier: Modifier = Modifier,
 //        val memberCont = contributions!!.contains("", )
         Column(modifier = modifier.fillMaxSize()) {
             val differenceInContributions = calculateContributionsDifference(
-                specificMemberDetails.totalAmount.toInt())
+                memberDetails.totalAmount.toInt())
             Row(horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically) {
                 if( differenceInContributions > 0){
@@ -68,7 +68,7 @@ fun HomeComposable(modifier: Modifier = Modifier,
                         Text(text = "KSH $differenceInContributions",
                             fontWeight = Bold,
                             modifier= Modifier.padding(2.dp))
-                        Text(text = specificMemberDetails.contributionsDate,
+                        Text(text = memberDetails.contributionsDate,
                             fontWeight = Bold,
                             modifier= Modifier.padding(2.dp))
 
@@ -84,7 +84,7 @@ fun HomeComposable(modifier: Modifier = Modifier,
                         Text(text = "KSH $differenceInContributions",
                             fontWeight = Bold,
                             modifier= Modifier.padding(2.dp))
-                        Text(text = specificMemberDetails.contributionsDate,
+                        Text(text = memberDetails.contributionsDate,
                             fontWeight = Bold,
                             modifier= Modifier.padding(2.dp))
 
@@ -111,37 +111,7 @@ fun HomeComposable(modifier: Modifier = Modifier,
                 }
             }
         }
-//        Column(modifier = modifier.padding(8.dp)) {
-//            Row(verticalAlignment = Alignment.CenterVertically) {
-//                val differenceInContributions = viewModel.calculateContributionsDifference(
-//                    specificMemberDetails.totalAmount.toInt())
-//                if( differenceInContributions < 0){
-//                    Icon(painter = painterResource(id = R.drawable.baseline_check_circle_24),
-//                        contentDescription = "Status of Contribution",
-//                        modifier = Modifier.size(68.dp))
-//                    Column {
-//                        Spacer(modifier = Modifier.padding(2.dp))
-////                    Text(text = "Hello ${specificMemberDetails.firstName}, you\'re on ${specificMemberDetails.contributionsDate}. Congrats! You are KSH ${-differenceInContributions} ahead on schedule")
-//                        Text(text = "KSH ${-differenceInContributions}")
-//                        Text(text = specificMemberDetails.contributionsDate)
-//
-//                    }
-//
-//
-//                    }
-//                else{
-//                    Icon(painter = painterResource(id = R.drawable.baseline_cancel_24),
-//                        contentDescription = "Status of Contribution",
-//                        modifier = Modifier.size(68.dp))
-////                    Text(text = "Hello ${specificMemberDetails.firstName}, you\'re on ${specificMemberDetails.contributionsDate}. You need KSH $differenceInContributions to be back on track.")
-//                    Text(text = specificMemberDetails.contributionsDate)
-//                    Text(text = "${-differenceInContributions}")
-//                }
-//                Spacer(modifier = Modifier.size(8.dp))
-//            }
-////            Text(text = "The group's total contributions so far amount to ${calculateTotalContributions(allMemberInfo)}",
-////                fontWeight = Bold,modifier= Modifier.padding(8.dp), fontSize = 24.sp)
-//            }
+
         BackHandler {
             val activity = (context as? Activity)
             activity?.finish()

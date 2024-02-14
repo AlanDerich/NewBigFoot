@@ -25,7 +25,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -36,8 +35,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.derich.bigfoot.allTransactions
-import com.derich.bigfoot.model.MemberDetails
 import com.derich.bigfoot.model.Transactions
+import com.derich.bigfoot.ui.bottomnavigation.memberDetails
 import com.derich.bigfoot.ui.common.composables.CircularProgressBar
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.util.Locale
@@ -46,7 +45,6 @@ import java.util.Locale
 @Composable
 fun TransactionsComposable(modifier: Modifier = Modifier,
                            transactionsViewModel: TransactionsViewModel,
-                           memberInfo: MemberDetails?,
                            navController: NavController
 ) {
 
@@ -74,7 +72,7 @@ fun TransactionsComposable(modifier: Modifier = Modifier,
                 }
             }
             //check if member is admin and display button to launch addTransaction page
-            if (memberInfo!!.memberRole == "admin") {
+            if (memberDetails.memberRole == "admin") {
                 FloatingActionButton(
                     onClick = {
                         transactionsViewModel.launchAddTransactionScreen(navController)

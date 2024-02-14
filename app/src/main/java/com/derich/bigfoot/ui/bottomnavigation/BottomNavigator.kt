@@ -18,6 +18,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.derich.bigfoot.allMemberInformation
 import com.derich.bigfoot.model.Loan
 import com.derich.bigfoot.model.MemberDetails
 import com.derich.bigfoot.model.Transactions
@@ -37,8 +38,7 @@ import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun BottomNavigator(
-    navController: NavController,
-    allMemberInfo: State<List<MemberDetails>>) {
+    navController: NavController) {
     val items = listOf(
         BottomNavItem.Home,
         BottomNavItem.Transactions,
@@ -57,7 +57,7 @@ fun BottomNavigator(
                     fontSize = 9.sp) },
                 alwaysShowLabel = true,
                 selected = currentRoute == item.screenRoute,
-                enabled = allMemberInfo.value.isNotEmpty(),
+                enabled = allMemberInformation.value.isNotEmpty(),
                 onClick = {
                     navController.navigate(item.screenRoute) {
 
@@ -81,22 +81,19 @@ fun NavigationGraph(
     transactionsViewModel: TransactionsViewModel,
     authVm: AuthViewModel,
     loansVm:LoansViewModel,
-    allMemberInfo: State<List<MemberDetails>>,
-    allTransactions: State<List<Transactions>>,
-    allLoans: State<List<Loan>>,
     modifier: Modifier
 ) {
 //    var allMemberInfo by remember { mutableStateOf(List<MemberDetails>) }
     val memberDetails: MemberDetails
     val context = LocalContext.current
-    if (allMemberInfo.value.isNotEmpty()) {
-        if (getMemberData(allMemberInfo.value) == null) {
+    if (allMemberInformation.value.isNotEmpty()) {
+        if (getMemberData(allMemberInformation.value) == null) {
             LoginErrorUi(message = "User not found. Contact system administrator to get you setup") {
                 authVm.logOut(context)
             }
         }
         else{
-        memberDetails = getMemberData(allMemberInfo.value)!!
+        memberDetails = getMemberData(allMemberInformation.value)!!
         NavHost(
             navController,
             startDestination = BottomNavItem.Home.screenRoute,
@@ -105,8 +102,7 @@ fun NavigationGraph(
             composable(BottomNavItem.Home.screenRoute) {
                 HomeComposable(
                     transactionsViewModel = transactionsViewModel,
-                    specificMemberDetails = memberDetails,
-                    allMemberInfo = allMemberInfo
+                    specificMemberDetails = memberDetails
                 )
             }
 
@@ -114,14 +110,12 @@ fun NavigationGraph(
                 TransactionsComposable(
                     transactionsViewModel = transactionsViewModel,
                     memberInfo = memberDetails,
-                    navController = navController,
-                    allTransactions = allTransactions
+                    navController = navController
                 )
             }
             composable(BottomNavItem.Loans.screenRoute) {
                 LoansComposable(loansViewModel = loansVm,
-                    memberInfo = memberDetails,
-                    allLoans= allLoans)
+                    memberInfo = memberDetails)
         }
             composable(BottomNavItem.Account.screenRoute) {
                 AccountsComposable(
@@ -149,7 +143,7 @@ fun NavigationGraph(
 
 }
 
-
+//function to get the current logged in member details
 fun getMemberData(memberInfo: List<MemberDetails>): MemberDetails? {
     var memberDets: MemberDetails?
     memberInfo.forEach {memberDetails ->

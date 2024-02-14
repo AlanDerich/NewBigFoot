@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.derich.bigfoot.R
+import com.derich.bigfoot.allMemberInformation
 import com.derich.bigfoot.model.MemberDetails
 import com.derich.bigfoot.ui.screens.transactions.TransactionsViewModel
 
@@ -37,19 +38,18 @@ import com.derich.bigfoot.ui.screens.transactions.TransactionsViewModel
 @Composable
 fun HomeComposable(modifier: Modifier = Modifier,
                    transactionsViewModel: TransactionsViewModel,
-                   specificMemberDetails: MemberDetails?,
-                   allMemberInfo: State<List<MemberDetails>>
+                   specificMemberDetails: MemberDetails?
 ) {
     val context = LocalContext.current
 
     //call this function only if I am logged in to sync all changes
     if(specificMemberDetails != null){
         if (specificMemberDetails.fullNames == "Alan Gitonga Wanjiru"){
-            syncAllChanges(transactionsViewModel,allMemberInfo, context)
+            syncAllChanges(transactionsViewModel, allMemberInformation, context)
         }
 
 
-        val allMembersInfo = allMemberInfo.value
+        val allMembersInfo = allMemberInformation.value
 //        val memberCont = contributions!!.contains("", )
         Column(modifier = modifier.fillMaxSize()) {
             val differenceInContributions = calculateContributionsDifference(
@@ -96,7 +96,7 @@ fun HomeComposable(modifier: Modifier = Modifier,
                     verticalArrangement = Arrangement.Center) {
 //                        Spacer(modifier = Modifier.padding(2.dp))
                     Text(text = "Group Total", fontWeight = Bold)
-                    Text(text = "KSH ${calculateTotalContributions(allMemberInfo)}",
+                    Text(text = "KSH ${calculateTotalContributions(allMemberInformation)}",
                         fontWeight = Bold,modifier= Modifier.padding(2.dp), fontSize = 16.sp)
 
                 }

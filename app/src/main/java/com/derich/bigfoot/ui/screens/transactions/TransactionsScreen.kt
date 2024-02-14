@@ -35,6 +35,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.derich.bigfoot.allTransactions
 import com.derich.bigfoot.model.MemberDetails
 import com.derich.bigfoot.model.Transactions
 import com.derich.bigfoot.ui.common.composables.CircularProgressBar
@@ -46,8 +47,7 @@ import java.util.Locale
 fun TransactionsComposable(modifier: Modifier = Modifier,
                            transactionsViewModel: TransactionsViewModel,
                            memberInfo: MemberDetails?,
-                           navController: NavController,
-                           allTransactions: State<List<Transactions>>
+                           navController: NavController
 ) {
 
 //    val context = LocalContext.current

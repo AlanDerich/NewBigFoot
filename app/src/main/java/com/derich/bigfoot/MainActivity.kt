@@ -20,9 +20,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.runtime.State
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
+import com.derich.bigfoot.model.Loan
+import com.derich.bigfoot.model.MemberDetails
+import com.derich.bigfoot.model.Transactions
 import com.derich.bigfoot.model.firebase.FirebaseDataSource
 import com.derich.bigfoot.ui.bottomnavigation.BottomNavigator
 import com.derich.bigfoot.ui.bottomnavigation.NavigationGraph
@@ -38,8 +42,11 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 
-class MainActivity : ComponentActivity() {
 
+lateinit var allMemberInformation: State<List<MemberDetails>>
+lateinit var allTransactions: State<List<Transactions>>
+lateinit var allLoans: State<List<Loan>>
+class MainActivity : ComponentActivity() {
     companion object {
         var mainActivity: MainActivity? = null
 
@@ -64,10 +71,11 @@ class MainActivity : ComponentActivity() {
                 val loansVM= LoansViewModel(firebaseDataSource)
 //                LaunchedEffect(Unit) { contributionsVM.members }
                 //login viewmodel handling all login activities
-                var allMemberInfo = contributionsVM.members.collectAsState()
-                var allTransactions= transactionsVM.transactions.collectAsState()
-                var allLoans = loansVM.loans.collectAsState()
-                var count = allLoans.value.size
+//                val allMemberInfo = contributionsVM.members.collectAsState()
+                allMemberInformation = contributionsVM.members.collectAsState()
+                allTransactions= transactionsVM.transactions.collectAsState()
+                allLoans = loansVM.loans.collectAsState()
+//                var count = allLoans.value.size
                 //navcontroller for the bottom navigation
                 val bottomNavController = rememberNavController()
                 BigFootTheme {
@@ -76,7 +84,7 @@ class MainActivity : ComponentActivity() {
                             BigFutAppBar()
                         },
                         bottomBar = {
-                            BottomNavigator(navController = bottomNavController, allMemberInfo=allMemberInfo)
+                            BottomNavigator(navController = bottomNavController)
                         },
                         //adding a FAB to add a deposit to your account
                         floatingActionButton = {
@@ -106,9 +114,6 @@ class MainActivity : ComponentActivity() {
                             transactionsViewModel = transactionsVM,
                             authVm= authVM,
                             loansVm = loansVM,
-                            allMemberInfo= allMemberInfo,
-                            allTransactions = allTransactions,
-                            allLoans= allLoans,
                             modifier = Modifier.padding(innerPadding)
                         )
 

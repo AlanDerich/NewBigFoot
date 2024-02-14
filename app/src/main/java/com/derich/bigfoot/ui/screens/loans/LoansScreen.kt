@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.derich.bigfoot.allLoans
 import com.derich.bigfoot.model.Loan
 import com.derich.bigfoot.model.MemberDetails
 import com.derich.bigfoot.ui.common.composables.CircularProgressBar
@@ -28,8 +29,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 @Composable
 fun LoansComposable(modifier: Modifier = Modifier,
                     loansViewModel: LoansViewModel,
-                    memberInfo: MemberDetails?,
-                    allLoans: State<List<Loan>>
+                    memberInfo: MemberDetails?
 ) {
     //this screen contains details on loans history
 //get data from firebase firestone

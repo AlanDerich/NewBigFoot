@@ -36,9 +36,11 @@ class TransactionsViewModel (
         transactions.value = transactionsList
     }
     fun launchAddTransactionScreen(navController: NavController) {
+        navController.popBackStack()
         navController.navigate(BottomNavItem.AddTransaction.screenRoute)
     }
     fun launchTransactionScreen(navController: NavController) {
+        navController.popBackStack()
         navController.navigate(BottomNavItem.Transactions.screenRoute)
     }
     fun addTransaction(transactionDetails: Transactions): Task<Void> {

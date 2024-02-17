@@ -221,6 +221,7 @@ fun updateContributions(memberPhoneNumber: String,
             Toast.makeText(mContext, "The transaction was updated successfully!", Toast.LENGTH_SHORT).show()
             transactionsViewModel.launchTransactionScreen(navController = navController)
 
+
         }
         task.addOnFailureListener{
             //do this if the upload failed due to some reason

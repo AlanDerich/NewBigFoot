@@ -16,11 +16,14 @@ import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.runtime.State
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
@@ -42,21 +45,23 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 
-
 lateinit var allMemberInformation: State<List<MemberDetails>>
 lateinit var allTransactions: State<List<Transactions>>
 lateinit var allLoans: State<List<Loan>>
+var deviceWidthSize: WindowWidthSizeClass = WindowWidthSizeClass.Compact
+
 class MainActivity : ComponentActivity() {
     companion object {
         var mainActivity: MainActivity? = null
 
     }
 
-    @OptIn(ExperimentalMaterial3Api::class)
+    @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         mainActivity = this
         super.onCreate(savedInstanceState)
         setContent {
+            deviceWidthSize = calculateWindowSizeClass(this).widthSizeClass
             FirebaseApp.initializeApp(/*context=*/this)
             val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
             val firebaseDataSource = FirebaseDataSource(firestore)

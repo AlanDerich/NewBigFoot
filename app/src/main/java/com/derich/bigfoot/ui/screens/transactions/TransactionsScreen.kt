@@ -5,12 +5,16 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
@@ -23,6 +27,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -35,6 +40,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.derich.bigfoot.allTransactions
+import com.derich.bigfoot.deviceWidthSize
 import com.derich.bigfoot.model.Transactions
 import com.derich.bigfoot.ui.bottomnavigation.memberDetails
 import com.derich.bigfoot.ui.common.composables.CircularProgressBar
@@ -51,35 +57,69 @@ fun TransactionsComposable(modifier: Modifier = Modifier,
 //    val context = LocalContext.current
     val textState = remember { mutableStateOf(TextFieldValue("")) }
     val transactions = filterTransactionsList(textState, allTransactions.value)
-//    DropdownMenu(expanded = , onDismissRequest = { /*TODO*/ }) {
-//
-//    }
-    Column {
-        SearchView(textState)
-        Box(
-            modifier = modifier,
-            contentAlignment = Alignment.BottomEnd
-        ) {
+    //check if the device is in compact mode
+    if (deviceWidthSize == WindowWidthSizeClass.Compact){
+        Column {
+            SearchView(textState, modifier = Modifier.fillMaxWidth())
+            Box(
+                modifier = modifier,
+                contentAlignment = Alignment.BottomEnd
+            ) {
 //display all the transactions as a horizontal list
-            LazyColumn {
-                items(
-                    items = transactions
-                ) { transaction ->
-                    TransactionCard(
-                        transaction = transaction,
-                        modifier = modifier
+                LazyColumn {
+                    items(
+                        items = transactions
+                    ) { transaction ->
+                        TransactionCard(
+                            transaction = transaction,
+                            modifier = modifier
+                        )
+                    }
+                }
+                //check if member is admin and display button to launch addTransaction page
+                if (memberDetails.memberRole == "admin") {
+                    FloatingActionButton(
+                        onClick = {
+                            transactionsViewModel.launchAddTransactionScreen(navController)
+                        }
                     )
+                    {
+                        Icon(imageVector = Icons.Default.AddCircle, contentDescription = "Add Transaction Button")
+                    }
                 }
             }
-            //check if member is admin and display button to launch addTransaction page
-            if (memberDetails.memberRole == "admin") {
-                FloatingActionButton(
-                    onClick = {
-                        transactionsViewModel.launchAddTransactionScreen(navController)
+        }
+    }
+    //display the landscape version
+    else{
+        Column {
+            Row{
+                SearchView(textState, modifier = Modifier.weight(0.25f))
+                Box(
+                    modifier = modifier.weight(0.75f),
+                    contentAlignment = Alignment.BottomEnd
+                ) {
+//display all the transactions as a horizontal list
+                    LazyVerticalGrid(columns = GridCells.Adaptive(200.dp)) {
+                        items(transactions
+                        ) { transaction ->
+                            TransactionCard(
+                                transaction = transaction,
+                                modifier = modifier
+                            )
+                        }
                     }
-                )
-                {
-                    Icon(imageVector = Icons.Default.AddCircle, contentDescription = "Add Transaction Button")
+                    //check if member is admin and display button to launch addTransaction page
+                    if (memberDetails.memberRole == "admin") {
+                        FloatingActionButton(
+                            onClick = {
+                                transactionsViewModel.launchAddTransactionScreen(navController)
+                            }
+                        )
+                        {
+                            Icon(imageVector = Icons.Default.AddCircle, contentDescription = "Add Transaction Button")
+                        }
+                    }
                 }
             }
         }
@@ -96,7 +136,7 @@ fun TransactionsComposable(modifier: Modifier = Modifier,
 
     }
 }
-
+//model of the transaction
 @Composable
 fun TransactionCard(transaction: Transactions,
                     modifier: Modifier
@@ -124,14 +164,13 @@ fun TransactionCard(transaction: Transactions,
 }
 
 @Composable
-fun SearchView(state: MutableState<TextFieldValue>) {
+fun SearchView(state: MutableState<TextFieldValue>, modifier: Modifier) {
     TextField(
         value = state.value,
         onValueChange = { value ->
             state.value = value
         },
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = modifier
             .padding(4.dp),
 //        textStyle = TextStyle(color = Color.White, fontSize = 18.sp),
         leadingIcon = {

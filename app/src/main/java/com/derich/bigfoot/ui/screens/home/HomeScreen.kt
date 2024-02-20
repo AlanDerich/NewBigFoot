@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -47,194 +48,29 @@ fun HomeComposable(modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
 
-    //call this function only if I am logged in to sync all changes
-    if(memberDetails != null){
-        if (memberDetails.fullNames == "Alan Gitonga Wanjiru"){
-            syncAllChanges(transactionsViewModel, allMemberInformation, context)
-        }
-
-
-        val allMembersInfo = allMemberInformation.value
-//        val memberCont = contributions!!.contains("", )
-        //check device window size is horizontal and act accordingly
-        if (deviceWidthSize == WindowWidthSizeClass.Compact){
-            Column(modifier = modifier.fillMaxSize()) {
-                val differenceInContributions = calculateContributionsDifference(
-                    memberDetails.totalAmount.toInt())
-                Row(horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically) {
-                    if( differenceInContributions > 0){
-                        Icon(painter = painterResource(id = R.drawable.baseline_check_circle_24),
-                            contentDescription = "Status of Contribution",
-                            modifier = Modifier.size(68.dp)
-                                .weight(0.5f))
-                        Column(horizontalAlignment = Alignment.Start,
-                            verticalArrangement = Arrangement.Center,
-                            modifier = Modifier.weight(1f)) {
-//                        Spacer(modifier = Modifier.padding(2.dp))
-                            Text(text = "KSH $differenceInContributions",
-                                fontWeight = Bold,
-                                modifier= Modifier.padding(2.dp))
-                            Text(text = memberDetails.contributionsDate,
-                                fontWeight = Bold,
-                                modifier= Modifier.padding(2.dp))
-
-                        }
-                    }
-                    else{
-                        Icon(painter = painterResource(id = R.drawable.baseline_cancel_24),
-                            contentDescription = "Status of Contribution",
-                            modifier = Modifier.size(68.dp)
-                                .weight(0.5f))
-                        Column (modifier = Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
-//                        Spacer(modifier = Modifier.padding(2.dp))
-                            Text(text = "KSH $differenceInContributions",
-                                fontWeight = Bold,
-                                modifier= Modifier.padding(2.dp))
-                            Text(text = memberDetails.contributionsDate,
-                                fontWeight = Bold,
-                                modifier= Modifier.padding(2.dp))
-
-                        }
-                    }
-                    Column (modifier = Modifier
-                        .weight(1f).padding(end = 8.dp),
-                        horizontalAlignment = Alignment.End,
-                        verticalArrangement = Arrangement.Center) {
-//                        Spacer(modifier = Modifier.padding(2.dp))
-                        Text(text = "Group Total", fontWeight = Bold)
-                        Text(text = "KSH ${calculateTotalContributions(allMemberInformation)}",
-                            fontWeight = Bold,modifier= Modifier.padding(2.dp), fontSize = 16.sp)
-
-                    }
-                }
-                //list here
-                LazyColumn(modifier = Modifier.padding(top= 8.dp).fillMaxWidth()) {
-                    items(
-                        items = allMembersInfo
-                    ) { contribution ->
-                        ContributionCard(contribution = contribution,
-                            modifier = modifier)
-                    }
-                }
-            }
-        }
-        //if the device orientation is landscape
-        else{
-            Column(modifier = modifier.fillMaxSize()) {
-                val differenceInContributions = calculateContributionsDifference(
-                    memberDetails.totalAmount.toInt())
-                Row(horizontalArrangement = Arrangement.Start,
-                    verticalAlignment = Alignment.CenterVertically) {
-                    if( differenceInContributions > 0){
-                        Icon(painter = painterResource(id = R.drawable.baseline_check_circle_24),
-                            contentDescription = "Status of Contribution",
-                            modifier = Modifier.size(68.dp)
-                                .weight(0.15f))
-                        Column(horizontalAlignment = Alignment.Start,
-                            verticalArrangement = Arrangement.Center,
-                            modifier = Modifier.weight(0.15f)) {
-//                        Spacer(modifier = Modifier.padding(2.dp))
-                            Text(text = "KSH $differenceInContributions",
-                                fontWeight = Bold,
-                                modifier= Modifier.padding(2.dp))
-                            Spacer(modifier = Modifier.padding(2.dp))
-                            Text(text = memberDetails.contributionsDate,
-                                fontWeight = Bold,
-                                modifier= Modifier.padding(2.dp))
-                            Spacer(modifier = Modifier.padding(2.dp))
-                            Text(text = "Group Total", fontWeight = Bold)
-                            Spacer(modifier = Modifier.padding(2.dp))
-                            Text(text = "KSH ${calculateTotalContributions(allMemberInformation)}",
-                                fontWeight = Bold,modifier= Modifier.padding(2.dp), fontSize = 16.sp)
-                        }
-                        LazyVerticalGrid(
-                            columns = GridCells.Fixed(2),
-                            modifier = Modifier
-                                .padding(top= 8.dp)
-                                .weight(0.7f)) {
-                            items(allMembersInfo) { contribution ->
-                                ContributionCard(contribution = contribution,
-                                    modifier = modifier)
-                            }
-                        }
-
-                    }
-                    else{
-                        Icon(painter = painterResource(id = R.drawable.baseline_cancel_24),
-                            contentDescription = "Status of Contribution",
-                            modifier = Modifier.size(68.dp)
-                                .weight(0.15f))
-                        Column (modifier = Modifier.weight(0.15f), horizontalAlignment = Alignment.CenterHorizontally) {
-//                        Spacer(modifier = Modifier.padding(2.dp))
-                            Text(text = "KSH $differenceInContributions",
-                                fontWeight = Bold,
-                                modifier= Modifier.padding(2.dp))
-                            Spacer(modifier = Modifier.padding(2.dp))
-                            Text(text = memberDetails.contributionsDate,
-                                fontWeight = Bold,
-                                modifier= Modifier.padding(2.dp))
-                            Spacer(modifier = Modifier.padding(2.dp))
-                            Text(text = "Group Total", fontWeight = Bold)
-                            Spacer(modifier = Modifier.padding(2.dp))
-                            Text(text = "KSH ${calculateTotalContributions(allMemberInformation)}",
-                                fontWeight = Bold,modifier= Modifier.padding(2.dp), fontSize = 16.sp)
-                        }
-                        LazyVerticalGrid(
-                            columns = GridCells.Fixed(2),
-                            modifier = Modifier
-                            .padding(top= 8.dp)
-                            .weight(0.7f)) {
-                            items(allMembersInfo) { contribution ->
-                                ContributionCard(contribution = contribution,
-                                    modifier = modifier)
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-
-        BackHandler {
-            val activity = (context as? Activity)
-            activity?.finish()
-        }
+    //call this function only if I(admin) am logged in to sync all changes
+    if (memberDetails.fullNames == "Alan Gitonga Wanjiru"){
+        syncAllChanges(transactionsViewModel, allMemberInformation, context)
     }
-    else {
-        Text(text = "Oops. No details we're not found in our database. Please Contact Admin to make things right.")
+    //get the current list of member details from the flow state
+    val allMembersInfo = allMemberInformation.value
+//        val memberCont = contributions!!.contains("", )
+    //check device window size is portrait and display the portrait version
+    if (deviceWidthSize == WindowWidthSizeClass.Compact){
+        CompactScreen(modifier = modifier, allMembersInfo = allMembersInfo)
+    }
+    //if the device orientation is landscape
+    else{
+        LandscapeScreen(modifier,allMembersInfo)
+    }
+
+
+    BackHandler {
+        val activity = (context as? Activity)
+        activity?.finish()
     }
 }
-
-//function to generate pdf
-//fun ConvertToPdf(activity: Activity, context: Context, allMemberInfo: List<MemberDetails>) {
-//
-//    /*
-//    * var usersList: ArrayList<User> = ArrayList()
-//    usersList.add(User(name = "Mostafa",age =  15 ,  country = "Egypt"))
-//    usersList.add(User(name = "Ahmed", age = 25 ,  country = "Egypt"))
-//    usersList.add(User(name = "Mohammed",age =  35 ,  country = "Egypt"))
-//    usersList.add(User(name = "Kareem", age = 40,  country = "Egypt"))
-//*
-//    * */
-//
-//    if (ContextCompat.checkSelfPermission(context,
-//            Manifest.permission.WRITE_EXTERNAL_STORAGE)
-//        == PackageManager.PERMISSION_GRANTED) {
-//        PdfExtractor().Builder()
-//            .setDocsName("Gad")
-//            .setDocumentTitle("Gad Title")
-//            .setHeaders(allMemberInfo)
-//            .setDocumentContent(allMemberInfo)
-//            .build(context)
-//    } else {
-//        val permission = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-//        requestPermissions(
-//            context as Activity, permission,
-//            212)
-//    }
-//
-//}
+//calculate the total member contributions to display on the home screen
 fun calculateTotalContributions(allMemberInfo: State<List<MemberDetails>>): Int {
     var totalAmount =0
     allMemberInfo.value.forEach {
@@ -242,7 +78,7 @@ fun calculateTotalContributions(allMemberInfo: State<List<MemberDetails>>): Int 
     }
     return totalAmount
 }
-
+//a model for member details
 @Composable
 fun ContributionCard(contribution: MemberDetails,
                      modifier: Modifier
@@ -273,3 +109,176 @@ fun UsersColumn(modifier: Modifier = Modifier, contribution: MemberDetails) {
             Text(text = contribution.contributionsDate)
         } 
 }
+@Composable
+fun CompactScreen(modifier: Modifier, allMembersInfo: List<MemberDetails>){
+    Column(modifier = modifier.fillMaxSize()) {
+        val differenceInContributions = calculateContributionsDifference(
+            memberDetails.totalAmount.toInt())
+        Row(horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically) {
+            if( differenceInContributions > 0){
+                Icon(painter = painterResource(id = R.drawable.baseline_check_circle_24),
+                    contentDescription = "Status of Contribution is current",
+                    modifier = Modifier
+                        .size(68.dp)
+                        .weight(0.5f))
+                Column(horizontalAlignment = Alignment.Start,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.weight(1f)) {
+//                        Spacer(modifier = Modifier.padding(2.dp))
+                    Text(text = "KSH $differenceInContributions",
+                        fontWeight = Bold,
+                        modifier= Modifier.padding(2.dp))
+                    Text(text = memberDetails.contributionsDate,
+                        fontWeight = Bold,
+                        modifier= Modifier.padding(2.dp))
+
+                }
+            }
+            else{
+                Icon(painter = painterResource(id = R.drawable.baseline_cancel_24),
+                    contentDescription = "Status of Contribution",
+                    modifier = Modifier
+                        .size(68.dp)
+                        .weight(0.5f))
+                Column (modifier = Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
+//                        Spacer(modifier = Modifier.padding(2.dp))
+                    Text(text = "KSH $differenceInContributions",
+                        fontWeight = Bold,
+                        modifier= Modifier.padding(2.dp))
+                    Text(text = memberDetails.contributionsDate,
+                        fontWeight = Bold,
+                        modifier= Modifier.padding(2.dp))
+
+                }
+            }
+            Column (modifier = Modifier
+                .weight(1f)
+                .padding(end = 8.dp),
+                horizontalAlignment = Alignment.End,
+                verticalArrangement = Arrangement.Center) {
+//                        Spacer(modifier = Modifier.padding(2.dp))
+                Text(text = "Group Total", fontWeight = Bold)
+                Text(text = "KSH ${calculateTotalContributions(allMemberInformation)}",
+                    fontWeight = Bold,modifier= Modifier.padding(2.dp), fontSize = 16.sp)
+
+            }
+        }
+        //list here
+        LazyColumn(modifier = Modifier
+            .padding(top = 8.dp)
+            .fillMaxWidth()) {
+            items(
+                items = allMembersInfo
+            ) { contribution ->
+                ContributionCard(contribution = contribution,
+                    modifier = modifier)
+            }
+        }
+    }
+}
+@Composable
+fun LandscapeScreen(modifier: Modifier, allMembersInfo: List<MemberDetails>) {
+    Column(modifier = modifier
+        .fillMaxSize()
+        .padding(8.dp)) {
+        val differenceInContributions = calculateContributionsDifference(
+            memberDetails.totalAmount.toInt())
+        Row(horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.Top) {
+            if( differenceInContributions > 0){
+                Column(horizontalAlignment = Alignment.Start,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.wrapContentWidth()) {
+//                        Spacer(modifier = Modifier.padding(2.dp))
+                    Icon(painter = painterResource(id = R.drawable.baseline_check_circle_24),
+                        contentDescription = "Status of Contribution",
+                        modifier = Modifier
+                            .size(68.dp))
+                    Spacer(modifier = Modifier.padding(8.dp))
+                    Text(text = "Your Total KSH $differenceInContributions",
+                        fontWeight = Bold)
+                    Spacer(modifier = Modifier.padding(2.dp))
+                    Text(text = "Due: ${memberDetails.contributionsDate}",
+                        fontWeight = Bold)
+                    Spacer(modifier = Modifier.padding(2.dp))
+                    Text(text = "Group Total: KSH ${calculateTotalContributions(allMemberInformation)}",
+                        fontWeight = Bold,fontSize = 16.sp)
+                }
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    modifier = Modifier
+                        .padding(top = 8.dp)
+                        ) {
+                    items(allMembersInfo) { contribution ->
+                        ContributionCard(contribution = contribution,
+                            modifier = modifier)
+                    }
+                }
+
+            }
+            else{
+                Column(horizontalAlignment = Alignment.Start,
+                    verticalArrangement = Arrangement.Center,
+                    modifier = Modifier.wrapContentWidth()) {
+                    Icon(painter = painterResource(id = R.drawable.baseline_cancel_24),
+                        contentDescription = "Status of Contribution not unto date",
+                        modifier = Modifier
+                            .size(68.dp)
+                           )
+                    Spacer(modifier = Modifier.padding(8.dp))
+                    Text(text = "Your Total KSH $differenceInContributions",
+                        fontWeight = Bold)
+                    Spacer(modifier = Modifier.padding(2.dp))
+                    Text(text = "Due: ${memberDetails.contributionsDate}",
+                        fontWeight = Bold)
+                    Spacer(modifier = Modifier.padding(2.dp))
+                    Text(text = "Group Total: KSH ${calculateTotalContributions(allMemberInformation)}",
+                        fontWeight = Bold,fontSize = 16.sp)
+                }
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    modifier = Modifier
+                        .padding(top = 8.dp)
+                        ) {
+                    items(allMembersInfo) { contribution ->
+                        ContributionCard(contribution = contribution,
+                            modifier = modifier)
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+//function to generate pdf
+//fun ConvertToPdf(activity: Activity, context: Context, allMemberInfo: List<MemberDetails>) {
+//
+//    /*
+//    * var usersList: ArrayList<User> = ArrayList()
+//    usersList.add(User(name = "Mostafa",age =  15 ,  country = "Egypt"))
+//    usersList.add(User(name = "Ahmed", age = 25 ,  country = "Egypt"))
+//    usersList.add(User(name = "Mohammed",age =  35 ,  country = "Egypt"))
+//    usersList.add(User(name = "Kareem", age = 40,  country = "Egypt"))
+//*
+//    * */
+//
+//    if (ContextCompat.checkSelfPermission(context,
+//            Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//        == PackageManager.PERMISSION_GRANTED) {
+//        PdfExtractor().Builder()
+//            .setDocsName("Gad")
+//            .setDocumentTitle("Gad Title")
+//            .setHeaders(allMemberInfo)
+//            .setDocumentContent(allMemberInfo)
+//            .build(context)
+//    } else {
+//        val permission = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//        requestPermissions(
+//            context as Activity, permission,
+//            212)
+//    }
+//
+//}

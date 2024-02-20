@@ -12,7 +12,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -51,7 +53,9 @@ fun AddTransactionScreen(
     navController: NavController
 ) {
 //    var requestToOpen by remember { mutableStateOf(false) }
-    Column(modifier = modifier.padding(8.dp)) {
+    Column(modifier = modifier
+        .padding(8.dp)
+        .verticalScroll(rememberScrollState())) {
         val allMemberInfo = contViewModel.members.collectAsState()
         var selectedMember by remember { mutableStateOf(allMemberInfo.value[0]) }
         val isOpen = rememberSaveable { mutableStateOf(false) } // initial value

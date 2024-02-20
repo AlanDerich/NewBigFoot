@@ -4,17 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FabPosition
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -22,10 +12,8 @@ import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.derich.bigfoot.model.Loan
 import com.derich.bigfoot.model.MemberDetails
@@ -56,7 +44,7 @@ class MainActivity : ComponentActivity() {
 
     }
 
-    @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3WindowSizeClassApi::class)
+    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         mainActivity = this
         super.onCreate(savedInstanceState)
@@ -91,26 +79,6 @@ class MainActivity : ComponentActivity() {
                         bottomBar = {
                             BottomNavigator(navController = bottomNavController)
                         },
-                        //adding a FAB to add a deposit to your account
-                        floatingActionButton = {
-                            Box(){
-                                FloatingActionButton(
-                                    onClick = { /* stub */ },
-                                    shape = CircleShape,
-                                    modifier = Modifier
-                                        .align(Alignment.Center)
-                                        .size(50.dp)
-                                        .offset(y = 50.dp)
-                                ) {
-                                    Icon(
-                                        imageVector = Icons.Default.AddCircle,
-                                        contentDescription = null,
-                                        modifier = Modifier.size(35.dp)
-                                    )
-                                }
-                            }
-                        },
-                        floatingActionButtonPosition = FabPosition.Center,
                     ) {
                             innerPadding ->
                         NavigationGraph(

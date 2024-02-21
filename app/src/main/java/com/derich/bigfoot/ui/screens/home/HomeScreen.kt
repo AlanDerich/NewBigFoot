@@ -253,32 +253,3 @@ fun LandscapeScreen(modifier: Modifier, allMembersInfo: List<MemberDetails>) {
 
 
 
-//function to generate pdf
-//fun ConvertToPdf(activity: Activity, context: Context, allMemberInfo: List<MemberDetails>) {
-//
-//    /*
-//    * var usersList: ArrayList<User> = ArrayList()
-//    usersList.add(User(name = "Mostafa",age =  15 ,  country = "Egypt"))
-//    usersList.add(User(name = "Ahmed", age = 25 ,  country = "Egypt"))
-//    usersList.add(User(name = "Mohammed",age =  35 ,  country = "Egypt"))
-//    usersList.add(User(name = "Kareem", age = 40,  country = "Egypt"))
-//*
-//    * */
-//
-//    if (ContextCompat.checkSelfPermission(context,
-//            Manifest.permission.WRITE_EXTERNAL_STORAGE)
-//        == PackageManager.PERMISSION_GRANTED) {
-//        PdfExtractor().Builder()
-//            .setDocsName("Gad")
-//            .setDocumentTitle("Gad Title")
-//            .setHeaders(allMemberInfo)
-//            .setDocumentContent(allMemberInfo)
-//            .build(context)
-//    } else {
-//        val permission = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-//        requestPermissions(
-//            context as Activity, permission,
-//            212)
-//    }
-//
-//}

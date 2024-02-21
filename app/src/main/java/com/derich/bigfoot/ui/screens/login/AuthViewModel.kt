@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.derich.bigfoot.MainActivity
 import com.derich.bigfoot.ui.bottomnavigation.BottomNavItem
+import com.derich.bigfoot.ui.screens.account.ExportDataActivity
 import com.google.firebase.auth.FirebaseAuth
 
 class AuthViewModel (
@@ -18,6 +19,13 @@ class AuthViewModel (
         Toast.makeText(context, "Successfully logged out.", Toast.LENGTH_SHORT).show()
         val intent = Intent(context, PhoneAuthActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        context.startActivity(intent)
+
+    }
+    //navigate to export data to excel screen
+    fun navigateToExportDataActivity(context: Context) {
+        val intent = Intent(context, ExportDataActivity::class.java)
+//        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         context.startActivity(intent)
 
     }

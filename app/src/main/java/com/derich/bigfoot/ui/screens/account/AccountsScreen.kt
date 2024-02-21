@@ -20,14 +20,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.derich.bigfoot.ui.bottomnavigation.BottomNavItem
 import com.derich.bigfoot.ui.bottomnavigation.memberDetails
 import com.derich.bigfoot.ui.screens.login.AuthViewModel
-import com.derich.bigfoot.ui.theme.BigFootTheme
 
 @Composable
 fun AccountsComposable(
@@ -63,6 +61,16 @@ fun AccountsComposable(
         Text(text = memberDetails.phoneNumber,
             style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier.padding(8.dp))
+        //export data button
+        Button(onClick = {
+            authViewModel.navigateToExportDataActivity(context = context)
+
+        },
+            modifier = Modifier.padding(8.dp)) {
+            Text(text = "Export Data",
+                style = MaterialTheme.typography.bodyMedium)
+        }
+        //logout button
         Button(onClick = {
             authViewModel.logOut(context = context)
 
@@ -84,12 +92,4 @@ fun AccountsComposable(
 @Composable
 fun DeleteUser() {
 
-}
-
-@Preview
-@Composable
-fun DefaultPreview(modifier: Modifier = Modifier) {
-    BigFootTheme {
-//        AccountsComposable(userProfile = userProfile.user)
-    }
 }

@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId = "com.derich.bigfoot"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 4
         versionName = "1.3"
@@ -70,6 +70,9 @@ dependencies {
     implementation(platform("androidx.compose:compose-bom:2024.02.00"))
     implementation("com.google.firebase:firebase-storage")
     implementation("androidx.compose.material3:material3-window-size-class-android:1.2.0")
+    implementation("org.apache.poi:poi:5.2.5")
+    implementation("org.apache.poi:poi-ooxml:5.2.5")
+
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

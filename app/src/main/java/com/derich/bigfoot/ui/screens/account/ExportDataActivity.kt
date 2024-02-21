@@ -18,24 +18,28 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.lifecycleScope
 import com.derich.bigfoot.allLoans
 import com.derich.bigfoot.allMemberInformation
 import com.derich.bigfoot.allTransactions
-import com.derich.bigfoot.model.Loan
-import com.derich.bigfoot.model.MemberDetails
-import com.derich.bigfoot.model.Transactions
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
 
 private const val FILE_PROVIDER_AUTHORITY = "com.derich.bigfoot.fileprovider"
-class ExportDataActivity(): ComponentActivity() {
+const val PICK_PDF_FILE = 2
+class ExportDataActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MyApp {
-                MyScreenContent(createFile())
-                Toast.makeText(LocalContext.current, "${ allMemberInformation.value.size }", Toast.LENGTH_SHORT).show()
+                MyScreenContent { createFile() }
+                Toast.makeText(LocalContext.current, "${allMemberInformation.value.size}", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -44,151 +48,155 @@ class ExportDataActivity(): ComponentActivity() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 result.data?.data?.let { uri ->
-                    try {
-                        val inputStream = contentResolver.openInputStream(uri)
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        val contentResolver = applicationContext.contentResolver
 
-                        // Check if inputStream is null
-                        if (inputStream != null) {
-                            val workbook = XSSFWorkbook(inputStream)
+                        val takeFlags: Int = Intent.FLAG_GRANT_READ_URI_PERMISSION or
+                                Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                        contentResolver.takePersistableUriPermission(uri, takeFlags)
+
+                        try {
+                            // Create a temporary file to write the workbook to
+                            val tempFile = File.createTempFile("temp", ".xlsx")
+                            val tempUri = Uri.fromFile(tempFile)
+
+                            val workbook = XSSFWorkbook()
 
                             // Modify or add data to the workbook
-                            exportToExcel(allMemberInformation.value, allTransactions.value, allLoans.value, workbook)
+//                            exportToExcel(allMemberInformation.value, allTransactions.value, allLoans.value, workbook)
+                            // Create sheet for members
+                            val membersSheet = workbook.createSheet("Member Details")
 
-                            // Save the modified workbook back to the file
-                            saveWorkbookToFile(uri, workbook)
-                        } else {
-                            Toast.makeText(this, "Error opening file", Toast.LENGTH_SHORT).show()
+                            // Create header row for members
+                            val headerSheetRow = membersSheet.createRow(0)
+                            headerSheetRow.createCell(0).setCellValue("Phone Number")
+                            headerSheetRow.createCell(1).setCellValue("First Name")
+                            headerSheetRow.createCell(2).setCellValue("Second Name")
+                            headerSheetRow.createCell(3).setCellValue("Surname")
+                            headerSheetRow.createCell(4).setCellValue("Full Names")
+                            headerSheetRow.createCell(5).setCellValue("Total Amount")
+                            headerSheetRow.createCell(6).setCellValue("Contributions Date")
+                            headerSheetRow.createCell(7).setCellValue("Profile Picture URL")
+
+                            // Fill data rows for members
+                            for ((index, individualMemberDets) in allMemberInformation.value.withIndex()) {
+                                val row = membersSheet.createRow(index + 1)
+                                row.createCell(0).setCellValue(individualMemberDets.phoneNumber)
+                                row.createCell(1).setCellValue(individualMemberDets.firstName)
+                                row.createCell(2).setCellValue(individualMemberDets.secondName)
+                                row.createCell(3).setCellValue(individualMemberDets.surname)
+                                row.createCell(4).setCellValue(individualMemberDets.fullNames)
+                                row.createCell(5).setCellValue(individualMemberDets.totalAmount)
+                                row.createCell(6).setCellValue(individualMemberDets.contributionsDate)
+                                row.createCell(7).setCellValue(individualMemberDets.profPicUrl)
+                            }
+
+                            // Create sheet for transactions
+                            val transactionsSheet = workbook.createSheet("Transactions Details")
+
+                            // Create header row for transactions
+                            val transactionsHeaderRow = transactionsSheet.createRow(0)
+                            transactionsHeaderRow.createCell(0).setCellValue("Transaction Date")
+                            transactionsHeaderRow.createCell(1).setCellValue("Deposit for")
+                            transactionsHeaderRow.createCell(2).setCellValue("Deposited by")
+                            transactionsHeaderRow.createCell(3).setCellValue("Amount")
+                            transactionsHeaderRow.createCell(4).setCellValue("Confirmation Message")
+                            transactionsHeaderRow.createCell(5).setCellValue("Saved by:")
+
+                            // Fill data rows for transactions
+                            for ((index, transactionDetail) in allTransactions.value.withIndex()) {
+                                val row = transactionsSheet.createRow(index + 1)
+                                row.createCell(0).setCellValue(transactionDetail.transactionDate)
+                                row.createCell(1).setCellValue(transactionDetail.depositFor)
+                                row.createCell(2).setCellValue(transactionDetail.depositBy)
+                                row.createCell(3).setCellValue(transactionDetail.transactionAmount.toString())
+                                row.createCell(4).setCellValue(transactionDetail.transactionConfirmation)
+                                row.createCell(5).setCellValue(transactionDetail.savedBy)
+                            }
+
+                            // Create sheet for loans details
+                            val loanDetailsSheet = workbook.createSheet("Loans Details")
+
+                            // Create header row for Company Details
+                            val loansHeaderRow = loanDetailsSheet.createRow(0)
+                            loansHeaderRow.createCell(0).setCellValue("Username")
+                            loansHeaderRow.createCell(1).setCellValue("Amount Loaned")
+                            loansHeaderRow.createCell(2).setCellValue("Date Loaned")
+                            loansHeaderRow.createCell(3).setCellValue("Status")
+                            loansHeaderRow.createCell(4).setCellValue("Transaction fee")
+                            loansHeaderRow.createCell(5).setCellValue("Date Repaid")
+                            loansHeaderRow.createCell(6).setCellValue("Amount Repaid")
+
+                            // Fill data rows for Company Details
+                            for ((index, loanDetail) in allLoans.value.withIndex()) {
+                                val row = loanDetailsSheet.createRow(index + 1)
+                                row.createCell(0).setCellValue(loanDetail.username)
+                                row.createCell(1).setCellValue(loanDetail.amountLoaned.toString())
+                                row.createCell(2).setCellValue(loanDetail.dateLoaned)
+                                row.createCell(3).setCellValue(loanDetail.status)
+                                row.createCell(4).setCellValue(loanDetail.transactionCharges.toString())
+                                row.createCell(5).setCellValue(loanDetail.dateRepaid)
+                                row.createCell(6).setCellValue(loanDetail.amountRepaid.toString())
+                            }
+                                FileOutputStream(tempFile).use { fileOutputStream ->
+                                    workbook.write(fileOutputStream)
+                                }
+
+                                // Now copy the temporary file to the selected URI
+                                contentResolver.openOutputStream(uri)?.use { outputStream ->
+                                    contentResolver.openInputStream(tempUri)?.use { inputStream ->
+                                        inputStream.copyTo(outputStream)
+                                    }
+                                }
+
+                                withContext(Dispatchers.Main) {
+                                    Toast.makeText(
+                                        this@ExportDataActivity,
+                                        "File saved successfully",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            } catch (e: IOException) {
+                                withContext(Dispatchers.Main) {
+                                    e.printStackTrace()
+                                    Toast.makeText(
+                                        this@ExportDataActivity,
+                                        "Error processing file",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }
                         }
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                        Toast.makeText(this, "Error processing file", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
+
+            private fun createFile() {
+                val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+                    addCategory(Intent.CATEGORY_OPENABLE)
+                    type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    putExtra(Intent.EXTRA_TITLE, "BigfutData.xlsx")
+                }
+                createFileLauncher.launch(intent)
+            }
         }
 
-    private fun createFile() {
-        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-            addCategory(Intent.CATEGORY_OPENABLE)
-            type = "application/vnd.ms-excel"
-            putExtra(Intent.EXTRA_TITLE, "BigfutData")
-        }
-        createFileLauncher.launch(intent)
-    }
-
-    private fun saveWorkbookToFile(uri: Uri, workbook: XSSFWorkbook) {
-        try {
-            val outputStream = contentResolver.openOutputStream(uri)
-            workbook.write(outputStream)
-            outputStream?.close()
-            workbook.close()
-            Toast.makeText(this, "File saved successfully", Toast.LENGTH_SHORT).show()
-        } catch (e: IOException) {
-            e.printStackTrace()
+    @Composable
+    fun MyApp(content: @Composable () -> Unit) {
+        MaterialTheme {
+            Surface {
+                content()
+            }
         }
     }
-}
 
-@Composable
-fun MyApp(content: @Composable () -> Unit) {
-    MaterialTheme {
-        Surface {
-            content()
-        }
-    }
-}
-
-@Composable
-fun MyScreenContent(exportListLauncher: Unit) {
-    Column(
-        modifier = Modifier.padding(16.dp)
-    ) {
-        Button(onClick = {
-            exportListLauncher }
+    @Composable
+    fun MyScreenContent(exportListLauncher: () -> Unit) {
+        Column(
+            modifier = Modifier.padding(16.dp)
         ) {
-            Text("Export to Excel")
+            Button(onClick = exportListLauncher) {
+                Text("Export to Excel")
+            }
         }
     }
-}
-
-
-fun exportToExcel(memberDetailsList: List<MemberDetails>,
-                  transactionsList: List<Transactions>,
-                  loansList: List<Loan>,
-                  workbook:XSSFWorkbook) {
-
-    // Create sheet for members
-    val membersSheet = workbook.createSheet("Member Details")
-
-    // Create header row for members
-    val headerSheetRow = membersSheet.createRow(0)
-    headerSheetRow.createCell(0).setCellValue("Phone Number")
-    headerSheetRow.createCell(1).setCellValue("First Name")
-    headerSheetRow.createCell(2).setCellValue("Second Name")
-    headerSheetRow.createCell(3).setCellValue("Surname")
-    headerSheetRow.createCell(4).setCellValue("Full Names")
-    headerSheetRow.createCell(5).setCellValue("Total Amount")
-    headerSheetRow.createCell(6).setCellValue("Contributions Date")
-    headerSheetRow.createCell(7).setCellValue("Profile Picture URL")
-
-    // Fill data rows for members
-    for ((index, individualMemberDets) in memberDetailsList.withIndex()) {
-        val row = membersSheet.createRow(index + 1)
-        row.createCell(0).setCellValue(individualMemberDets.phoneNumber)
-        row.createCell(1).setCellValue(individualMemberDets.firstName)
-        row.createCell(2).setCellValue(individualMemberDets.secondName)
-        row.createCell(3).setCellValue(individualMemberDets.surname)
-        row.createCell(4).setCellValue(individualMemberDets.fullNames)
-        row.createCell(5).setCellValue(individualMemberDets.totalAmount)
-        row.createCell(6).setCellValue(individualMemberDets.contributionsDate)
-        row.createCell(7).setCellValue(individualMemberDets.profPicUrl)
-    }
-
-    // Create sheet for transactions
-    val transactionsSheet = workbook.createSheet("Transactions Details")
-
-    // Create header row for transactions
-    val transactionsHeaderRow = transactionsSheet.createRow(0)
-    transactionsHeaderRow.createCell(0).setCellValue("Transaction Date")
-    transactionsHeaderRow.createCell(1).setCellValue("Deposit for")
-    transactionsHeaderRow.createCell(2).setCellValue("Deposited by")
-    transactionsHeaderRow.createCell(3).setCellValue("Amount")
-    transactionsHeaderRow.createCell(4).setCellValue("Confirmation Message")
-    transactionsHeaderRow.createCell(5).setCellValue("Saved by:")
-
-    // Fill data rows for transactions
-    for ((index, transactionDetail) in transactionsList.withIndex()) {
-        val row = transactionsSheet.createRow(index + 1)
-        row.createCell(0).setCellValue(transactionDetail.transactionDate)
-        row.createCell(1).setCellValue(transactionDetail.depositFor)
-        row.createCell(2).setCellValue(transactionDetail.depositBy)
-        row.createCell(3).setCellValue(transactionDetail.transactionAmount.toString())
-        row.createCell(4).setCellValue(transactionDetail.transactionConfirmation)
-        row.createCell(5).setCellValue(transactionDetail.savedBy)
-    }
-
-    // Create sheet for loans details
-    val loanDetailsSheet = workbook.createSheet("Loans Details")
-
-    // Create header row for Company Details
-    val loansHeaderRow = loanDetailsSheet.createRow(0)
-    loansHeaderRow.createCell(0).setCellValue("Username")
-    loansHeaderRow.createCell(1).setCellValue("Amount Loaned")
-    loansHeaderRow.createCell(2).setCellValue("Date Loaned")
-    loansHeaderRow.createCell(3).setCellValue("Status")
-    loansHeaderRow.createCell(4).setCellValue("Transaction fee")
-    loansHeaderRow.createCell(5).setCellValue("Date Repaid")
-    loansHeaderRow.createCell(6).setCellValue("Amount Repaid")
-
-    // Fill data rows for Company Details
-    for ((index, loanDetail) in loansList.withIndex()) {
-        val row = loanDetailsSheet.createRow(index + 1)
-        row.createCell(0).setCellValue(loanDetail.username)
-        row.createCell(1).setCellValue(loanDetail.amountLoaned.toString())
-        row.createCell(2).setCellValue(loanDetail.dateLoaned)
-        row.createCell(3).setCellValue(loanDetail.status)
-        row.createCell(4).setCellValue(loanDetail.transactionCharges.toString())
-        row.createCell(5).setCellValue(loanDetail.dateRepaid)
-        row.createCell(6).setCellValue(loanDetail.amountRepaid.toString())
-    }
-}

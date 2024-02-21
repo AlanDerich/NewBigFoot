@@ -5,6 +5,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +18,8 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -83,19 +86,21 @@ fun calculateTotalContributions(allMemberInfo: State<List<MemberDetails>>): Int 
 fun ContributionCard(contribution: MemberDetails,
                      modifier: Modifier
 ) {
-    Row(
-        modifier = modifier.padding(start = 8.dp),
-        horizontalArrangement = Arrangement.Start,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Image(
-            painter = rememberAsyncImagePainter(contribution.profPicUrl),
-            contentDescription = stringResource(R.string.profile_image_description),
-            Modifier
-                .clip(MaterialTheme.shapes.medium)
-                .size(68.dp)
-        )
-        UsersColumn(contribution = contribution)
+    Card(modifier=modifier,
+        elevation = CardDefaults.cardElevation()) {
+        Row(
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = rememberAsyncImagePainter(contribution.profPicUrl),
+                contentDescription = stringResource(R.string.profile_image_description),
+                Modifier
+                    .clip(MaterialTheme.shapes.medium)
+                    .size(68.dp)
+            )
+            UsersColumn(contribution = contribution)
+        }
     }
 }
 
@@ -166,13 +171,15 @@ fun CompactScreen(modifier: Modifier, allMembersInfo: List<MemberDetails>){
         }
         //list here
         LazyColumn(modifier = Modifier
-            .padding(top = 8.dp)
-            .fillMaxWidth()) {
+            .fillMaxWidth(),
+            contentPadding = PaddingValues(8.dp)
+        ) {
             items(
                 items = allMembersInfo
             ) { contribution ->
                 ContributionCard(contribution = contribution,
-                    modifier = modifier)
+                    modifier = modifier.fillMaxWidth()
+                        .padding(top = 8.dp))
             }
         }
     }

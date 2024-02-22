@@ -1,5 +1,13 @@
 package com.derich.bigfoot.ui.screens.transactions
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -15,7 +23,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Close
@@ -47,13 +55,19 @@ import com.derich.bigfoot.ui.common.composables.CircularProgressBar
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.util.Locale
 
-@OptIn(ExperimentalCoroutinesApi::class)
+@OptIn(ExperimentalCoroutinesApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun TransactionsComposable(modifier: Modifier = Modifier,
                            transactionsViewModel: TransactionsViewModel,
                            navController: NavController
 ) {
-
+    //variable to hold the visibility state of the animation
+    val visibleState = remember {
+        MutableTransitionState(false).apply {
+            // Start the animation immediately.
+            targetState = true
+        }
+    }
 //    val context = LocalContext.current
     val textState = remember { mutableStateOf(TextFieldValue("")) }
     val transactions = filterTransactionsList(textState, allTransactions.value)
@@ -65,17 +79,33 @@ fun TransactionsComposable(modifier: Modifier = Modifier,
                 modifier = modifier,
                 contentAlignment = Alignment.BottomEnd
             ) {
-//display all the transactions as a horizontal list
-                LazyColumn {
-                    items(
-                        items = transactions
-                    ) { transaction ->
-                        TransactionCard(
-                            transaction = transaction,
-                            modifier = modifier
-                        )
+                Column {
+                    AnimatedVisibility(
+                        visibleState = visibleState,
+                        enter = fadeIn(
+                            animationSpec = spring(dampingRatio = Spring.DampingRatioLowBouncy)
+                        ), exit = fadeOut()
+                    ) {
+                        LazyColumn {
+                            itemsIndexed(transactions) { index, transaction ->
+                                TransactionCard(
+                                    transaction = transaction,
+                                    modifier = Modifier.animateEnterExit(
+                                        enter = slideInHorizontally(
+                                            animationSpec = spring(
+                                                dampingRatio = Spring.DampingRatioMediumBouncy,
+                                                stiffness = Spring.StiffnessMediumLow
+                                            ),
+                                            initialOffsetX = { it * (index + 1) }
+                                        )
+                                    )
+                                )
+                            }
+                        }
                     }
                 }
+
+//display all the transactions as a horizontal list
                 //check if member is admin and display button to launch addTransaction page
                 if (memberDetails.memberRole == "admin") {
                     FloatingActionButton(
@@ -210,8 +240,6 @@ fun SearchView(state: MutableState<TextFieldValue>, modifier: Modifier) {
         )
     )
 }
-
-
 
 
 

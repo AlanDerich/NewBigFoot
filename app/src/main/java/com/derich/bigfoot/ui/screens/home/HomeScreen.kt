@@ -203,7 +203,7 @@ fun LandscapeScreen(modifier: Modifier, allMembersInfo: List<MemberDetails>) {
                         modifier = Modifier
                             .size(68.dp))
                     Spacer(modifier = Modifier.padding(8.dp))
-                    Text(text = "Your Total KSH $differenceInContributions",
+                    Text(text = "Balance: KSH $differenceInContributions",
                         fontWeight = Bold)
                     Spacer(modifier = Modifier.padding(2.dp))
                     Text(text = "Due: ${memberDetails.contributionsDate}",
@@ -219,7 +219,7 @@ fun LandscapeScreen(modifier: Modifier, allMembersInfo: List<MemberDetails>) {
                         ) {
                     items(allMembersInfo) { contribution ->
                         ContributionCard(contribution = contribution,
-                            modifier = modifier)
+                            modifier = modifier.padding(top = 8.dp, start = 8.dp))
                     }
                 }
 
@@ -234,7 +234,7 @@ fun LandscapeScreen(modifier: Modifier, allMembersInfo: List<MemberDetails>) {
                             .size(68.dp)
                            )
                     Spacer(modifier = Modifier.padding(8.dp))
-                    Text(text = "Your Total KSH $differenceInContributions",
+                    Text(text = "Balance: KSH $differenceInContributions",
                         fontWeight = Bold)
                     Spacer(modifier = Modifier.padding(2.dp))
                     Text(text = "Due: ${memberDetails.contributionsDate}",
@@ -250,7 +250,7 @@ fun LandscapeScreen(modifier: Modifier, allMembersInfo: List<MemberDetails>) {
                         ) {
                     items(allMembersInfo) { contribution ->
                         ContributionCard(contribution = contribution,
-                            modifier = modifier)
+                            modifier = modifier.padding(top = 8.dp, start = 8.dp))
                     }
                 }
             }

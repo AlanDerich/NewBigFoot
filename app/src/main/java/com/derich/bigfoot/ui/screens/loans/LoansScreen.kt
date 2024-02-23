@@ -1,7 +1,5 @@
 package com.derich.bigfoot.ui.screens.loans
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -10,6 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -48,7 +48,8 @@ fun LoansComposable(modifier: Modifier = Modifier,
                     items = loans
                 ){ loan ->
                     LoansCard( loan = loan,
-                        modifier = Modifier.padding(start = 4.dp, end = 4.dp))
+                        modifier = modifier.fillMaxWidth()
+                            .padding(top = 8.dp, start=8.dp, end = 8.dp))
                 }
             }
         }
@@ -69,39 +70,42 @@ fun LoansComposable(modifier: Modifier = Modifier,
 fun LoansCard(loan: Loan,
               modifier: Modifier
 ) {
-    Column(horizontalAlignment = Alignment.Start,
-        modifier = modifier
-            .border(border = BorderStroke(width = 2.dp, color = Color.White))
-            .padding(8.dp)
-            .fillMaxWidth()) {
-        Text(text = loan.username,
-            style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.padding(start = 8.dp, end = 8.dp))
-        Spacer(modifier = Modifier.padding(2.dp))
-        Text(text = "Date Loaned: ${ loan.dateLoaned }",
-            modifier = Modifier.padding(start = 8.dp, end = 8.dp))
-        Spacer(modifier = Modifier.padding(2.dp))
-        Text(text = "Amount Loaned: KSH ${ loan.amountLoaned }",
-            modifier = Modifier.padding(start = 8.dp, end = 8.dp))
-        Spacer(modifier = Modifier.padding(2.dp))
-        Text(text = "Transaction Charges: KSH ${ loan.transactionCharges }",
-            modifier = Modifier.padding(start = 8.dp, end = 8.dp))
-        Spacer(modifier = Modifier.padding(2.dp))
-        if (loan.status){
-            Text(text = "Status: Repaid",
-                modifier = Modifier.padding(start = 8.dp, end = 8.dp),
-                color = Color.Green,
-                fontWeight = FontWeight.Bold)
-            Text(text = "Repaid Date: ${loan.dateRepaid}",
+    Card(modifier=modifier,
+        elevation = CardDefaults.cardElevation()) {
+        Column(horizontalAlignment = Alignment.Start,
+            modifier = modifier
+                .padding(8.dp)
+                .fillMaxWidth()) {
+            Text(text = loan.username,
+                style = MaterialTheme.typography.headlineSmall,
                 modifier = Modifier.padding(start = 8.dp, end = 8.dp))
-            Text(text = "Repaid Amount: ${loan.amountRepaid}",
+            Spacer(modifier = Modifier.padding(2.dp))
+            Text(text = "Date Loaned: ${ loan.dateLoaned }",
                 modifier = Modifier.padding(start = 8.dp, end = 8.dp))
-        }
-        else {
-            Text(text = "Status: Not Paid",
-                modifier = Modifier.padding(start = 8.dp, end = 8.dp),
-                color = Color.Red,
-                fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.padding(2.dp))
+            Text(text = "Amount Loaned: KSH ${ loan.amountLoaned }",
+                modifier = Modifier.padding(start = 8.dp, end = 8.dp))
+            Spacer(modifier = Modifier.padding(2.dp))
+            Text(text = "Transaction Charges: KSH ${ loan.transactionCharges }",
+                modifier = Modifier.padding(start = 8.dp, end = 8.dp))
+            Spacer(modifier = Modifier.padding(2.dp))
+            if (loan.status){
+                Text(text = "Status: Repaid",
+                    modifier = Modifier.padding(start = 8.dp, end = 8.dp),
+                    color = Color.Green,
+                    fontWeight = FontWeight.Bold)
+                Text(text = "Repaid Date: ${loan.dateRepaid}",
+                    modifier = Modifier.padding(start = 8.dp, end = 8.dp))
+                Text(text = "Repaid Amount: ${loan.amountRepaid}",
+                    modifier = Modifier.padding(start = 8.dp, end = 8.dp))
+            }
+            else {
+                Text(text = "Status: Not Paid",
+                    modifier = Modifier.padding(start = 8.dp, end = 8.dp),
+                    color = Color.Red,
+                    fontWeight = FontWeight.Bold)
+            }
         }
     }
+
 }

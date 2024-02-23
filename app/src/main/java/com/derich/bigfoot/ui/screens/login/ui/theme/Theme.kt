@@ -14,9 +14,14 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import com.derich.bigfoot.ui.screens.login.ui.theme.BigFutColors.Pink40
+import com.derich.bigfoot.ui.screens.login.ui.theme.BigFutColors.Pink80
+import com.derich.bigfoot.ui.screens.login.ui.theme.BigFutColors.Purple40
+import com.derich.bigfoot.ui.screens.login.ui.theme.BigFutColors.PurpleGrey40
+import com.derich.bigfoot.ui.screens.login.ui.theme.BigFutColors.PurpleGrey80
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
+    primary = BigFutColors.Purple80,
     secondary = PurpleGrey80,
     tertiary = Pink80
 )

@@ -7,9 +7,6 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -28,6 +25,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -90,15 +89,8 @@ fun TransactionsComposable(modifier: Modifier = Modifier,
                             itemsIndexed(transactions) { index, transaction ->
                                 TransactionCard(
                                     transaction = transaction,
-                                    modifier = Modifier.animateEnterExit(
-                                        enter = slideInHorizontally(
-                                            animationSpec = spring(
-                                                dampingRatio = Spring.DampingRatioMediumBouncy,
-                                                stiffness = Spring.StiffnessMediumLow
-                                            ),
-                                            initialOffsetX = { it * (index + 1) }
-                                        )
-                                    )
+                                    modifier = modifier.fillMaxWidth()
+                                        .padding(top = 8.dp, start=8.dp, end = 8.dp)
                                 )
                             }
                         }
@@ -135,7 +127,7 @@ fun TransactionsComposable(modifier: Modifier = Modifier,
                         ) { transaction ->
                             TransactionCard(
                                 transaction = transaction,
-                                modifier = modifier
+                                modifier = modifier.padding(top = 8.dp, start = 8.dp)
                             )
                         }
                     }
@@ -171,9 +163,11 @@ fun TransactionsComposable(modifier: Modifier = Modifier,
 fun TransactionCard(transaction: Transactions,
                     modifier: Modifier
 ) {
+    Card(modifier=modifier,
+        elevation = CardDefaults.cardElevation()) {
         Column(horizontalAlignment = Alignment.Start,
             modifier = modifier
-                .border(border = BorderStroke(width = 2.dp, color = Color.White))
+//                .border(border = BorderStroke(width = 2.dp, color = Color.White))
                 .padding(8.dp)
                 .fillMaxWidth()) {
             Text(text = transaction.depositFor,
@@ -191,6 +185,7 @@ fun TransactionCard(transaction: Transactions,
                 maxLines = 4,
                 overflow = TextOverflow.Ellipsis)
         }
+    }
 }
 
 @Composable

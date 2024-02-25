@@ -104,6 +104,8 @@ fun DisplayStatsDialog(loansViewModel: LoansViewModel,
         * display all remaining loans and total
         * display all expenses
         * display all available cash
+        *
+        * display profits = amount of money given out- amount repaid...
         * */
 
         Column(modifier = Modifier
@@ -130,6 +132,9 @@ fun DisplayStatsDialog(loansViewModel: LoansViewModel,
                 style = MaterialTheme.typography.headlineLarge)
             Spacer(modifier = Modifier.height(2.dp))
             Text(text = "Available Amount: KSH ${loansViewModel.availableAmount}",
+                style = MaterialTheme.typography.headlineLarge)
+            Spacer(modifier = Modifier.height(2.dp))
+            Text(text = "Total Profits: KSH ${loansViewModel.totalProfits}",
                 style = MaterialTheme.typography.headlineLarge)
             Button(onClick = onDismiss, modifier = Modifier.align(Alignment.End)) {
                 Text(text = "Dismiss")

@@ -26,6 +26,7 @@ class LoansViewModel (
     var allRechargesTotal = 0
     var allExpensesTotal = 0
     var availableAmount =0
+    var totalProfits =0
     init {
         viewModelScope.launch {
             firebaseDataSource.getAllLoans().collect { loansDetails ->
@@ -60,6 +61,11 @@ class LoansViewModel (
         allRechargesTotal = getAllRecharges()
         allExpensesTotal = getAllExpenses()
         availableAmount = (allRechargesTotal+ allPaidLoansTotal) - (allExpensesTotal + allGroupLoansTotal + allTransCharges)
+        val totalProfitsBeforeTransactionCharges = allGroupLoansTotal - allPaidLoansTotal - allExpensesTotal
+//        totalProfits = totalProfitsBeforeTransactionCharges - allTransCharges
+        //get a better function (outstanding+availableamount) - initial amount
+        totalProfits = (allOutstandingLoansTotalAmount + availableAmount) - (allRechargesTotal)
+
 
     }
     //get all transaction charges and total pending loans
@@ -108,6 +114,7 @@ class LoansViewModel (
         allRechargesTotal = 0
         allExpensesTotal = 0
         availableAmount =0
+        totalProfits= 0
         listOfAllLoans.clear()
         listOfAllTopUps.clear()
         listOfAllExpenses.clear()

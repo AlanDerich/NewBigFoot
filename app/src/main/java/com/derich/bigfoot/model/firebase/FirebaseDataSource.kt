@@ -90,22 +90,6 @@ class FirebaseDataSource(
         awaitClose{loans?.remove()}
     }
 
-//    fun uploadToTransactions(transactionDetails: Transactions): StateFlow<Int> {
-//        val _status = MutableStateFlow(0)
-//
-//        firestore.collection("Transactions")
-//            .document(currentDate)
-//            .collection("allTransactions")
-//            .document(currentTime)
-//            .set(transactionDetails)
-//            .addOnSuccessListener {
-//                _status.update { 1 }
-//            }
-//            .addOnFailureListener { e ->
-//                _status.update { 2 }
-//            }
-//        return _status.asStateFlow()
-//    }
 fun updateProfPic(
     memberPhoneNumber: String,
     memberFullNames: String,
@@ -135,26 +119,4 @@ fun uploadTransactions(transactionDetails: Transactions) = firestore.collection(
         .collection("allTransactions")
         .document(currentTime)
         .set(transactionDetails)
-//    fun updateContributionsDetails(
-//        memberPhoneNumber: String,
-//        memberFullNames: String,
-//        resultingDate: String,
-//        newUserAmount: String): StateFlow<Int> {
-//        val _status = MutableStateFlow(0)
-//        firestore.collection("Members")
-//            .document(memberPhoneNumber)
-//            .collection("allMembers")
-//            .document(memberFullNames)
-//            .update(
-//                "contributionsDate", resultingDate,
-//                "totalAmount", newUserAmount
-//            ).addOnSuccessListener {
-//                _status.update { 1 }
-//            }
-//            .addOnFailureListener { e ->
-//                _status.update { 2 }
-//            }
-//        return _status.asStateFlow()
-//    }
-
 }

@@ -1,5 +1,6 @@
 package com.derich.bigfoot.ui.screens.loans
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -105,20 +106,34 @@ fun DisplayStatsDialog(loansViewModel: LoansViewModel,
         * display all available cash
         * */
 
-        Column {
-            Text(text = "All Deposits ${loansViewModel.allRechargesTotal}")
+        Column(modifier = Modifier
+            .fillMaxSize().background(Color.DarkGray)
+            .padding(8.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.Start) {
+            Text(text = "All Deposits: KSH ${loansViewModel.allRechargesTotal}",
+                style = MaterialTheme.typography.headlineLarge)
             Spacer(modifier = Modifier.height(2.dp))
-            Text(text = "All loans are ${loansViewModel.allGroupLoans} total ${loansViewModel.allGroupLoansTotal}")
+            Text(text = "${loansViewModel.allGroupLoans} total loans: KSH ${loansViewModel.allGroupLoansTotal}",
+                style = MaterialTheme.typography.headlineLarge)
             Spacer(modifier = Modifier.height(2.dp))
-            Text(text = "All transaction charges: ${loansViewModel.allTransCharges}")
+            Text(text = "All transaction charges: KSH ${loansViewModel.allTransCharges}",
+                style = MaterialTheme.typography.headlineLarge)
             Spacer(modifier = Modifier.height(2.dp))
-            Text(text = "${loansViewModel.allPaidLoans} paid loans totalling ${loansViewModel.allPaidLoansTotal}")
+            Text(text = "${loansViewModel.allPaidLoans} paid loans totalling: KSH ${loansViewModel.allPaidLoansTotal}",
+                style = MaterialTheme.typography.headlineLarge)
             Spacer(modifier = Modifier.height(2.dp))
-            Text(text = "${loansViewModel.allPendingLoans} unpaid loans totalling ${loansViewModel.allOutstandingLoansTotalAmount}")
+            Text(text = "${loansViewModel.allPendingLoans} unpaid loans totalling: KSH ${loansViewModel.allOutstandingLoansTotalAmount}",
+                style = MaterialTheme.typography.headlineLarge)
             Spacer(modifier = Modifier.height(2.dp))
-            Text(text = "All Group Expenses ${loansViewModel.allExpensesTotal}")
+            Text(text = "All Group Expenses: KSH ${loansViewModel.allExpensesTotal}",
+                style = MaterialTheme.typography.headlineLarge)
             Spacer(modifier = Modifier.height(2.dp))
-            Text(text = "Available Amount ${loansViewModel.availableAmount}")
+            Text(text = "Available Amount: KSH ${loansViewModel.availableAmount}",
+                style = MaterialTheme.typography.headlineLarge)
+            Button(onClick = onDismiss, modifier = Modifier.align(Alignment.End)) {
+                Text(text = "Dismiss")
+            }
         }
     }
 }

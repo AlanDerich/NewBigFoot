@@ -11,7 +11,7 @@ import com.derich.bigfoot.ui.theme.BigFootTheme
 import com.google.firebase.auth.FirebaseAuth
 
 class PhoneAuthActivity : ComponentActivity() {
-    val authVm = AuthViewModel(FirebaseAuth.getInstance())
+    private val authVm = AuthViewModel(FirebaseAuth.getInstance())
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {

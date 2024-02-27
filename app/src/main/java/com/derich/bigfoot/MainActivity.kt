@@ -4,14 +4,24 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
@@ -57,39 +67,55 @@ class MainActivity : ComponentActivity() {
 //            val authServImp = AuthImplementation(LoginActivity(), auth)
             val authVM = AuthViewModel(auth)
             //check if user is logged in or not
-            if(FirebaseAuth.getInstance().currentUser != null) {
-                //viewmodel handling all actions on contributions
+            if(auth.currentUser != null) {
+                //viewmodel handling all actions on contributions transactions and loans
                 val contributionsVM = ContributionsViewModel(firebaseDataSource)
                 val transactionsVM = TransactionsViewModel(firebaseDataSource)
                 val loansVM= LoansViewModel(firebaseDataSource)
 //                LaunchedEffect(Unit) { contributionsVM.members }
                 //login viewmodel handling all login activities
 //                val allMemberInfo = contributionsVM.members.collectAsState()
+                //get all data from the Firestore database using flow to automatically update the data in case of changes
                 allMemberInformation = contributionsVM.members.collectAsState()
                 allTransactions= transactionsVM.transactions.collectAsState()
                 allLoans = loansVM.loans.collectAsState()
 //                var count = allLoans.value.size
                 //navcontroller for the bottom navigation
                 val bottomNavController = rememberNavController()
+                var dataLoading by remember { mutableStateOf(true) }
                 BigFootTheme {
-                    Scaffold(
-                        topBar = {
-                            BigFutAppBar()
-                        },
-                        bottomBar = {
-                            BottomNavigator(navController = bottomNavController)
-                        },
-                    ) {
-                            innerPadding ->
-                        NavigationGraph(
-                            navController = bottomNavController,
-                            contViewModel = contributionsVM,
-                            transactionsViewModel = transactionsVM,
-                            authVm= authVM,
-                            loansVm = loansVM,
-                            modifier = Modifier.padding(innerPadding)
-                        )
+                    if (allMemberInformation.value.isEmpty()) {
+                        if (dataLoading) {
+                            Column(verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally) {
+                                Text(text = "Fetching data...")
+                                LinearProgressIndicator(modifier = Modifier.wrapContentSize(
+                                    Alignment.Center))
+                            }
 
+                        }
+                    }
+                    else{
+                        dataLoading = false
+                        Scaffold(
+                            topBar = {
+                                BigFutAppBar()
+                            },
+                            bottomBar = {
+                                BottomNavigator(navController = bottomNavController)
+                            },
+                        ) {
+                                innerPadding ->
+                            NavigationGraph(
+                                navController = bottomNavController,
+                                contViewModel = contributionsVM,
+                                transactionsViewModel = transactionsVM,
+                                authVm= authVM,
+                                loansVm = loansVM,
+                                modifier = Modifier.padding(innerPadding)
+                            )
+
+                        }
                     }
                 }
 

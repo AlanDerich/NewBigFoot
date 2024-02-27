@@ -8,20 +8,24 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.lifecycleScope
 import com.derich.bigfoot.allLoans
 import com.derich.bigfoot.allMemberInformation
 import com.derich.bigfoot.allTransactions
+import com.derich.bigfoot.ui.common.composables.BigFutAppBar
+import com.derich.bigfoot.ui.theme.BigFootTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -33,13 +37,19 @@ import java.io.IOException
 private const val FILE_PROVIDER_AUTHORITY = "com.derich.bigfoot.fileprovider"
 const val PICK_PDF_FILE = 2
 class ExportDataActivity : ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MyApp {
-                MyScreenContent { createFile() }
-                Toast.makeText(LocalContext.current, "${allMemberInformation.value.size}", Toast.LENGTH_SHORT).show()
+            BigFootTheme {
+                    Scaffold(
+                        topBar = {
+                            BigFutAppBar()
+                        }
+                    ) {
+                            innerPadding ->
+                        MyScreenContent({ createFile() },
+                            modifier = Modifier.padding(innerPadding))
+                    }
             }
         }
     }
@@ -48,9 +58,9 @@ class ExportDataActivity : ComponentActivity() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 result.data?.data?.let { uri ->
+                    exportingStatus =true
                     lifecycleScope.launch(Dispatchers.IO) {
                         val contentResolver = applicationContext.contentResolver
-
                         val takeFlags: Int = Intent.FLAG_GRANT_READ_URI_PERMISSION or
                                 Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                         contentResolver.takePersistableUriPermission(uri, takeFlags)
@@ -155,6 +165,7 @@ class ExportDataActivity : ComponentActivity() {
                                         "File saved successfully",
                                         Toast.LENGTH_SHORT
                                     ).show()
+                                    exportingStatus=false
                                 }
                             } catch (e: IOException) {
                                 withContext(Dispatchers.Main) {
@@ -164,6 +175,7 @@ class ExportDataActivity : ComponentActivity() {
                                         "Error processing file",
                                         Toast.LENGTH_SHORT
                                     ).show()
+                                    exportingStatus=false
                                 }
                             }
                         }
@@ -181,22 +193,26 @@ class ExportDataActivity : ComponentActivity() {
             }
         }
 
+var exportingStatus = false
     @Composable
-    fun MyApp(content: @Composable () -> Unit) {
-        MaterialTheme {
-            Surface {
-                content()
-            }
-        }
-    }
-
-    @Composable
-    fun MyScreenContent(exportListLauncher: () -> Unit) {
+    fun MyScreenContent(exportListLauncher: () -> Unit,modifier: Modifier) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = modifier.padding(16.dp)
         ) {
-            Button(onClick = exportListLauncher) {
-                Text("Export to Excel")
+            if (exportingStatus){
+                Column(verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(text = "Fetching data...")
+                    LinearProgressIndicator(modifier = Modifier.wrapContentSize(
+                        Alignment.Center))
+                }
+            }
+            else{
+                Button(onClick = exportListLauncher) {
+                    Text("Export to Excel")
+                }
             }
         }
     }

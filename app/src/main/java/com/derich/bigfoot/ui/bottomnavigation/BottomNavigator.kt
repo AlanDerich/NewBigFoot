@@ -81,58 +81,57 @@ fun NavigationGraph(
     loansVm:LoansViewModel,
     modifier: Modifier
 ) {
-//    var allMemberInfo by remember { mutableStateOf(List<MemberDetails>) }
     val context = LocalContext.current
-    if (allMemberInformation.value.isNotEmpty()) {
-        if (getMemberData(allMemberInformation.value) == null) {
-            LoginErrorUi(message = "User not found. Contact system administrator to get you setup") {
+    if (getMemberData(allMemberInformation.value) == null) {
+        LoginErrorUi(message = "User not found. Contact system administrator to get you setup") {
                 authVm.logOut(context)
-            }
-        }
-        else{
-        memberDetails = getMemberData(allMemberInformation.value)!!
-        NavHost(
-            navController,
-            startDestination = BottomNavItem.Home.screenRoute,
-            modifier = modifier
-        ) {
-            composable(BottomNavItem.Home.screenRoute) {
-                HomeComposable(
-                    transactionsViewModel = transactionsViewModel
-                )
-            }
-
-            composable(BottomNavItem.Transactions.screenRoute) {
-                TransactionsComposable(
-                    transactionsViewModel = transactionsViewModel,
-                    navController = navController
-                )
-            }
-            composable(BottomNavItem.Loans.screenRoute) {
-                LoansComposable(loansViewModel = loansVm)
-        }
-            composable(BottomNavItem.Account.screenRoute) {
-                AccountsComposable(
-                    navController= navController,
-                    authViewModel = authVm)
-        }
-            composable(BottomNavItem.AddTransaction.screenRoute) {
-                AddTransactionScreen(
-                transactionsViewModel = transactionsViewModel,
-                contViewModel = contViewModel,
-                navController = navController)
-        }
-            composable(BottomNavItem.DeleteAccount.screenRoute) {
-                DataDeletionRequest(
-                    authViewModel = authVm
-                )
-            }
-            composable(BottomNavItem.ImageUploader.screenRoute) {
-                ImageUploaderScreen(transactionsViewModel)
-            }
         }
     }
-}
+    else {
+        memberDetails = getMemberData(allMemberInformation.value)!!
+        NavHost(
+                navController,
+                startDestination = BottomNavItem.Home.screenRoute,
+                modifier = modifier
+            ) {
+                composable(BottomNavItem.Home.screenRoute) {
+                    HomeComposable(
+                        transactionsViewModel = transactionsViewModel
+                    )
+                }
+
+                composable(BottomNavItem.Transactions.screenRoute) {
+                    TransactionsComposable(
+                        transactionsViewModel = transactionsViewModel,
+                        navController = navController
+                    )
+                }
+                composable(BottomNavItem.Loans.screenRoute) {
+                    LoansComposable(loansViewModel = loansVm)
+                }
+                composable(BottomNavItem.Account.screenRoute) {
+                    AccountsComposable(
+                        navController = navController,
+                        authViewModel = authVm
+                    )
+                }
+                composable(BottomNavItem.AddTransaction.screenRoute) {
+                    AddTransactionScreen(
+                        transactionsViewModel = transactionsViewModel,
+                        contViewModel = contViewModel,
+                        navController = navController
+                    )
+                }
+                composable(BottomNavItem.DeleteAccount.screenRoute) {
+                    DataDeletionRequest(
+                        authViewModel = authVm
+                    )
+                }
+                composable(BottomNavItem.ImageUploader.screenRoute) {
+                    ImageUploaderScreen(transactionsViewModel)
+                }
+            }
+        }
 
 }
 

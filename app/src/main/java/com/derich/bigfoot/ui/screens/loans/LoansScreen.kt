@@ -1,8 +1,11 @@
 package com.derich.bigfoot.ui.screens.loans
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,13 +14,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -35,6 +44,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.derich.bigfoot.R
 import com.derich.bigfoot.allLoans
+import com.derich.bigfoot.deviceWidthSize
 import com.derich.bigfoot.model.Loan
 import com.derich.bigfoot.model.LoanType
 import com.derich.bigfoot.ui.common.composables.CircularProgressBar
@@ -65,21 +75,72 @@ fun LoansComposable(modifier: Modifier = Modifier,
                 totalOutstandingLoans++
             }
         }
-        Column(modifier = modifier) {
-            Text(text = "There are $totalOutstandingLoans unpaid loans.", modifier = Modifier.padding(8.dp), style = MaterialTheme.typography.headlineSmall)
-            Text(text = "The total amount of unpaid loan is KSH$totalOutstandingLoanAmount.", modifier = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp), style = MaterialTheme.typography.bodyLarge)
-            Button(onClick = {showStatsDialog = true},
-                modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                Text(text = "Full Stats")
+        //device is in portrait mode
+        if(deviceWidthSize == WindowWidthSizeClass.Compact){
+            Column(modifier = modifier) {
+                Text(
+                    text = "There are $totalOutstandingLoans unpaid loans.",
+                    modifier = Modifier.padding(8.dp),
+                    style = MaterialTheme.typography.headlineSmall
+                )
+                Text(
+                    text = "The total amount of unpaid loan is KSH$totalOutstandingLoanAmount.",
+                    modifier = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
+                    style = MaterialTheme.typography.bodyLarge
+                )
+                Button(
+                    onClick = { showStatsDialog = true },
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                ) {
+                    Text(text = "Full Stats")
+                }
+                LazyColumn {
+                    items(
+                        items = loans
+                    ) { loan ->
+                        LoansCard(
+                            loan = loan,
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .padding(top = 8.dp, start = 8.dp, end = 8.dp)
+                        )
+                    }
+                }
             }
-            LazyColumn{
-                items(
-                    items = loans
-                ){ loan ->
-                    LoansCard( loan = loan,
-                        modifier = modifier
-                            .fillMaxWidth()
-                            .padding(top = 8.dp, start = 8.dp, end = 8.dp))
+        }
+        //display landscape screen
+        else{
+            Row {
+                Column(modifier = modifier
+                    .verticalScroll(rememberScrollState()).weight(0.25f)) {
+                    Text(
+                        text = "There are $totalOutstandingLoans unpaid loans.",
+                        modifier = Modifier.padding(8.dp),
+                        style = MaterialTheme.typography.headlineSmall
+                    )
+                    Text(
+                        text = "The total amount of unpaid loan is KSH$totalOutstandingLoanAmount.",
+                        modifier = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                    Button(
+                        onClick = { showStatsDialog = true },
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    ) {
+                        Text(text = "Full Stats")
+                    }
+                }
+                LazyVerticalGrid(columns = GridCells.Adaptive(200.dp), modifier = Modifier.weight(0.75f)) {
+                    items(
+                        items = loans
+                    ) { loan ->
+                        LoansCard(
+                            loan = loan,
+                            modifier = modifier
+                                .fillMaxWidth()
+                                .padding(top = 8.dp, start = 8.dp, end = 8.dp)
+                        )
+                    }
                 }
             }
         }

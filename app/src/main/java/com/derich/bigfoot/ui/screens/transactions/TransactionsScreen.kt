@@ -50,7 +50,7 @@ import com.derich.bigfoot.allTransactions
 import com.derich.bigfoot.deviceWidthSize
 import com.derich.bigfoot.model.Transactions
 import com.derich.bigfoot.ui.bottomnavigation.memberDetails
-import com.derich.bigfoot.ui.common.composables.CircularProgressBar
+import com.derich.bigfoot.ui.common.composables.CommonLinearProgressBar
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.util.Locale
 
@@ -89,8 +89,9 @@ fun TransactionsComposable(modifier: Modifier = Modifier,
                             itemsIndexed(transactions) { index, transaction ->
                                 TransactionCard(
                                     transaction = transaction,
-                                    modifier = modifier.fillMaxWidth()
-                                        .padding(top = 8.dp, start=8.dp, end = 8.dp)
+                                    modifier = modifier
+                                        .fillMaxWidth()
+                                        .padding(top = 8.dp, start = 8.dp, end = 8.dp)
                                 )
                             }
                         }
@@ -152,9 +153,9 @@ fun TransactionsComposable(modifier: Modifier = Modifier,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        CircularProgressBar(
-            isDisplayed = transactions.isEmpty()
-        )
+        if (transactions.isEmpty()){
+            CommonLinearProgressBar()
+        }
 
     }
 }

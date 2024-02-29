@@ -60,7 +60,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.11.0")
+//    implementation("com.google.android.material:material:1.11.0")
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-auth")
     implementation("androidx.work:work-runtime:2.9.0")
@@ -69,7 +69,7 @@ dependencies {
     implementation(platform("androidx.compose:compose-bom:2024.02.01"))
     implementation("com.google.firebase:firebase-storage")
     implementation("androidx.compose.material3:material3-window-size-class-android:1.2.0")
-    implementation("org.apache.poi:poi:5.2.5")
+//    implementation("org.apache.poi:poi:5.2.5")
     implementation("org.apache.poi:poi-ooxml:5.2.5")
 
 

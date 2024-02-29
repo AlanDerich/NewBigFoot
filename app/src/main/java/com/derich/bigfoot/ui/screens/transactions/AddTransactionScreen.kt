@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.derich.bigfoot.model.MemberDetails
 import com.derich.bigfoot.model.Transactions
-import com.derich.bigfoot.ui.common.composables.CircularProgressBar
+import com.derich.bigfoot.ui.common.composables.CommonLinearProgressBar
 import com.derich.bigfoot.ui.screens.home.ContributionsViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -207,9 +207,9 @@ fun AddTransactionPage(selectedMember: MemberDetails,
         {
             Text(text = "Add Transaction")
         }
-    CircularProgressBar(
-        isDisplayed
-    )
+    if (isDisplayed){
+        CommonLinearProgressBar()
+    }
 }
 fun updateContributions(memberPhoneNumber: String,
                         memberFullNames: String,

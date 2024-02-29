@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -45,7 +46,7 @@ import com.derich.bigfoot.allLoans
 import com.derich.bigfoot.deviceWidthSize
 import com.derich.bigfoot.model.Loan
 import com.derich.bigfoot.model.LoanType
-import com.derich.bigfoot.ui.common.composables.CircularProgressBar
+import com.derich.bigfoot.ui.common.composables.CommonLinearProgressBar
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -60,11 +61,16 @@ fun LoansComposable(modifier: Modifier = Modifier,
     var totalOutstandingLoans = 0
     val loans = allLoans.value
     if (showStatsDialog) {
-        DisplayStatsDialog(
-            loansViewModel = loansViewModel,
-            onDismiss = { showStatsDialog = false
-            loansViewModel.clearData()}
-        )
+        if (LoansViewModel.loadingLoansInfo){
+            CommonLinearProgressBar()
+        }
+        else{
+            DisplayStatsDialog(
+                loansViewModel = loansViewModel,
+                onDismiss = { showStatsDialog = false
+                    loansViewModel.clearData()}
+            )
+        }
     }
     loans.let {
         it.forEach {loanAmount ->
@@ -110,7 +116,8 @@ fun LoansComposable(modifier: Modifier = Modifier,
         else{
             Row {
                 Column(modifier = modifier
-                    .verticalScroll(rememberScrollState()).weight(0.25f)) {
+                    .verticalScroll(rememberScrollState())
+                    .weight(0.25f)) {
                     Text(
                         text = "There are $totalOutstandingLoans unpaid loans.",
                         modifier = Modifier.padding(8.dp),
@@ -128,7 +135,9 @@ fun LoansComposable(modifier: Modifier = Modifier,
                         Text(text = "Full Stats")
                     }
                 }
-                LazyVerticalGrid(columns = GridCells.Adaptive(200.dp), modifier = Modifier.weight(0.75f)) {
+                LazyVerticalGrid(columns = GridCells.Adaptive(200.dp), modifier = Modifier
+                    .weight(0.75f)
+                    .fillMaxHeight()) {
                     items(
                         items = loans
                     ) { loan ->
@@ -136,6 +145,7 @@ fun LoansComposable(modifier: Modifier = Modifier,
                             loan = loan,
                             modifier = modifier
                                 .fillMaxWidth()
+                                .fillMaxHeight()
                                 .padding(top = 8.dp, start = 8.dp, end = 8.dp)
                         )
                     }
@@ -148,9 +158,9 @@ fun LoansComposable(modifier: Modifier = Modifier,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        CircularProgressBar(
-            isDisplayed = loans.isEmpty()
-        )
+        if (loans.isEmpty()){
+            CommonLinearProgressBar()
+        }
 
     }
 }

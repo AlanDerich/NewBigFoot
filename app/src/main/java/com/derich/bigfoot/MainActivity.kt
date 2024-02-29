@@ -4,13 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
@@ -21,7 +16,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
@@ -32,6 +26,7 @@ import com.derich.bigfoot.model.firebase.FirebaseDataSource
 import com.derich.bigfoot.ui.bottomnavigation.BottomNavigator
 import com.derich.bigfoot.ui.bottomnavigation.NavigationGraph
 import com.derich.bigfoot.ui.common.composables.BigFutAppBar
+import com.derich.bigfoot.ui.common.composables.CommonLinearProgressBar
 import com.derich.bigfoot.ui.screens.home.ContributionsViewModel
 import com.derich.bigfoot.ui.screens.loans.LoansViewModel
 import com.derich.bigfoot.ui.screens.login.AuthViewModel
@@ -86,13 +81,7 @@ class MainActivity : ComponentActivity() {
                 BigFootTheme {
                     if (allMemberInformation.value.isEmpty()) {
                         if (dataLoading) {
-                            Column(verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally) {
-                                Text(text = "Fetching data...")
-                                LinearProgressIndicator(modifier = Modifier.wrapContentSize(
-                                    Alignment.Center))
-                            }
-
+                            CommonLinearProgressBar()
                         }
                     }
                     else{

@@ -41,6 +41,7 @@ class LoansViewModel (
     }
     //function to check all outstanding loans and total
     fun differentiateTheLoansTransactions(){
+        loadingLoansInfo = true
         for (loan in loans.value){
             when (loan.type) {
                 LoanType.PERSONAL_LOAN -> {
@@ -61,11 +62,8 @@ class LoansViewModel (
         allRechargesTotal = getAllRecharges()
         allExpensesTotal = getAllExpenses()
         availableAmount = (allRechargesTotal+ allPaidLoansTotal) - (allExpensesTotal + allGroupLoansTotal + allTransCharges)
-        val totalProfitsBeforeTransactionCharges = allGroupLoansTotal - allPaidLoansTotal - allExpensesTotal
-//        totalProfits = totalProfitsBeforeTransactionCharges - allTransCharges
-        //get a better function (outstanding+availableamount) - initial amount
         totalProfits = (allOutstandingLoansTotalAmount + availableAmount) - (allRechargesTotal)
-
+        loadingLoansInfo=false
 
     }
     //get all transaction charges and total pending loans
@@ -118,5 +116,8 @@ class LoansViewModel (
         listOfAllLoans.clear()
         listOfAllTopUps.clear()
         listOfAllExpenses.clear()
+    }
+    companion object{
+        var loadingLoansInfo = false
     }
 }

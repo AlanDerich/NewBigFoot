@@ -27,7 +27,7 @@ class LoansViewModel (
     var allExpensesTotal = 0
     var availableAmount =0
     var totalProfits =0
-    init {
+    fun collectLoansFromDB() {
         viewModelScope.launch {
             firebaseDataSource.getAllLoans().collect { loansDetails ->
                 if (loansDetails.size!=loans.value.size){

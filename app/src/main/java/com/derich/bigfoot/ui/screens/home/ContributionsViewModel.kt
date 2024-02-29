@@ -20,34 +20,20 @@ class ContributionsViewModel(
     private val firebaseDataSource: FirebaseDataSource
 ): ViewModel() {
     var members = MutableStateFlow<List<MemberDetails>>(listOf())
-
-
-//    private val contributionsRepository: ContributionsHistoryRepository = ContributionsHistoryRepository()
-
-//    var loadingContributions = mutableStateOf(false)
-//    var loadingMemberDetails = mutableStateOf(false)
     init {
-    viewModelScope.launch {
-        firebaseDataSource.getMemberDetails().collect { memberDetails ->
-            if (memberDetails.size!=members.value.size){
-                updateUI(memberDetails)
+    }
+    fun collectDataFromDB(){
+        viewModelScope.launch {
+            firebaseDataSource.getMemberDetails().collect { memberDetails ->
+                if (memberDetails.size!=members.value.size){
+                    updateUI(memberDetails)
+                }
             }
         }
     }
-    }
-
     private fun updateUI(memberDetails: List<MemberDetails>) {
         members.value = memberDetails
     }
-
-
-//    private fun getMemberDetails() {
-//        viewModelScope.launch {
-//            loadingMemberDetails.value = true
-//            memberData.value = contributionsRepository.getMemberDetailsFromFirestore()
-//            loadingMemberDetails.value = false
-//        }
-//    }
 
 companion object{
     fun calculateContributionsDifference(totalAmount: Int) : Int {

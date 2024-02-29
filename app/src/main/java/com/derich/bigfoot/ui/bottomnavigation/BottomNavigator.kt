@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -27,7 +26,6 @@ import com.derich.bigfoot.ui.screens.home.HomeComposable
 import com.derich.bigfoot.ui.screens.loans.LoansComposable
 import com.derich.bigfoot.ui.screens.loans.LoansViewModel
 import com.derich.bigfoot.ui.screens.login.AuthViewModel
-import com.derich.bigfoot.ui.screens.login.LoginErrorUi
 import com.derich.bigfoot.ui.screens.transactions.AddTransactionScreen
 import com.derich.bigfoot.ui.screens.transactions.TransactionsComposable
 import com.derich.bigfoot.ui.screens.transactions.TransactionsViewModel
@@ -81,58 +79,48 @@ fun NavigationGraph(
     loansVm:LoansViewModel,
     modifier: Modifier
 ) {
-    val context = LocalContext.current
-    if (getMemberData(allMemberInformation.value) == null) {
-        LoginErrorUi(message = "User not found. Contact system administrator to get you setup") {
-                authVm.logOut(context)
+    memberDetails = getMemberData(allMemberInformation.value)!!
+    NavHost(
+        navController,
+        startDestination = BottomNavItem.Home.screenRoute,
+        modifier = modifier
+    ) {
+        composable(BottomNavItem.Home.screenRoute) {
+            HomeComposable(
+                transactionsViewModel = transactionsViewModel
+            )
+        }
+        composable(BottomNavItem.Transactions.screenRoute) {
+            TransactionsComposable(
+                transactionsViewModel = transactionsViewModel,
+                navController = navController
+            )
+        }
+        composable(BottomNavItem.Loans.screenRoute) {
+            LoansComposable(loansViewModel = loansVm)
+        }
+        composable(BottomNavItem.Account.screenRoute) {
+            AccountsComposable(
+                navController = navController,
+                authViewModel = authVm
+            )
+        }
+        composable(BottomNavItem.AddTransaction.screenRoute) {
+            AddTransactionScreen(
+                transactionsViewModel = transactionsViewModel,
+                contViewModel = contViewModel,
+                navController = navController
+            )
+        }
+        composable(BottomNavItem.DeleteAccount.screenRoute) {
+            DataDeletionRequest(
+                authViewModel = authVm
+            )
+        }
+        composable(BottomNavItem.ImageUploader.screenRoute) {
+            ImageUploaderScreen(transactionsViewModel)
         }
     }
-    else {
-        memberDetails = getMemberData(allMemberInformation.value)!!
-        NavHost(
-                navController,
-                startDestination = BottomNavItem.Home.screenRoute,
-                modifier = modifier
-            ) {
-                composable(BottomNavItem.Home.screenRoute) {
-                    HomeComposable(
-                        transactionsViewModel = transactionsViewModel
-                    )
-                }
-
-                composable(BottomNavItem.Transactions.screenRoute) {
-                    TransactionsComposable(
-                        transactionsViewModel = transactionsViewModel,
-                        navController = navController
-                    )
-                }
-                composable(BottomNavItem.Loans.screenRoute) {
-                    LoansComposable(loansViewModel = loansVm)
-                }
-                composable(BottomNavItem.Account.screenRoute) {
-                    AccountsComposable(
-                        navController = navController,
-                        authViewModel = authVm
-                    )
-                }
-                composable(BottomNavItem.AddTransaction.screenRoute) {
-                    AddTransactionScreen(
-                        transactionsViewModel = transactionsViewModel,
-                        contViewModel = contViewModel,
-                        navController = navController
-                    )
-                }
-                composable(BottomNavItem.DeleteAccount.screenRoute) {
-                    DataDeletionRequest(
-                        authViewModel = authVm
-                    )
-                }
-                composable(BottomNavItem.ImageUploader.screenRoute) {
-                    ImageUploaderScreen(transactionsViewModel)
-                }
-            }
-        }
-
 }
 
 //function to get the current logged in member details

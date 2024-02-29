@@ -24,7 +24,7 @@ class TransactionsViewModel (
 ) : ViewModel() {
     var transactions = MutableStateFlow<List<Transactions>>(listOf())
 
-    init {
+    fun collectTransactionsFromDB() {
         viewModelScope.launch {
             firebaseDataSource.getAllTransactions().collect { transactionsDetails ->
                 if (transactionsDetails.size!=transactions.value.size) {

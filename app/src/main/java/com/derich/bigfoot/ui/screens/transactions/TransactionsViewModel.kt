@@ -10,6 +10,7 @@ import com.derich.bigfoot.model.MemberDetails
 import com.derich.bigfoot.model.Transactions
 import com.derich.bigfoot.model.firebase.FirebaseDataSource
 import com.derich.bigfoot.ui.bottomnavigation.BottomNavItem
+import com.derich.bigfoot.ui.common.composables.CommonVariables
 import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -76,30 +77,31 @@ class TransactionsViewModel (
 
             }
     }
-
-}
-
-fun calculateResultingDate(newUserAmount: Int): String {
-    //do this if the user has contributed less than 30440 which is 29/02/2024
-    if (newUserAmount <30440){
-        val totalDays: Int = (newUserAmount / 20)
-        //add number of days to the start date
-        var sdf = SimpleDateFormat("dd/MM/yyyy", Locale.US)
-        val c: Calendar = Calendar.getInstance()
-        c.time = sdf.parse("31/12/2019")!!
-        c.add(Calendar.DATE, totalDays)
-        sdf = SimpleDateFormat("dd/MM/yyyy", Locale.US)
-        return sdf.format(Date(c.timeInMillis))
+    companion object{
+        fun calculateResultingDate(newUserAmount: Int): String {
+            //do this if the user has contributed less than 30440 which is 29/02/2024
+            if (newUserAmount <30440){
+                val totalDays: Int = (newUserAmount / CommonVariables.PreviousContribution)
+                //add number of days to the start date
+                var sdf = SimpleDateFormat("dd/MM/yyyy", Locale.US)
+                val c: Calendar = Calendar.getInstance()
+                c.time = sdf.parse("31/12/2019")!!
+                c.add(Calendar.DATE, totalDays)
+                sdf = SimpleDateFormat("dd/MM/yyyy", Locale.US)
+                return sdf.format(Date(c.timeInMillis))
+            }
+            else{
+                //do this if the user has contributed more than 30440
+                val totalDays: Int = ((newUserAmount-30420) / CommonVariables.CurrentContribution)
+                //add number of days to the start date
+                var sdf = SimpleDateFormat("dd/MM/yyyy", Locale.US)
+                val c: Calendar = Calendar.getInstance()
+                c.time = sdf.parse("29/02/2024")!!
+                c.add(Calendar.DATE, totalDays)
+                sdf = SimpleDateFormat("dd/MM/yyyy", Locale.US)
+                return sdf.format(Date(c.timeInMillis))
+            }
+        }
     }
-    else{
-        //do this if the user has contributed more than 30440
-        val totalDays: Int = ((newUserAmount-30420) / 35)
-        //add number of days to the start date
-        var sdf = SimpleDateFormat("dd/MM/yyyy", Locale.US)
-        val c: Calendar = Calendar.getInstance()
-        c.time = sdf.parse("29/02/2024")!!
-        c.add(Calendar.DATE, totalDays)
-        sdf = SimpleDateFormat("dd/MM/yyyy", Locale.US)
-        return sdf.format(Date(c.timeInMillis))
-    }
+
 }

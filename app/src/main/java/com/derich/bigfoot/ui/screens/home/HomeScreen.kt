@@ -41,6 +41,7 @@ import com.derich.bigfoot.allMemberInformation
 import com.derich.bigfoot.deviceWidthSize
 import com.derich.bigfoot.model.MemberDetails
 import com.derich.bigfoot.ui.bottomnavigation.memberDetails
+import com.derich.bigfoot.ui.common.composables.CommonVariables
 import com.derich.bigfoot.ui.screens.transactions.TransactionsViewModel
 
 
@@ -109,7 +110,7 @@ fun UsersColumn(modifier: Modifier = Modifier, contribution: MemberDetails) {
         Column(horizontalAlignment = Alignment.Start, modifier = modifier.padding(8.dp)) {
             Text(text = contribution.fullNames, fontWeight = Bold)
             Spacer(modifier = Modifier.padding(2.dp))
-            Text(text = "KSH ${contribution.totalAmount}")
+            Text(text = "${CommonVariables.Currency} ${contribution.totalAmount}")
             Spacer(modifier = Modifier.padding(2.dp))
             Text(text = contribution.contributionsDate)
         } 
@@ -117,7 +118,7 @@ fun UsersColumn(modifier: Modifier = Modifier, contribution: MemberDetails) {
 @Composable
 fun CompactScreen(modifier: Modifier, allMembersInfo: List<MemberDetails>){
     Column(modifier = modifier.fillMaxSize()) {
-        val differenceInContributions = calculateContributionsDifference(
+        val differenceInContributions = ContributionsViewModel.calculateContributionsDifference(
             memberDetails.totalAmount.toInt())
         Row(horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically) {
@@ -131,7 +132,7 @@ fun CompactScreen(modifier: Modifier, allMembersInfo: List<MemberDetails>){
                     verticalArrangement = Arrangement.Center,
                     modifier = Modifier.weight(1f)) {
 //                        Spacer(modifier = Modifier.padding(2.dp))
-                    Text(text = "KSH $differenceInContributions",
+                    Text(text = "${CommonVariables.Currency} $differenceInContributions",
                         fontWeight = Bold,
                         modifier= Modifier.padding(2.dp))
                     Text(text = memberDetails.contributionsDate,
@@ -148,7 +149,7 @@ fun CompactScreen(modifier: Modifier, allMembersInfo: List<MemberDetails>){
                         .weight(0.5f))
                 Column (modifier = Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
 //                        Spacer(modifier = Modifier.padding(2.dp))
-                    Text(text = "KSH $differenceInContributions",
+                    Text(text = "${CommonVariables.Currency} $differenceInContributions",
                         fontWeight = Bold,
                         modifier= Modifier.padding(2.dp))
                     Text(text = memberDetails.contributionsDate,
@@ -164,7 +165,7 @@ fun CompactScreen(modifier: Modifier, allMembersInfo: List<MemberDetails>){
                 verticalArrangement = Arrangement.Center) {
 //                        Spacer(modifier = Modifier.padding(2.dp))
                 Text(text = "Group Total", fontWeight = Bold)
-                Text(text = "KSH ${calculateTotalContributions(allMemberInformation)}",
+                Text(text = "${CommonVariables.Currency} ${calculateTotalContributions(allMemberInformation)}",
                     fontWeight = Bold,modifier= Modifier.padding(2.dp), fontSize = 16.sp)
 
             }
@@ -189,7 +190,7 @@ fun LandscapeScreen(modifier: Modifier, allMembersInfo: List<MemberDetails>) {
     Column(modifier = modifier
         .fillMaxSize()
         .padding(8.dp)) {
-        val differenceInContributions = calculateContributionsDifference(
+        val differenceInContributions = ContributionsViewModel.calculateContributionsDifference(
             memberDetails.totalAmount.toInt())
         Row(horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.Top) {
@@ -203,13 +204,13 @@ fun LandscapeScreen(modifier: Modifier, allMembersInfo: List<MemberDetails>) {
                         modifier = Modifier
                             .size(68.dp))
                     Spacer(modifier = Modifier.padding(8.dp))
-                    Text(text = "Balance: KSH $differenceInContributions",
+                    Text(text = "Balance: ${CommonVariables.Currency} $differenceInContributions",
                         fontWeight = Bold)
                     Spacer(modifier = Modifier.padding(2.dp))
                     Text(text = "Due: ${memberDetails.contributionsDate}",
                         fontWeight = Bold)
                     Spacer(modifier = Modifier.padding(2.dp))
-                    Text(text = "Group Total: KSH ${calculateTotalContributions(allMemberInformation)}",
+                    Text(text = "Group Total: ${CommonVariables.Currency} ${calculateTotalContributions(allMemberInformation)}",
                         fontWeight = Bold,fontSize = 16.sp)
                 }
                 LazyVerticalGrid(
@@ -234,13 +235,13 @@ fun LandscapeScreen(modifier: Modifier, allMembersInfo: List<MemberDetails>) {
                             .size(68.dp)
                            )
                     Spacer(modifier = Modifier.padding(8.dp))
-                    Text(text = "Balance: KSH $differenceInContributions",
+                    Text(text = "Balance: ${CommonVariables.Currency} $differenceInContributions",
                         fontWeight = Bold)
                     Spacer(modifier = Modifier.padding(2.dp))
                     Text(text = "Due: ${memberDetails.contributionsDate}",
                         fontWeight = Bold)
                     Spacer(modifier = Modifier.padding(2.dp))
-                    Text(text = "Group Total: KSH ${calculateTotalContributions(allMemberInformation)}",
+                    Text(text = "Group Total: ${CommonVariables.Currency} ${calculateTotalContributions(allMemberInformation)}",
                         fontWeight = Bold,fontSize = 16.sp)
                 }
                 LazyVerticalGrid(

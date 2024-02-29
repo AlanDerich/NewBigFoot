@@ -51,6 +51,7 @@ import com.derich.bigfoot.deviceWidthSize
 import com.derich.bigfoot.model.Transactions
 import com.derich.bigfoot.ui.bottomnavigation.memberDetails
 import com.derich.bigfoot.ui.common.composables.CommonLinearProgressBar
+import com.derich.bigfoot.ui.common.composables.CommonVariables
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.util.Locale
 
@@ -178,7 +179,7 @@ fun TransactionCard(transaction: Transactions,
             Text(text = "Date: ${ transaction.transactionDate }",
                 modifier = Modifier.padding(start = 8.dp, end = 8.dp))
             Spacer(modifier = Modifier.padding(2.dp))
-            Text(text = "Amount: KSH ${ transaction.transactionAmount }",
+            Text(text = "Amount: ${CommonVariables.Currency} ${ transaction.transactionAmount }",
                 modifier = Modifier.padding(start = 8.dp, end = 8.dp))
             Spacer(modifier = Modifier.padding(2.dp))
             Text(text = transaction.transactionConfirmation,

@@ -185,7 +185,7 @@ fun AddTransactionPage(selectedMember: MemberDetails,
                         updateContributions(
                             selectedMember.phoneNumber,
                             selectedMember.fullNames,
-                            calculateResultingDate(selectedMember.totalAmount.toInt() + transactionAmountPaid.toInt()),
+                            TransactionsViewModel.calculateResultingDate(selectedMember.totalAmount.toInt() + transactionAmountPaid.toInt()),
                             newUserAmount = (selectedMember.totalAmount.toInt() + transactionAmountPaid.toInt()).toString(),
                             transactionsViewModel,
                             mContext,

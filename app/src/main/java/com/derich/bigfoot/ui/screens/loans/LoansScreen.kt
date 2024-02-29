@@ -47,6 +47,7 @@ import com.derich.bigfoot.deviceWidthSize
 import com.derich.bigfoot.model.Loan
 import com.derich.bigfoot.model.LoanType
 import com.derich.bigfoot.ui.common.composables.CommonLinearProgressBar
+import com.derich.bigfoot.ui.common.composables.CommonVariables
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -88,7 +89,7 @@ fun LoansComposable(modifier: Modifier = Modifier,
                     style = MaterialTheme.typography.headlineSmall
                 )
                 Text(
-                    text = "The total amount of unpaid loan is KSH$totalOutstandingLoanAmount.",
+                    text = "The total amount of unpaid loan is ${CommonVariables.Currency}$totalOutstandingLoanAmount.",
                     modifier = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
                     style = MaterialTheme.typography.bodyLarge
                 )
@@ -124,7 +125,7 @@ fun LoansComposable(modifier: Modifier = Modifier,
                         style = MaterialTheme.typography.headlineSmall
                     )
                     Text(
-                        text = "The total amount of unpaid loan is KSH$totalOutstandingLoanAmount.",
+                        text = "The total amount of unpaid loan is ${CommonVariables.Currency}$totalOutstandingLoanAmount.",
                         modifier = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
                         style = MaterialTheme.typography.bodyLarge
                     )
@@ -200,28 +201,28 @@ fun DisplayStatsDialog(loansViewModel: LoansViewModel,
                             RoundedCornerShape(8.dp)
                         ))
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(text = "All Deposits: KSH ${loansViewModel.allRechargesTotal}",
+                Text(text = "All Deposits: ${CommonVariables.Currency} ${loansViewModel.allRechargesTotal}",
                     style = MaterialTheme.typography.headlineMedium)
                 Spacer(modifier = Modifier.height(2.dp))
-                Text(text = "${loansViewModel.allGroupLoans} total loans: KSH ${loansViewModel.allGroupLoansTotal}",
+                Text(text = "${loansViewModel.allGroupLoans} total loans: ${CommonVariables.Currency} ${loansViewModel.allGroupLoansTotal}",
                     style = MaterialTheme.typography.headlineMedium)
                 Spacer(modifier = Modifier.height(2.dp))
-                Text(text = "All transaction charges: KSH ${loansViewModel.allTransCharges}",
+                Text(text = "All transaction charges: ${CommonVariables.Currency} ${loansViewModel.allTransCharges}",
                     style = MaterialTheme.typography.headlineMedium)
                 Spacer(modifier = Modifier.height(2.dp))
-                Text(text = "${loansViewModel.allPaidLoans} paid loans totalling: KSH ${loansViewModel.allPaidLoansTotal}",
+                Text(text = "${loansViewModel.allPaidLoans} paid loans totalling: ${CommonVariables.Currency} ${loansViewModel.allPaidLoansTotal}",
                     style = MaterialTheme.typography.headlineMedium)
                 Spacer(modifier = Modifier.height(2.dp))
-                Text(text = "${loansViewModel.allPendingLoans} unpaid loans totalling: KSH ${loansViewModel.allOutstandingLoansTotalAmount}",
+                Text(text = "${loansViewModel.allPendingLoans} unpaid loans totalling: ${CommonVariables.Currency} ${loansViewModel.allOutstandingLoansTotalAmount}",
                     style = MaterialTheme.typography.headlineMedium)
                 Spacer(modifier = Modifier.height(2.dp))
-                Text(text = "All Group Expenses: KSH ${loansViewModel.allExpensesTotal}",
+                Text(text = "All Group Expenses: ${CommonVariables.Currency} ${loansViewModel.allExpensesTotal}",
                     style = MaterialTheme.typography.headlineMedium)
                 Spacer(modifier = Modifier.height(2.dp))
-                Text(text = "Available Amount: KSH ${loansViewModel.availableAmount}",
+                Text(text = "Available Amount: ${CommonVariables.Currency} ${loansViewModel.availableAmount}",
                     style = MaterialTheme.typography.headlineMedium)
                 Spacer(modifier = Modifier.height(2.dp))
-                Text(text = "Total Profits: KSH ${loansViewModel.totalProfits}",
+                Text(text = "Total Profits: ${CommonVariables.Currency} ${loansViewModel.totalProfits}",
                     style = MaterialTheme.typography.headlineMedium)
                 Button(onClick = onDismiss, modifier = Modifier.align(Alignment.End)) {
                     Text(text = "Dismiss")
@@ -250,10 +251,10 @@ fun LoansCard(loan: Loan,
                 Text(text = "Date Loaned: ${ loan.dateLoaned }",
                     modifier = Modifier.padding(start = 8.dp, end = 8.dp))
                 Spacer(modifier = Modifier.padding(2.dp))
-                Text(text = "Amount Loaned: KSH ${ loan.amountLoaned }",
+                Text(text = "Amount Loaned: ${CommonVariables.Currency} ${ loan.amountLoaned }",
                     modifier = Modifier.padding(start = 8.dp, end = 8.dp))
                 Spacer(modifier = Modifier.padding(2.dp))
-                Text(text = "Transaction Charges: KSH ${ loan.transactionCharges }",
+                Text(text = "Transaction Charges: ${CommonVariables.Currency} ${ loan.transactionCharges }",
                     modifier = Modifier.padding(start = 8.dp, end = 8.dp))
                 Spacer(modifier = Modifier.padding(2.dp))
                 if (loan.status){
@@ -278,7 +279,7 @@ fun LoansCard(loan: Loan,
                 Text(text = "Date: ${ loan.dateLoaned }",
                     modifier = Modifier.padding(start = 8.dp, end = 8.dp))
                 Spacer(modifier = Modifier.padding(2.dp))
-                Text(text = "Amount Recharged: KSH ${ loan.amountLoaned }",
+                Text(text = "Amount Recharged: ${CommonVariables.Currency} ${ loan.amountLoaned }",
                     modifier = Modifier.padding(start = 8.dp, end = 8.dp))
             }
             //display this if it is an expense
@@ -286,7 +287,7 @@ fun LoansCard(loan: Loan,
                 Text(text = "Expense Date: ${ loan.dateLoaned }",
                     modifier = Modifier.padding(start = 8.dp, end = 8.dp))
                 Spacer(modifier = Modifier.padding(2.dp))
-                Text(text = "Amount used: KSH ${ loan.amountLoaned }",
+                Text(text = "Amount used: ${CommonVariables.Currency} ${ loan.amountLoaned }",
                     modifier = Modifier.padding(start = 8.dp, end = 8.dp))
                 Spacer(modifier = Modifier.padding(2.dp))
                 Text(text = "Details: ${loan.username}",

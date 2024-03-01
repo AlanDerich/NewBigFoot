@@ -30,6 +30,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.derich.bigfoot.deviceWidthSize
 import com.derich.bigfoot.ui.bottomnavigation.BottomNavItem
 import com.derich.bigfoot.ui.bottomnavigation.memberDetails
+import com.derich.bigfoot.ui.common.composables.MEMBER_ROLE
 import com.derich.bigfoot.ui.screens.login.AuthViewModel
 
 @Composable
@@ -81,18 +82,20 @@ fun AccountsComposable(
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier.padding(8.dp)
             )
-            //export data button
-            Button(
-                onClick = {
-                    authViewModel.navigateToExportDataActivity(context = context)
+            if(memberDetails.memberRole == MEMBER_ROLE.ADMIN.name){
+                //export data button
+                Button(
+                    onClick = {
+                        authViewModel.navigateToExportDataActivity(context = context)
 
-                },
-                modifier = Modifier.padding(8.dp)
-            ) {
-                Text(
-                    text = "Export Data",
-                    style = MaterialTheme.typography.bodyMedium
-                )
+                    },
+                    modifier = Modifier.padding(8.dp)
+                ) {
+                    Text(
+                        text = "Export Data",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
             }
             //logout button
             Button(
@@ -165,17 +168,20 @@ fun AccountsComposable(
                 )
             }
             Column(modifier= Modifier.verticalScroll(rememberScrollState()).padding(8.dp).weight(1f)) {
-                //export data button
-                Button(
-                    onClick = {
-                        authViewModel.navigateToExportDataActivity(context = context)
-                    },
-                    modifier = Modifier.padding(8.dp)
-                ) {
-                    Text(
-                        text = "Export Data",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
+
+                //show export data button if Admin
+                if(memberDetails.memberRole == MEMBER_ROLE.ADMIN.name){
+                    Button(
+                        onClick = {
+                            authViewModel.navigateToExportDataActivity(context = context)
+                        },
+                        modifier = Modifier.padding(8.dp)
+                    ) {
+                        Text(
+                            text = "Export Data",
+                            style = MaterialTheme.typography.bodyMedium
+                        )
+                    }
                 }
                 //logout button
                 Button(

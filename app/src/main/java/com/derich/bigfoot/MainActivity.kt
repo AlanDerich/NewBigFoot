@@ -29,7 +29,6 @@ import com.derich.bigfoot.model.firebase.FirebaseDataSource
 import com.derich.bigfoot.ui.bottomnavigation.BottomNavigator
 import com.derich.bigfoot.ui.bottomnavigation.NavigationGraph
 import com.derich.bigfoot.ui.bottomnavigation.getMemberData
-import com.derich.bigfoot.ui.bottomnavigation.memberDetails
 import com.derich.bigfoot.ui.common.composables.BigFutAppBar
 import com.derich.bigfoot.ui.common.composables.CommonLinearProgressBar
 import com.derich.bigfoot.ui.screens.home.ContributionsViewModel
@@ -55,7 +54,6 @@ var deviceWidthSize: WindowWidthSizeClass = WindowWidthSizeClass.Compact
 class MainActivity : ComponentActivity() {
     companion object {
         var mainActivity: MainActivity? = null
-
     }
 
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
@@ -66,89 +64,79 @@ class MainActivity : ComponentActivity() {
         val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
         val firebaseDataSource = FirebaseDataSource(firestore)
         val auth = FirebaseAuth.getInstance()
+
         //viewModels initialization this starts the data collection from the firestore database
         val contributionsVM = ContributionsViewModel(firebaseDataSource)
         val transactionsVM = TransactionsViewModel(firebaseDataSource)
         val loansVM= LoansViewModel(firebaseDataSource)
         val authVM = AuthViewModel(auth)
-        var memberDets:MemberDetails? = null
+        var memberDets: MemberDetails? = null
+
         setContent {
-            var notifyLoadingDate by remember { mutableStateOf(false) }
+            var notifyLoadingData by remember { mutableStateOf(true) }
             deviceWidthSize = calculateWindowSizeClass(this).widthSizeClass
+
             allMemberInformation = contributionsVM.members.collectAsState()
-            allTransactions= transactionsVM.transactions.collectAsState()
+            allTransactions = transactionsVM.transactions.collectAsState()
             allLoans = loansVM.loans.collectAsState()
-            if(auth.currentUser != null) {
-                notifyLoadingDate=true
-                LaunchedEffect(key1 = rememberCoroutineScope()){
+
+            // Check if the user is logged in
+            if (auth.currentUser != null) {
+                LaunchedEffect(key1 = rememberCoroutineScope()) {
+                    // Coroutine to fetch data from the database
                     lifecycleScope.launch(Dispatchers.IO) {
                         contributionsVM.collectDataFromDB()
-                    }.invokeOnCompletion {
-                        if(contributionsVM.members.value.isNotEmpty()){
-                            lifecycleScope.launch(Dispatchers.IO) {
-                                memberDets = getMemberData(allMemberInformation.value)
-                            }.invokeOnCompletion {
-                                notifyLoadingDate = false
-                            }
-                        }
-                    }
-                    lifecycleScope.launch(Dispatchers.IO) {
                         transactionsVM.collectTransactionsFromDB()
-                    }
-                    lifecycleScope.launch(Dispatchers.IO) {
                         loansVM.collectLoansFromDB()
+                    }.invokeOnCompletion {
+                            lifecycleScope.launch(Dispatchers.IO) {
+                                contributionsVM.members.collect{
+                                    notifyLoadingData = it.isEmpty()
+                                    if(it.isNotEmpty()){
+                                        lifecycleScope.launch(Dispatchers.IO) {
+                                            memberDets = getMemberData(it)
+                                        }.invokeOnCompletion {
+                                            notifyLoadingData = false
+                                        }
+                                    }
+                                }
+
+                            }
                     }
                 }
-            }
-            else {
+            } else {
+                // User is not logged in, navigate to the login page
                 val intent = Intent(mainActivity, PhoneAuthActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
             }
 
-
-//                var count = allLoans.value.size
-                //navcontroller for the bottom navigation
+            // Navigation setup
             val bottomNavController = rememberNavController()
+
+            // UI Composition based on user login status
             BigFootTheme {
-                if (allMemberInformation.value.isEmpty()) {
-                    if (notifyLoadingDate) {
-                        CommonLinearProgressBar()
+                if (notifyLoadingData) {
+                    CommonLinearProgressBar()
+                } else if (allMemberInformation.value.isEmpty()) {
+                    LoginErrorUi(message = "User not found. Contact system administrator to get you set up") {
+                        authVM.logOut(context = this)
                     }
-                }
-                else{
-                    if(!notifyLoadingDate){
-                        if (memberDets== null) {
-                            LoginErrorUi(message = "User not found. Contact system administrator to get you setup") {
-                                authVM.logOut(context = this)
-                            }
-                        }
-                        else{
-                            memberDetails = memberDets!!
-                            Scaffold(
-                                topBar = {
-                                    BigFutAppBar()
-                                },
-                                bottomBar = {
-                                    BottomNavigator(navController = bottomNavController)
-                                },
-                            ) {
-                                    innerPadding ->
-                                NavigationGraph(
-                                    navController = bottomNavController,
-                                    contViewModel = contributionsVM,
-                                    transactionsViewModel = transactionsVM,
-                                    authVm= authVM,
-                                    loansVm = loansVM,
-                                    modifier = Modifier.padding(innerPadding)
-                                )
-
-                            }
-
-                        }
-                    }
-                    else{
-                        CommonLinearProgressBar()
+                } else {
+                    // User is logged in and data is fetched
+//                    memberDetails = memberDets!!
+                    Scaffold(
+                        topBar = { BigFutAppBar() },
+                        bottomBar = { BottomNavigator(navController = bottomNavController) },
+                    ) { innerPadding ->
+                        NavigationGraph(
+                            navController = bottomNavController,
+                            contViewModel = contributionsVM,
+                            transactionsViewModel = transactionsVM,
+                            authVm= authVM,
+                            loansVm = loansVM,
+                            modifier = Modifier.padding(innerPadding)
+                        )
                     }
                 }
             }
@@ -173,6 +161,6 @@ class MainActivity : ComponentActivity() {
 
 @Preview
 @Composable
-fun MainPrev(){
-
+fun MainPrev() {
+    // Preview code
 }

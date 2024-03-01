@@ -6,3 +6,7 @@ object CommonVariables {
     var CurrentContribution: Int=35
     var Currency: String="KSH"
 }
+enum class MEMBER_ROLE {
+    ADMIN,
+    MEMBER
+}

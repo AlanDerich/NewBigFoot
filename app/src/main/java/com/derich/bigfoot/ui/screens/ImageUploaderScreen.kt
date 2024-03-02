@@ -5,7 +5,6 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +20,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.FileProvider
 import com.derich.bigfoot.model.MemberDetails
 import com.derich.bigfoot.ui.bottomnavigation.memberDetails
+import com.derich.bigfoot.ui.common.composables.showMessage
 import com.derich.bigfoot.ui.screens.transactions.TransactionsViewModel
 import com.google.firebase.FirebaseApp
 import com.google.firebase.storage.FirebaseStorage
@@ -46,7 +46,7 @@ fun ImageUploaderScreen(transactionsViewModel: TransactionsViewModel) {
             imageUploader(reduceAndUploadImage(uri, context), context)
         } else {
             // Handle the case where the user did not select an image
-            Toast.makeText(context, "Error Selecting the Image", Toast.LENGTH_SHORT).show()
+            context.showMessage("Error Selecting the Image")
         }
     }
 
@@ -119,7 +119,7 @@ fun imageUploader(
     uploadTask.addOnSuccessListener {
         // Image uploaded successfully
         // You can get the download URL if needed
-        Toast.makeText(context, "Image uploaded successfully", Toast.LENGTH_SHORT).show()
+        context.showMessage("Image uploaded successfully")
         imagesRef.downloadUrl.addOnSuccessListener { downloadUri ->
             val downloadUrl = downloadUri.toString()
             // Handle the download URL
@@ -127,7 +127,7 @@ fun imageUploader(
         }
     }.addOnFailureListener {
         // Handle unsuccessful uploads
-        Toast.makeText(context, "Error occurred while uploading the Image", Toast.LENGTH_SHORT).show()
+        context.showMessage("Error occurred while uploading the Image")
     }
 }
 
@@ -137,12 +137,12 @@ fun updateMemberDetails(context: Context, newUserPic: String) {
             fullMemberDetails.fullNames,newUserPic)
         task.addOnSuccessListener {
             //do this if the upload was successful
-            Toast.makeText(context, "The profile picture was updated successfully!", Toast.LENGTH_SHORT).show()
+            context.showMessage("The profile picture was updated successfully!")
 
         }
         task.addOnFailureListener{
             //do this if the upload failed due to some reason
-            Toast.makeText(context, "An error occurred during upload ${it.message.toString()}!", Toast.LENGTH_SHORT).show()
+            context.showMessage("An error occurred during upload ${it.message.toString()}!")
         }
     }
 }

@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -25,6 +24,7 @@ import com.derich.bigfoot.allLoans
 import com.derich.bigfoot.allMemberInformation
 import com.derich.bigfoot.allTransactions
 import com.derich.bigfoot.ui.common.composables.BigFutAppBar
+import com.derich.bigfoot.ui.common.composables.showMessage
 import com.derich.bigfoot.ui.theme.BigFootTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -160,21 +160,13 @@ class ExportDataActivity : ComponentActivity() {
                                 }
 
                                 withContext(Dispatchers.Main) {
-                                    Toast.makeText(
-                                        this@ExportDataActivity,
-                                        "File saved successfully",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    this@ExportDataActivity.showMessage("File saved successfully")
                                     exportingStatus=false
                                 }
                             } catch (e: IOException) {
                                 withContext(Dispatchers.Main) {
                                     e.printStackTrace()
-                                    Toast.makeText(
-                                        this@ExportDataActivity,
-                                        "Error processing file",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
+                                    this@ExportDataActivity.showMessage("Error processing file")
                                     exportingStatus=false
                                 }
                             }

@@ -30,7 +30,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.derich.bigfoot.deviceWidthSize
 import com.derich.bigfoot.ui.bottomnavigation.BottomNavItem
 import com.derich.bigfoot.ui.bottomnavigation.memberDetails
-import com.derich.bigfoot.ui.common.composables.MEMBER_ROLE
+import com.derich.bigfoot.ui.common.composables.MemberRole
 import com.derich.bigfoot.ui.screens.login.AuthViewModel
 
 @Composable
@@ -82,7 +82,7 @@ fun AccountsComposable(
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier.padding(8.dp)
             )
-            if(memberDetails.memberRole == MEMBER_ROLE.ADMIN.name){
+            if(memberDetails.memberRole == MemberRole.ADMIN.name){
                 //export data button
                 Button(
                     onClick = {
@@ -170,7 +170,7 @@ fun AccountsComposable(
             Column(modifier= Modifier.verticalScroll(rememberScrollState()).padding(8.dp).weight(1f)) {
 
                 //show export data button if Admin
-                if(memberDetails.memberRole == MEMBER_ROLE.ADMIN.name){
+                if(memberDetails.memberRole == MemberRole.ADMIN.name){
                     Button(
                         onClick = {
                             authViewModel.navigateToExportDataActivity(context = context)

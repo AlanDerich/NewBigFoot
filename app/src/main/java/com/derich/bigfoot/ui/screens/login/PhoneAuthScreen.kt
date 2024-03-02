@@ -3,7 +3,6 @@ package com.derich.bigfoot.ui.screens.login
 import android.app.Activity
 import android.text.TextUtils
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.scaleIn
@@ -29,6 +28,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.derich.bigfoot.ui.common.composables.showMessage
 import com.google.firebase.Firebase
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
@@ -105,11 +105,7 @@ fun PhoneAuthScreen(authVm: AuthViewModel) {
                 enabled = !loading.value && !codeSent.value,
                 onClick = {
                     if (TextUtils.isEmpty(phoneNumber.value) || phoneNumber.value.length < 10) {
-                        Toast.makeText(
-                            context,
-                            "Enter a valid phone number",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        context.showMessage("Enter a valid phone number")
                     } else {
                         loading.value = true
                         val number = if (phoneNumber.value.startsWith("+254")) {
@@ -159,12 +155,7 @@ fun PhoneAuthScreen(authVm: AuthViewModel) {
                     enabled = !loading.value,
                     onClick = {
                         if (TextUtils.isEmpty(otp.value) || otp.value.length < 6) {
-                            Toast.makeText(
-                                context,
-                                "Please enter a valid OTP",
-                                Toast.LENGTH_SHORT
-                            )
-                                .show()
+                            context.showMessage("Please enter a valid OTP")
                         } else {
                             loading.value = true
                             //This is the main part where we verify the OTP
@@ -180,11 +171,7 @@ fun PhoneAuthScreen(authVm: AuthViewModel) {
                                     } else {
                                         loading.value = false
                                         if (task.exception is FirebaseAuthInvalidCredentialsException) {
-                                            Toast.makeText(
-                                                context,
-                                                "Verification failed.." + (task.exception as FirebaseAuthInvalidCredentialsException).message,
-                                                Toast.LENGTH_LONG
-                                            ).show()
+                                            context.showMessage("Verification failed..")
                                             Log.d("Verification failed..", (task.exception as FirebaseAuthInvalidCredentialsException).message.toString())
                                             if ((task.exception as FirebaseAuthInvalidCredentialsException).message?.contains(
                                                     "expired"
@@ -216,13 +203,12 @@ fun PhoneAuthScreen(authVm: AuthViewModel) {
 
     callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
         override fun onVerificationCompleted(p0: PhoneAuthCredential) {
-            Toast.makeText(context, "Verification successful..", Toast.LENGTH_SHORT).show()
+            context.showMessage("Verification successful..")
             loading.value = false
         }
 
         override fun onVerificationFailed(p0: FirebaseException) {
-            Toast.makeText(context, "Verification failed.. ${p0.message}", Toast.LENGTH_LONG)
-                .show()
+            context.showMessage("Verification failed.. ${p0.message}")
             loading.value = false
         }
 

@@ -1,7 +1,6 @@
 package com.derich.bigfoot.ui.screens.transactions
 
 import android.content.Context
-import android.widget.Toast
 import androidx.compose.runtime.State
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,6 +10,7 @@ import com.derich.bigfoot.model.Transactions
 import com.derich.bigfoot.model.firebase.FirebaseDataSource
 import com.derich.bigfoot.ui.bottomnavigation.BottomNavItem
 import com.derich.bigfoot.ui.common.composables.CommonVariables
+import com.derich.bigfoot.ui.common.composables.showMessage
 import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -70,7 +70,7 @@ class TransactionsViewModel (
                         memberInfo.totalAmount)
                     task.addOnSuccessListener {
                         //do this if the upload was successful
-                        Toast.makeText(mContext, "The details for ${memberInfo.fullNames} was updated successfully!", Toast.LENGTH_SHORT).show()
+                        mContext.showMessage("The details for ${memberInfo.fullNames} was updated successfully!")
 
                     }
                 }

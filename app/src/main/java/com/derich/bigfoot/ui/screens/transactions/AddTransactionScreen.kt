@@ -3,7 +3,6 @@ package com.derich.bigfoot.ui.screens.transactions
 import android.app.DatePickerDialog
 import android.content.Context
 import android.widget.DatePicker
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -37,6 +36,7 @@ import androidx.navigation.NavController
 import com.derich.bigfoot.model.MemberDetails
 import com.derich.bigfoot.model.Transactions
 import com.derich.bigfoot.ui.common.composables.CommonLinearProgressBar
+import com.derich.bigfoot.ui.common.composables.showMessage
 import com.derich.bigfoot.ui.screens.home.ContributionsViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -130,7 +130,6 @@ fun AddTransactionPage(selectedMember: MemberDetails,
                 reversedDateOfTransaction = "$date/${month}/$mYear"
             }, yearSelected, monthSelected, daySelected
         ).show()
-        Toast.makeText(mContext, dateOfTransaction, Toast.LENGTH_SHORT).show()
     }) {
         Text(text = dateOfTransaction)
 
@@ -194,12 +193,12 @@ fun AddTransactionPage(selectedMember: MemberDetails,
                     }
                     task.addOnFailureListener{
                 //do this if the upload failed due to some reason
-                        Toast.makeText(mContext, "An error occurred during upload ${it.message.toString()}!", Toast.LENGTH_SHORT).show()
+                        mContext.showMessage("An error occurred during upload ${it.message.toString()}!")
                     }
                 }
             }
                 else {
-                    Toast.makeText(mContext, "Please confirm the details again", Toast.LENGTH_SHORT).show()
+                    mContext.showMessage("Please confirm the details again")
                 }
 
                       },
@@ -222,14 +221,14 @@ fun updateContributions(memberPhoneNumber: String,
         val task = transactionsViewModel.updateContributions(memberPhoneNumber,memberFullNames,resultingDate, newUserAmount)
         task.addOnSuccessListener {
             //do this if the upload was successful
-            Toast.makeText(mContext, "The transaction was updated successfully!", Toast.LENGTH_SHORT).show()
+            mContext.showMessage("The transaction was updated successfully!")
             transactionsViewModel.launchTransactionScreen(navController = navController)
 
 
         }
         task.addOnFailureListener{
             //do this if the upload failed due to some reason
-            Toast.makeText(mContext, "An error occurred during upload ${it.message.toString()}!", Toast.LENGTH_SHORT).show()
+            mContext.showMessage("An error occurred during upload ${it.message.toString()}!")
         }
     }
 }

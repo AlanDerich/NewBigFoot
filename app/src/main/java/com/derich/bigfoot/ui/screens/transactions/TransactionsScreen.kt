@@ -52,7 +52,7 @@ import com.derich.bigfoot.model.Transactions
 import com.derich.bigfoot.ui.bottomnavigation.memberDetails
 import com.derich.bigfoot.ui.common.composables.CommonLinearProgressBar
 import com.derich.bigfoot.ui.common.composables.CommonVariables
-import com.derich.bigfoot.ui.common.composables.MEMBER_ROLE
+import com.derich.bigfoot.ui.common.composables.MemberRole
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.util.Locale
 
@@ -102,7 +102,7 @@ fun TransactionsComposable(modifier: Modifier = Modifier,
 
 //display all the transactions as a horizontal list
                 //check if member is admin and display button to launch addTransaction page
-                if (memberDetails.memberRole == MEMBER_ROLE.ADMIN.name) {
+                if (memberDetails.memberRole == MemberRole.ADMIN.name) {
                     FloatingActionButton(
                         onClick = {
                             transactionsViewModel.launchAddTransactionScreen(navController)
@@ -135,7 +135,7 @@ fun TransactionsComposable(modifier: Modifier = Modifier,
                         }
                     }
                     //check if member is admin and display button to launch addTransaction page
-                    if (memberDetails.memberRole == MEMBER_ROLE.ADMIN.name) {
+                    if (memberDetails.memberRole == MemberRole.ADMIN.name) {
                         FloatingActionButton(
                             onClick = {
                                 transactionsViewModel.launchAddTransactionScreen(navController)

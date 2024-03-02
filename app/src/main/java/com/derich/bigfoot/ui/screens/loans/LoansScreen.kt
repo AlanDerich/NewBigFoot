@@ -34,7 +34,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -48,6 +47,8 @@ import com.derich.bigfoot.model.Loan
 import com.derich.bigfoot.model.LoanType
 import com.derich.bigfoot.ui.common.composables.CommonLinearProgressBar
 import com.derich.bigfoot.ui.common.composables.CommonVariables
+import com.derich.bigfoot.ui.theme.ErrorRed
+import com.derich.bigfoot.ui.theme.SuccessGreen
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -260,7 +261,7 @@ fun LoansCard(loan: Loan,
                 if (loan.status){
                     Text(text = "Status: Repaid",
                         modifier = Modifier.padding(start = 8.dp, end = 8.dp),
-                        color = Color.Green,
+                        color = SuccessGreen,
                         fontWeight = FontWeight.Bold)
                     Text(text = "Repaid Date: ${loan.dateRepaid}",
                         modifier = Modifier.padding(start = 8.dp, end = 8.dp))
@@ -270,7 +271,7 @@ fun LoansCard(loan: Loan,
                 else {
                     Text(text = "Status: Not Paid",
                         modifier = Modifier.padding(start = 8.dp, end = 8.dp),
-                        color = Color.Red,
+                        color = ErrorRed,
                         fontWeight = FontWeight.Bold)
                 }
             }

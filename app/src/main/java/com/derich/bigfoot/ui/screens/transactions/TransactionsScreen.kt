@@ -69,7 +69,6 @@ fun TransactionsComposable(modifier: Modifier = Modifier,
             targetState = true
         }
     }
-//    val context = LocalContext.current
     val textState = remember { mutableStateOf(TextFieldValue("")) }
     val transactions = filterTransactionsList(textState, allTransactions.value)
     //check if the device is in compact mode
@@ -101,7 +100,7 @@ fun TransactionsComposable(modifier: Modifier = Modifier,
                 }
 
 //display all the transactions as a horizontal list
-                //check if member is admin and display button to launch addTransaction page
+//check if member is admin and display button to launch addTransaction page
                 if (memberDetails.memberRole == MemberRole.ADMIN.name) {
                     FloatingActionButton(
                         onClick = {
@@ -180,7 +179,7 @@ fun TransactionCard(transaction: Transactions,
             Text(text = "Date: ${ transaction.transactionDate }",
                 modifier = Modifier.padding(start = 8.dp, end = 8.dp))
             Spacer(modifier = Modifier.padding(2.dp))
-            Text(text = "Amount: ${CommonVariables.Currency} ${ transaction.transactionAmount }",
+            Text(text = "Amount: ${CommonVariables.CURRENCY} ${ transaction.transactionAmount }",
                 modifier = Modifier.padding(start = 8.dp, end = 8.dp))
             Spacer(modifier = Modifier.padding(2.dp))
             Text(text = transaction.transactionConfirmation,

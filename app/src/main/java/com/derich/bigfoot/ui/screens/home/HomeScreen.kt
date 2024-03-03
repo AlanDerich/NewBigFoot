@@ -25,7 +25,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,6 +41,9 @@ import com.derich.bigfoot.deviceWidthSize
 import com.derich.bigfoot.model.MemberDetails
 import com.derich.bigfoot.ui.bottomnavigation.memberDetails
 import com.derich.bigfoot.ui.common.composables.CommonVariables
+import com.derich.bigfoot.ui.common.composables.MemberRole
+import com.derich.bigfoot.ui.common.composables.calculateContributionsDifference
+import com.derich.bigfoot.ui.common.composables.calculateTotalContributions
 import com.derich.bigfoot.ui.screens.transactions.TransactionsViewModel
 
 
@@ -53,19 +55,16 @@ fun HomeComposable(modifier: Modifier = Modifier,
     val context = LocalContext.current
 
     //call this function only if I(admin) am logged in to sync all changes
-    if (memberDetails.fullNames == "Alan Gitonga Wanjiru"){
+    if (memberDetails.memberRole == MemberRole.ADMIN.name){
         syncAllChanges(transactionsViewModel, allMemberInformation, context)
     }
-    //get the current list of member details from the flow state
-    val allMembersInfo = allMemberInformation.value
-//        val memberCont = contributions!!.contains("", )
     //check device window size is portrait and display the portrait version
     if (deviceWidthSize == WindowWidthSizeClass.Compact){
-        CompactScreen(modifier = modifier, allMembersInfo = allMembersInfo)
+        CompactScreen(modifier = modifier, allMembersInfo = allMemberInformation.value)
     }
     //if the device orientation is landscape
     else{
-        LandscapeScreen(modifier,allMembersInfo)
+        LandscapeScreen(modifier, allMemberInformation.value)
     }
 
 
@@ -74,14 +73,7 @@ fun HomeComposable(modifier: Modifier = Modifier,
         activity?.finish()
     }
 }
-//calculate the total member contributions to display on the home screen
-fun calculateTotalContributions(allMemberInfo: State<List<MemberDetails>>): Int {
-    var totalAmount =0
-    allMemberInfo.value.forEach {
-        totalAmount+=it.totalAmount.toInt()
-    }
-    return totalAmount
-}
+
 //a model for member details
 @Composable
 fun ContributionCard(contribution: MemberDetails,
@@ -110,19 +102,22 @@ fun UsersColumn(modifier: Modifier = Modifier, contribution: MemberDetails) {
         Column(horizontalAlignment = Alignment.Start, modifier = modifier.padding(8.dp)) {
             Text(text = contribution.fullNames, fontWeight = Bold)
             Spacer(modifier = Modifier.padding(2.dp))
-            Text(text = "${CommonVariables.Currency} ${contribution.totalAmount}")
+            Text(text = "${CommonVariables.CURRENCY} ${contribution.totalAmount}")
             Spacer(modifier = Modifier.padding(2.dp))
             Text(text = contribution.contributionsDate)
         } 
 }
+
+//this is to display the portrait screen
 @Composable
 fun CompactScreen(modifier: Modifier, allMembersInfo: List<MemberDetails>){
     Column(modifier = modifier.fillMaxSize()) {
-        val differenceInContributions = ContributionsViewModel.calculateContributionsDifference(
+        val differenceInContributions = calculateContributionsDifference(
             memberDetails.totalAmount.toInt())
         Row(horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically) {
             if( differenceInContributions > 0){
+                //the member is upto date. Display a tick icon to show they are upto date
                 Icon(painter = painterResource(id = R.drawable.baseline_check_circle_24),
                     contentDescription = "Status of Contribution is current",
                     modifier = Modifier
@@ -132,7 +127,7 @@ fun CompactScreen(modifier: Modifier, allMembersInfo: List<MemberDetails>){
                     verticalArrangement = Arrangement.Center,
                     modifier = Modifier.weight(1f)) {
 //                        Spacer(modifier = Modifier.padding(2.dp))
-                    Text(text = "${CommonVariables.Currency} $differenceInContributions",
+                    Text(text = "${CommonVariables.CURRENCY} $differenceInContributions",
                         fontWeight = Bold,
                         modifier= Modifier.padding(2.dp))
                     Text(text = memberDetails.contributionsDate,
@@ -142,6 +137,7 @@ fun CompactScreen(modifier: Modifier, allMembersInfo: List<MemberDetails>){
                 }
             }
             else{
+                //the member's contribution is not upto date. Display the amount needed to get to current date
                 Icon(painter = painterResource(id = R.drawable.baseline_cancel_24),
                     contentDescription = "Status of Contribution",
                     modifier = Modifier
@@ -149,7 +145,7 @@ fun CompactScreen(modifier: Modifier, allMembersInfo: List<MemberDetails>){
                         .weight(0.5f))
                 Column (modifier = Modifier.weight(1f), horizontalAlignment = Alignment.CenterHorizontally) {
 //                        Spacer(modifier = Modifier.padding(2.dp))
-                    Text(text = "${CommonVariables.Currency} $differenceInContributions",
+                    Text(text = "${CommonVariables.CURRENCY} $differenceInContributions",
                         fontWeight = Bold,
                         modifier= Modifier.padding(2.dp))
                     Text(text = memberDetails.contributionsDate,
@@ -165,12 +161,12 @@ fun CompactScreen(modifier: Modifier, allMembersInfo: List<MemberDetails>){
                 verticalArrangement = Arrangement.Center) {
 //                        Spacer(modifier = Modifier.padding(2.dp))
                 Text(text = "Group Total", fontWeight = Bold)
-                Text(text = "${CommonVariables.Currency} ${calculateTotalContributions(allMemberInformation)}",
+                Text(text = "${CommonVariables.CURRENCY} ${calculateTotalContributions(allMemberInformation)}",
                     fontWeight = Bold,modifier= Modifier.padding(2.dp), fontSize = 16.sp)
 
             }
         }
-        //list here
+        //lazy column displays the members
         LazyColumn(modifier = Modifier
             .fillMaxWidth(),
             contentPadding = PaddingValues(8.dp)
@@ -185,12 +181,14 @@ fun CompactScreen(modifier: Modifier, allMembersInfo: List<MemberDetails>){
         }
     }
 }
+
+//display the landscape orientation screen
 @Composable
 fun LandscapeScreen(modifier: Modifier, allMembersInfo: List<MemberDetails>) {
     Column(modifier = modifier
         .fillMaxSize()
         .padding(8.dp)) {
-        val differenceInContributions = ContributionsViewModel.calculateContributionsDifference(
+        val differenceInContributions = calculateContributionsDifference(
             memberDetails.totalAmount.toInt())
         Row(horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.Top) {
@@ -204,13 +202,13 @@ fun LandscapeScreen(modifier: Modifier, allMembersInfo: List<MemberDetails>) {
                         modifier = Modifier
                             .size(68.dp))
                     Spacer(modifier = Modifier.padding(8.dp))
-                    Text(text = "Balance: ${CommonVariables.Currency} $differenceInContributions",
+                    Text(text = "Balance: ${CommonVariables.CURRENCY} $differenceInContributions",
                         fontWeight = Bold)
                     Spacer(modifier = Modifier.padding(2.dp))
                     Text(text = "Due: ${memberDetails.contributionsDate}",
                         fontWeight = Bold)
                     Spacer(modifier = Modifier.padding(2.dp))
-                    Text(text = "Group Total: ${CommonVariables.Currency} ${calculateTotalContributions(allMemberInformation)}",
+                    Text(text = "Group Total: ${CommonVariables.CURRENCY} ${calculateTotalContributions(allMemberInformation)}",
                         fontWeight = Bold,fontSize = 16.sp)
                 }
                 LazyVerticalGrid(
@@ -235,13 +233,13 @@ fun LandscapeScreen(modifier: Modifier, allMembersInfo: List<MemberDetails>) {
                             .size(68.dp)
                            )
                     Spacer(modifier = Modifier.padding(8.dp))
-                    Text(text = "Balance: ${CommonVariables.Currency} $differenceInContributions",
+                    Text(text = "Balance: ${CommonVariables.CURRENCY} $differenceInContributions",
                         fontWeight = Bold)
                     Spacer(modifier = Modifier.padding(2.dp))
                     Text(text = "Due: ${memberDetails.contributionsDate}",
                         fontWeight = Bold)
                     Spacer(modifier = Modifier.padding(2.dp))
-                    Text(text = "Group Total: ${CommonVariables.Currency} ${calculateTotalContributions(allMemberInformation)}",
+                    Text(text = "Group Total: ${CommonVariables.CURRENCY} ${calculateTotalContributions(allMemberInformation)}",
                         fontWeight = Bold,fontSize = 16.sp)
                 }
                 LazyVerticalGrid(

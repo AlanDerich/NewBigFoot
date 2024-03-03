@@ -9,6 +9,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.Button
@@ -16,6 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.FileProvider
 import com.derich.bigfoot.model.MemberDetails
@@ -39,7 +41,8 @@ fun ImageUploaderScreen(transactionsViewModel: TransactionsViewModel) {
     val storage = FirebaseStorage.getInstance()
     val storageRef = storage.reference
     val context = LocalContext.current
-    val getContent = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+    val getContent =
+        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         // Handle the selected image URI
         if (uri != null) {
             // Call your image size reduction and upload logic here
@@ -51,7 +54,8 @@ fun ImageUploaderScreen(transactionsViewModel: TransactionsViewModel) {
     }
 
     Column(verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally) {
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier= Modifier.fillMaxSize()) {
         // UI elements here
         Button(
             onClick = {
@@ -142,7 +146,7 @@ fun updateMemberDetails(context: Context, newUserPic: String) {
         }
         task.addOnFailureListener{
             //do this if the upload failed due to some reason
-            context.showMessage("An error occurred during upload ${it.message.toString()}!")
+            context.showMessage("An error occurred when updating your acc details ${it.message.toString()}!")
         }
     }
 }

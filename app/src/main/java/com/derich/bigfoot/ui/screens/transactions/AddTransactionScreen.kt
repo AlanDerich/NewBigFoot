@@ -23,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -36,14 +37,16 @@ import androidx.navigation.NavController
 import com.derich.bigfoot.model.MemberDetails
 import com.derich.bigfoot.model.Transactions
 import com.derich.bigfoot.ui.common.composables.CommonLinearProgressBar
+import com.derich.bigfoot.ui.common.composables.calculateResultingDate
 import com.derich.bigfoot.ui.common.composables.showMessage
 import com.derich.bigfoot.ui.screens.home.ContributionsViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import java.util.Calendar
 import java.util.Date
+
+var isDisplayed = false
 
 @Composable
 fun AddTransactionScreen(
@@ -96,7 +99,6 @@ fun AddTransactionScreen(
 
 }
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 fun AddTransactionPage(selectedMember: MemberDetails,
                        transactionsViewModel: TransactionsViewModel,
@@ -104,10 +106,9 @@ fun AddTransactionPage(selectedMember: MemberDetails,
     var dateOfTransaction by rememberSaveable { mutableStateOf("2020/01/01") }
     var reversedDateOfTransaction by rememberSaveable { mutableStateOf("01/01/2020") }
     var transactionPaidBy by rememberSaveable { mutableStateOf("") }
-    var transactionAmountPaid by rememberSaveable { mutableStateOf("0") }
+    var transactionAmountPaid by rememberSaveable { mutableIntStateOf(0) }
     var transactionConfirmation by rememberSaveable { mutableStateOf("") }
     var buttonEnabled by rememberSaveable { mutableStateOf(true) }
-    var isDisplayed = false
     // Fetching the Local Context
     val mContext = LocalContext.current
     OutlinedButton(onClick = {
@@ -140,12 +141,12 @@ fun AddTransactionPage(selectedMember: MemberDetails,
         onValueChange = {transactionPaidBy = it},
         modifier = Modifier.padding(top = 4.dp),
         isError = (transactionPaidBy == ""))
-    OutlinedTextField(value = transactionAmountPaid,
-        onValueChange = { transactionAmountPaid = it },
+    OutlinedTextField(value = transactionAmountPaid.toString(),
+        onValueChange = { transactionAmountPaid = it.toInt() },
         label = { Text(text = "Amount paid") },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         modifier = Modifier.padding(top = 4.dp),
-        isError = (transactionAmountPaid == "0")
+        isError = (transactionAmountPaid == 0)
         )
     OutlinedTextField(
         label = { Text(text = "Confirmation Message") },
@@ -164,32 +165,32 @@ fun AddTransactionPage(selectedMember: MemberDetails,
         onClick = {
             if (dateOfTransaction != "2020/01/01"
                 && transactionConfirmation  != ""
-                && transactionAmountPaid != "0"
+                && transactionAmountPaid != 0
                 && transactionPaidBy != "")
             {
                 buttonEnabled = false
                 isDisplayed = true
+                //start upload process
                 runBlocking {
                     val task = transactionsViewModel.addTransaction(
                         transactionDetails = Transactions(
                             transactionDate = dateOfTransaction,
                             depositFor = selectedMember.fullNames,
                             depositBy = transactionPaidBy,
-                            transactionAmount = transactionAmountPaid.toInt(),
+                            transactionAmount = transactionAmountPaid,
                             transactionConfirmation = transactionConfirmation,
                             savedBy = Firebase.auth.currentUser!!.phoneNumber.toString()
                         ))
                     task.addOnSuccessListener {
-                //do this if the upload was successful
+                //call this function to update member details if the upload of transaction was successful
                         updateContributions(
                             selectedMember.phoneNumber,
                             selectedMember.fullNames,
-                            TransactionsViewModel.calculateResultingDate(selectedMember.totalAmount.toInt() + transactionAmountPaid.toInt()),
-                            newUserAmount = (selectedMember.totalAmount.toInt() + transactionAmountPaid.toInt()).toString(),
+                            calculateResultingDate(selectedMember.totalAmount.toInt() + transactionAmountPaid),
+                            newUserAmount = (selectedMember.totalAmount.toInt() + transactionAmountPaid).toString(),
                             transactionsViewModel,
                             mContext,
                             navController = navController)
-                        isDisplayed= false
                     }
                     task.addOnFailureListener{
                 //do this if the upload failed due to some reason
@@ -220,6 +221,7 @@ fun updateContributions(memberPhoneNumber: String,
     runBlocking {
         val task = transactionsViewModel.updateContributions(memberPhoneNumber,memberFullNames,resultingDate, newUserAmount)
         task.addOnSuccessListener {
+            isDisplayed= false
             //do this if the upload was successful
             mContext.showMessage("The transaction was updated successfully!")
             transactionsViewModel.launchTransactionScreen(navController = navController)
@@ -227,6 +229,7 @@ fun updateContributions(memberPhoneNumber: String,
 
         }
         task.addOnFailureListener{
+            isDisplayed= false
             //do this if the upload failed due to some reason
             mContext.showMessage("An error occurred during upload ${it.message.toString()}!")
         }

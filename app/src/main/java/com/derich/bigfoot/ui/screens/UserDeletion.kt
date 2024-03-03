@@ -9,8 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.TextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -64,7 +64,6 @@ fun DataDeletionRequest(authViewModel: AuthViewModel) {
                 val emailIntent = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:alangitonga15@gmail.com"))
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Data Deletion Request")
                 emailIntent.putExtra(Intent.EXTRA_TEXT, "Phone Number: $phoneNumber\n\nReason for Deletion: $deletionReason")
-
                 try {
                     if (activity != null) {
                         authViewModel.logOutAndExit(activity = activity)

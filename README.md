@@ -5,12 +5,14 @@ The project was an inspiration for a group I am in where we used to save 20 KSH 
 As the transactions increased, it became even harder to keep track of the transactions made and the current member contributions. It became necessary to find a better way to manage the data. We later started the loans project where each member can borrow a loan equivalent to 75% of their total savings.
 
 All the users use Android apps, and an Android App was suitable for this case. The Android App was meant to serve the following purposes:
-    Keep track of each transaction made (To be updated by the admin)
+   ** Keep track of each transaction made (To be updated by the admin)
     Show the members their status and arrears.
-    Show the loans taken so far and the status of those loans (repaid or not).
+    Show the loans taken so far and the status of those loans (repaid or not).**
     
 Since the app has very few members, I decided to use Firebase which provides free storage and authentication. The completed app has four screens.
-  1. Display of member details (Home)
+
+  **1. Display of member details (Home)**
+     
 Here, details such as the total group savings, the logged-in member's current total savings and the date these savings cover are displayed. Also, the screen shows a list of all the members’ current contributions status in descending order from the highest amount to the lowest.
 
 ![home dark](https://github.com/AlanDerich/NewBigFoot/assets/50056881/04abb940-7866-4099-b4d5-841d5451dd27)
@@ -19,7 +21,8 @@ Here, details such as the total group savings, the logged-in member's current to
 ![home light landscape (2)](https://github.com/AlanDerich/NewBigFoot/assets/50056881/6b371f54-8988-4c7c-bb91-c21cee3df317)
 
 
-  3. Transactions
+ ** 2. Transactions**
+     
 This page contains a list of all transactions. At the top of the page is a search bar where users can search through the list for specific transactions.
 
 ![transactions dark](https://github.com/AlanDerich/NewBigFoot/assets/50056881/b5a29fc8-4bf4-409c-9167-210a6bbac0b8)
@@ -28,10 +31,12 @@ This page contains a list of all transactions. At the top of the page is a searc
 ![transactions light landscape](https://github.com/AlanDerich/NewBigFoot/assets/50056881/f2641dac-8b15-43c7-b440-31276ead8f6d)
 
 
-  5. Loans
+ ** 3. Loans**
+     
 This page displays information on the loan project. It has a list of all loans and the status of each loan. At the top of the page is a button that users can click in order to view all statistics such as the Initial amount invested in the project, the total loans given so far, the total loans repaid, and outstanding loans. It also shows the profits made so far among other key details.
 
-  6. Account
+ ** 4. Account**
+
 The page displays the logged-in member details including a profile picture, User full name, phone number, and buttons to log out and request deletion of their account. Users also have the option to update their profile pictures.
 
 ![account dark](https://github.com/AlanDerich/NewBigFoot/assets/50056881/1ed1bd14-3aaa-48ac-97e8-83d202052306)

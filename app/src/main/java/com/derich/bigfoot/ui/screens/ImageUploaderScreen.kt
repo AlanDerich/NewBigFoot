@@ -22,7 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.FileProvider
 import com.derich.bigfoot.model.MemberDetails
 import com.derich.bigfoot.ui.bottomnavigation.memberDetails
-import com.derich.bigfoot.ui.common.composables.showMessage
+import com.derich.bigfoot.ui.common.composables.CommonVariables.showMessage
 import com.derich.bigfoot.ui.screens.transactions.TransactionsViewModel
 import com.google.firebase.FirebaseApp
 import com.google.firebase.storage.FirebaseStorage

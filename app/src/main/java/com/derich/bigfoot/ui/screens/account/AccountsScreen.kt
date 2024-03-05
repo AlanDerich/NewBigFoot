@@ -30,7 +30,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.derich.bigfoot.deviceWidthSize
 import com.derich.bigfoot.ui.bottomnavigation.BottomNavItem
 import com.derich.bigfoot.ui.bottomnavigation.memberDetails
-import com.derich.bigfoot.ui.common.composables.MemberRole
+import com.derich.bigfoot.ui.common.composables.CommonVariables.MemberRole
 import com.derich.bigfoot.ui.screens.login.AuthViewModel
 
 @Composable

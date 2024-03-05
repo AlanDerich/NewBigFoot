@@ -24,7 +24,7 @@ import com.derich.bigfoot.allLoans
 import com.derich.bigfoot.allMemberInformation
 import com.derich.bigfoot.allTransactions
 import com.derich.bigfoot.ui.common.composables.BigFutAppBar
-import com.derich.bigfoot.ui.common.composables.showMessage
+import com.derich.bigfoot.ui.common.composables.CommonVariables.showMessage
 import com.derich.bigfoot.ui.theme.BigFootTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

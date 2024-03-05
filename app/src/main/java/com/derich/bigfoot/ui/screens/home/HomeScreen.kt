@@ -41,9 +41,9 @@ import com.derich.bigfoot.deviceWidthSize
 import com.derich.bigfoot.model.MemberDetails
 import com.derich.bigfoot.ui.bottomnavigation.memberDetails
 import com.derich.bigfoot.ui.common.composables.CommonVariables
-import com.derich.bigfoot.ui.common.composables.MemberRole
-import com.derich.bigfoot.ui.common.composables.calculateContributionsDifference
-import com.derich.bigfoot.ui.common.composables.calculateTotalContributions
+import com.derich.bigfoot.ui.common.composables.CommonVariables.MemberRole
+import com.derich.bigfoot.ui.common.composables.CommonVariables.calculateContributionsDifference
+import com.derich.bigfoot.ui.common.composables.CommonVariables.calculateTotalContributions
 import com.derich.bigfoot.ui.screens.transactions.TransactionsViewModel
 
 

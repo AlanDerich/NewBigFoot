@@ -9,8 +9,8 @@ import com.derich.bigfoot.model.MemberDetails
 import com.derich.bigfoot.model.Transactions
 import com.derich.bigfoot.model.firebase.FirebaseDataSource
 import com.derich.bigfoot.ui.bottomnavigation.BottomNavItem
-import com.derich.bigfoot.ui.common.composables.calculateResultingDate
-import com.derich.bigfoot.ui.common.composables.showMessage
+import com.derich.bigfoot.ui.common.composables.CommonVariables.calculateResultingDate
+import com.derich.bigfoot.ui.common.composables.CommonVariables.showMessage
 import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch

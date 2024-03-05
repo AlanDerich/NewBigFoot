@@ -52,7 +52,7 @@ import com.derich.bigfoot.model.Transactions
 import com.derich.bigfoot.ui.bottomnavigation.memberDetails
 import com.derich.bigfoot.ui.common.composables.CommonLinearProgressBar
 import com.derich.bigfoot.ui.common.composables.CommonVariables
-import com.derich.bigfoot.ui.common.composables.MemberRole
+import com.derich.bigfoot.ui.common.composables.CommonVariables.MemberRole
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.util.Locale
 

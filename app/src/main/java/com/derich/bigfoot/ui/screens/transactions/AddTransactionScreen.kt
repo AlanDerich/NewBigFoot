@@ -37,8 +37,8 @@ import androidx.navigation.NavController
 import com.derich.bigfoot.model.MemberDetails
 import com.derich.bigfoot.model.Transactions
 import com.derich.bigfoot.ui.common.composables.CommonLinearProgressBar
-import com.derich.bigfoot.ui.common.composables.calculateResultingDate
-import com.derich.bigfoot.ui.common.composables.showMessage
+import com.derich.bigfoot.ui.common.composables.CommonVariables.calculateResultingDate
+import com.derich.bigfoot.ui.common.composables.CommonVariables.showMessage
 import com.derich.bigfoot.ui.screens.home.ContributionsViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase

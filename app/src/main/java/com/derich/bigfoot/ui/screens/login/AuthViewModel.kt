@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.derich.bigfoot.MainActivity
 import com.derich.bigfoot.ui.bottomnavigation.BottomNavItem
-import com.derich.bigfoot.ui.common.composables.showMessage
+import com.derich.bigfoot.ui.common.composables.CommonVariables.showMessage
 import com.derich.bigfoot.ui.screens.account.ExportDataActivity
 import com.google.firebase.auth.FirebaseAuth
 

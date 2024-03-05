@@ -31,7 +31,6 @@ import com.derich.bigfoot.ui.screens.transactions.TransactionsComposable
 import com.derich.bigfoot.ui.screens.transactions.TransactionsViewModel
 import com.google.firebase.auth.FirebaseAuth
 
-lateinit var memberDetails: MemberDetails
 @Composable
 fun BottomNavigator(
     navController: NavController) {
@@ -79,7 +78,6 @@ fun NavigationGraph(
     loansVm:LoansViewModel,
     modifier: Modifier
 ) {
-    memberDetails = getMemberData(allMemberInformation.value)!!
     NavHost(
         navController,
         startDestination = BottomNavItem.Home.screenRoute,

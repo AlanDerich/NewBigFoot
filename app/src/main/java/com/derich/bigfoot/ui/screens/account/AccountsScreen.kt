@@ -29,7 +29,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.derich.bigfoot.deviceWidthSize
 import com.derich.bigfoot.ui.bottomnavigation.BottomNavItem
-import com.derich.bigfoot.ui.bottomnavigation.memberDetails
+import com.derich.bigfoot.ui.common.composables.CommonVariables.CURRENT_USER_DETAILS
 import com.derich.bigfoot.ui.common.composables.CommonVariables.MemberRole
 import com.derich.bigfoot.ui.screens.login.AuthViewModel
 
@@ -39,6 +39,7 @@ fun AccountsComposable(
     navController: NavController,
     authViewModel: AuthViewModel
 ) {
+    val memberDetails = CURRENT_USER_DETAILS
     val context = LocalContext.current
     //display portrait screen
     if(deviceWidthSize == WindowWidthSizeClass.Compact) {

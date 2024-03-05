@@ -11,7 +11,7 @@ import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 object CommonVariables {
-    val CURRENT_USER: String? = null
+    lateinit var CURRENT_USER_DETAILS: MemberDetails
     private const val PREVIOUS_CONTRIBUTION_AMOUNT: Int=20
     private const val CURRENT_CONTRIBUTION_AMOUNT: Int=35
     const val CURRENCY: String="KSH"

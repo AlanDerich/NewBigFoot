@@ -25,11 +25,14 @@ import com.derich.bigfoot.model.Transactions
 import com.derich.bigfoot.model.firebase.FirebaseDataSource
 import com.derich.bigfoot.ui.bottomnavigation.BottomNavigator
 import com.derich.bigfoot.ui.bottomnavigation.NavigationGraph
+import com.derich.bigfoot.ui.bottomnavigation.getMemberData
 import com.derich.bigfoot.ui.common.composables.BigFutAppBar
 import com.derich.bigfoot.ui.common.composables.CommonLinearProgressBar
+import com.derich.bigfoot.ui.common.composables.CommonVariables.CURRENT_USER_DETAILS
 import com.derich.bigfoot.ui.screens.home.ContributionsViewModel
 import com.derich.bigfoot.ui.screens.loans.LoansViewModel
 import com.derich.bigfoot.ui.screens.login.AuthViewModel
+import com.derich.bigfoot.ui.screens.login.LoginErrorUi
 import com.derich.bigfoot.ui.screens.login.PhoneAuthActivity
 import com.derich.bigfoot.ui.screens.transactions.TransactionsViewModel
 import com.derich.bigfoot.ui.theme.BigFootTheme
@@ -89,25 +92,34 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                     else{
+                        var memberDets = getMemberData(allMemberInformation.value)
                         dataLoading = false
-                        Scaffold(
-                            topBar = {
-                                BigFutAppBar()
-                            },
-                            bottomBar = {
-                                BottomNavigator(navController = bottomNavController)
-                            },
-                        ) {
-                                innerPadding ->
-                            NavigationGraph(
-                                navController = bottomNavController,
-                                contViewModel = contributionsVM,
-                                transactionsViewModel = transactionsVM,
-                                authVm= authVM,
-                                loansVm = loansVM,
-                                modifier = Modifier.padding(innerPadding)
-                            )
+                        if(memberDets !=null){
+                            CURRENT_USER_DETAILS=memberDets
+                            Scaffold(
+                                topBar = {
+                                    BigFutAppBar()
+                                },
+                                bottomBar = {
+                                    BottomNavigator(navController = bottomNavController)
+                                },
+                            ) {
+                                    innerPadding ->
+                                NavigationGraph(
+                                    navController = bottomNavController,
+                                    contViewModel = contributionsVM,
+                                    transactionsViewModel = transactionsVM,
+                                    authVm= authVM,
+                                    loansVm = loansVM,
+                                    modifier = Modifier.padding(innerPadding)
+                                )
 
+                            }
+                        }
+                        else{
+                            LoginErrorUi(message = "Member Details Not Found. Kindly contact Admin") {
+                                authVM.logOut(this)
+                            }
                         }
                     }
                 }

@@ -39,8 +39,8 @@ import com.derich.bigfoot.R
 import com.derich.bigfoot.allMemberInformation
 import com.derich.bigfoot.deviceWidthSize
 import com.derich.bigfoot.model.MemberDetails
-import com.derich.bigfoot.ui.bottomnavigation.memberDetails
 import com.derich.bigfoot.ui.common.composables.CommonVariables
+import com.derich.bigfoot.ui.common.composables.CommonVariables.CURRENT_USER_DETAILS
 import com.derich.bigfoot.ui.common.composables.CommonVariables.MemberRole
 import com.derich.bigfoot.ui.common.composables.CommonVariables.calculateContributionsDifference
 import com.derich.bigfoot.ui.common.composables.CommonVariables.calculateTotalContributions
@@ -55,7 +55,7 @@ fun HomeComposable(modifier: Modifier = Modifier,
     val context = LocalContext.current
 
     //call this function only if I(admin) am logged in to sync all changes
-    if (memberDetails.memberRole == MemberRole.ADMIN.name){
+    if (CURRENT_USER_DETAILS.memberRole == MemberRole.ADMIN.name){
         syncAllChanges(transactionsViewModel, allMemberInformation, context)
     }
     //check device window size is portrait and display the portrait version
@@ -113,7 +113,7 @@ fun UsersColumn(modifier: Modifier = Modifier, contribution: MemberDetails) {
 fun CompactScreen(modifier: Modifier, allMembersInfo: List<MemberDetails>){
     Column(modifier = modifier.fillMaxSize()) {
         val differenceInContributions = calculateContributionsDifference(
-            memberDetails.totalAmount.toInt())
+            CURRENT_USER_DETAILS.totalAmount.toInt())
         Row(horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically) {
             if( differenceInContributions > 0){
@@ -130,7 +130,7 @@ fun CompactScreen(modifier: Modifier, allMembersInfo: List<MemberDetails>){
                     Text(text = "${CommonVariables.CURRENCY} $differenceInContributions",
                         fontWeight = Bold,
                         modifier= Modifier.padding(2.dp))
-                    Text(text = memberDetails.contributionsDate,
+                    Text(text = CURRENT_USER_DETAILS.contributionsDate,
                         fontWeight = Bold,
                         modifier= Modifier.padding(2.dp))
 
@@ -148,7 +148,7 @@ fun CompactScreen(modifier: Modifier, allMembersInfo: List<MemberDetails>){
                     Text(text = "${CommonVariables.CURRENCY} $differenceInContributions",
                         fontWeight = Bold,
                         modifier= Modifier.padding(2.dp))
-                    Text(text = memberDetails.contributionsDate,
+                    Text(text = CURRENT_USER_DETAILS.contributionsDate,
                         fontWeight = Bold,
                         modifier= Modifier.padding(2.dp))
 
@@ -189,7 +189,7 @@ fun LandscapeScreen(modifier: Modifier, allMembersInfo: List<MemberDetails>) {
         .fillMaxSize()
         .padding(8.dp)) {
         val differenceInContributions = calculateContributionsDifference(
-            memberDetails.totalAmount.toInt())
+            CURRENT_USER_DETAILS.totalAmount.toInt())
         Row(horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.Top) {
             if( differenceInContributions > 0){
@@ -205,7 +205,7 @@ fun LandscapeScreen(modifier: Modifier, allMembersInfo: List<MemberDetails>) {
                     Text(text = "Balance: ${CommonVariables.CURRENCY} $differenceInContributions",
                         fontWeight = Bold)
                     Spacer(modifier = Modifier.padding(2.dp))
-                    Text(text = "Due: ${memberDetails.contributionsDate}",
+                    Text(text = "Due: ${CURRENT_USER_DETAILS.contributionsDate}",
                         fontWeight = Bold)
                     Spacer(modifier = Modifier.padding(2.dp))
                     Text(text = "Group Total: ${CommonVariables.CURRENCY} ${calculateTotalContributions(allMemberInformation)}",
@@ -236,7 +236,7 @@ fun LandscapeScreen(modifier: Modifier, allMembersInfo: List<MemberDetails>) {
                     Text(text = "Balance: ${CommonVariables.CURRENCY} $differenceInContributions",
                         fontWeight = Bold)
                     Spacer(modifier = Modifier.padding(2.dp))
-                    Text(text = "Due: ${memberDetails.contributionsDate}",
+                    Text(text = "Due: ${CURRENT_USER_DETAILS.contributionsDate}",
                         fontWeight = Bold)
                     Spacer(modifier = Modifier.padding(2.dp))
                     Text(text = "Group Total: ${CommonVariables.CURRENCY} ${calculateTotalContributions(allMemberInformation)}",

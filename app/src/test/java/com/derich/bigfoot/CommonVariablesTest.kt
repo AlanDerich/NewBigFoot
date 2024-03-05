@@ -11,4 +11,9 @@ class CommonVariablesTest {
     fun calculateContributionsDiffTest(){
         assertEquals(-175, classUnderTest.calculateContributionsDifference(30420))
     }
+
+    @Test
+    fun calculateResultingDateTest(){
+        assertEquals("05/03/2024", classUnderTest.calculateResultingDate(30595))
+    }
 }

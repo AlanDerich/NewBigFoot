@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.FileProvider
 import com.derich.bigfoot.model.MemberDetails
-import com.derich.bigfoot.ui.bottomnavigation.memberDetails
+import com.derich.bigfoot.ui.common.composables.CommonVariables.CURRENT_USER_DETAILS
 import com.derich.bigfoot.ui.common.composables.CommonVariables.showMessage
 import com.derich.bigfoot.ui.screens.transactions.TransactionsViewModel
 import com.google.firebase.FirebaseApp
@@ -37,7 +37,7 @@ private lateinit var fullMemberDetails: MemberDetails
 @Composable
 fun ImageUploaderScreen(transactionsViewModel: TransactionsViewModel) {
     transactionsVM = transactionsViewModel
-    fullMemberDetails = memberDetails
+    fullMemberDetails = CURRENT_USER_DETAILS!!
     val storage = FirebaseStorage.getInstance()
     val storageRef = storage.reference
     val context = LocalContext.current

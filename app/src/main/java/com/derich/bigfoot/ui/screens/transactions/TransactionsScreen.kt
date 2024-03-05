@@ -1,7 +1,6 @@
 package com.derich.bigfoot.ui.screens.transactions
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -49,14 +48,12 @@ import androidx.navigation.NavController
 import com.derich.bigfoot.allTransactions
 import com.derich.bigfoot.deviceWidthSize
 import com.derich.bigfoot.model.Transactions
-import com.derich.bigfoot.ui.bottomnavigation.memberDetails
 import com.derich.bigfoot.ui.common.composables.CommonLinearProgressBar
 import com.derich.bigfoot.ui.common.composables.CommonVariables
+import com.derich.bigfoot.ui.common.composables.CommonVariables.CURRENT_USER_DETAILS
 import com.derich.bigfoot.ui.common.composables.CommonVariables.MemberRole
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.util.Locale
 
-@OptIn(ExperimentalCoroutinesApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun TransactionsComposable(modifier: Modifier = Modifier,
                            transactionsViewModel: TransactionsViewModel,
@@ -101,7 +98,7 @@ fun TransactionsComposable(modifier: Modifier = Modifier,
 
 //display all the transactions as a horizontal list
 //check if member is admin and display button to launch addTransaction page
-                if (memberDetails.memberRole == MemberRole.ADMIN.name) {
+                if (CURRENT_USER_DETAILS.memberRole == MemberRole.ADMIN.name) {
                     FloatingActionButton(
                         onClick = {
                             transactionsViewModel.launchAddTransactionScreen(navController)
@@ -134,7 +131,7 @@ fun TransactionsComposable(modifier: Modifier = Modifier,
                         }
                     }
                     //check if member is admin and display button to launch addTransaction page
-                    if (memberDetails.memberRole == MemberRole.ADMIN.name) {
+                    if (CURRENT_USER_DETAILS.memberRole == MemberRole.ADMIN.name) {
                         FloatingActionButton(
                             onClick = {
                                 transactionsViewModel.launchAddTransactionScreen(navController)

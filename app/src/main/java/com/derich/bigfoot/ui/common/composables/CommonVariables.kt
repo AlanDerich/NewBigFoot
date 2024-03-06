@@ -62,9 +62,9 @@ object CommonVariables {
     //this function calculates the difference in amount from the expected amount and current amount
     fun calculateContributionsDifference(totalAmount: Int) : Int {
         val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.US)
-        var previousBalance =0
-        //first calculate the first contribution upto 29th feb 2024
-        //then calculate from then upto date using 35ksh
+        val previousBalance: Int
+        //first calculate the first contribution up-to 29th feb 2024
+        //then calculate from then up-to date using 35ksh
         //this formula is the old version which was being used to calculate the contributions when the contributions
         //we're ksh 20 per day
         val prevDate = sdf.parse(NEW_CONTRIBUTION_START_DATE)

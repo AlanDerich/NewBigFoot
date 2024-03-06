@@ -113,7 +113,7 @@ fun AccountsComposable(
             }
             Button(
                 onClick = {
-                    authViewModel.deleteAccount(context, navController)
+                    authViewModel.deleteAccount(navController)
                 },
                 modifier = Modifier.padding(8.dp)
             ) {
@@ -198,7 +198,7 @@ fun AccountsComposable(
                 }
                 Button(
                     onClick = {
-                        authViewModel.deleteAccount(context, navController)
+                        authViewModel.deleteAccount(navController)
                     },
                     modifier = Modifier.padding(8.dp)
                 ) {
@@ -212,7 +212,7 @@ fun AccountsComposable(
     }
 }
 
-@Composable
-fun DeleteUser() {
-
-}
+//@Composable
+//fun DeleteUser() {
+//
+//}

@@ -37,9 +37,9 @@ private lateinit var fullMemberDetails: MemberDetails
 @Composable
 fun ImageUploaderScreen(transactionsViewModel: TransactionsViewModel) {
     transactionsVM = transactionsViewModel
-    fullMemberDetails = CURRENT_USER_DETAILS!!
-    val storage = FirebaseStorage.getInstance()
-    val storageRef = storage.reference
+    fullMemberDetails = CURRENT_USER_DETAILS
+//    val storage = FirebaseStorage.getInstance()
+//    val storageRef = storage.reference
     val context = LocalContext.current
     val getContent =
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->

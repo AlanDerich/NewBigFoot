@@ -38,7 +38,7 @@ class AuthViewModel (
         firebaseAuth.signOut()
         activity.finish()
     }
-    fun deleteAccount(context: Context, navController: NavController) {
+    fun deleteAccount(navController: NavController) {
         navController.navigate(BottomNavItem.DeleteAccount.screenRoute)
     }
 

@@ -75,9 +75,17 @@ fun LoansComposable(modifier: Modifier = Modifier,
         }
     }
     loans.let {
+//        totalOutstandingLoanAmount = it.fold(0){
+//                total, loan ->
+//            if (!loan.status && loan.type== LoanType.PERSONAL_LOAN){
+//                totalOutstandingLoans++
+//                total + loan.amountLoaned
+//            }
+//            total
+//        }
         it.forEach {loanAmount ->
-            if (!loanAmount.status){
-                totalOutstandingLoanAmount = totalOutstandingLoanAmount.plus(loanAmount.amountLoaned)
+            if (!loanAmount.status && loanAmount.type == LoanType.PERSONAL_LOAN){
+                totalOutstandingLoanAmount += loanAmount.amountLoaned
                 totalOutstandingLoans++
             }
         }

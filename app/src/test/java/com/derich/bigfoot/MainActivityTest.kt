@@ -1,3 +1,5 @@
 package com.derich.bigfoot
 
-class MainActivityTest
+class MainActivityTest{
+
+}

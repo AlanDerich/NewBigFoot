@@ -2,7 +2,6 @@ package com.derich.bigfoot.ui.common.composables
 
 import android.content.Context
 import android.widget.Toast
-import androidx.compose.runtime.State
 import com.derich.bigfoot.model.MemberDetails
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -49,14 +48,6 @@ object CommonVariables {
             sdf = SimpleDateFormat("dd/MM/yyyy", Locale.US)
             return sdf.format(Date(c.timeInMillis))
         }
-    }
-    //calculate the total member contributions to display on the home screen
-    fun calculateTotalContributions(allMemberInfo: State<List<MemberDetails>>): Int {
-        var totalAmount =0
-        allMemberInfo.value.forEach {
-            totalAmount+=it.totalAmount.toInt()
-        }
-        return totalAmount
     }
 
     //this function calculates the difference in amount from the expected amount and current amount

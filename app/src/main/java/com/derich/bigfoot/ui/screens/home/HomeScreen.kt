@@ -43,7 +43,6 @@ import com.derich.bigfoot.ui.common.composables.CommonVariables
 import com.derich.bigfoot.ui.common.composables.CommonVariables.CURRENT_USER_DETAILS
 import com.derich.bigfoot.ui.common.composables.CommonVariables.MemberRole
 import com.derich.bigfoot.ui.common.composables.CommonVariables.calculateContributionsDifference
-import com.derich.bigfoot.ui.common.composables.CommonVariables.calculateTotalContributions
 import com.derich.bigfoot.ui.screens.transactions.TransactionsViewModel
 
 
@@ -161,7 +160,10 @@ fun CompactScreen(modifier: Modifier, allMembersInfo: List<MemberDetails>){
                 verticalArrangement = Arrangement.Center) {
 //                        Spacer(modifier = Modifier.padding(2.dp))
                 Text(text = "Group Total", fontWeight = Bold)
-                Text(text = "${CommonVariables.CURRENCY} ${calculateTotalContributions(allMemberInformation)}",
+                Text(text = "${CommonVariables.CURRENCY} ${allMemberInformation.value.fold(0){
+                    acc, member -> acc + member.totalAmount.toInt()
+                }
+                }",
                     fontWeight = Bold,modifier= Modifier.padding(2.dp), fontSize = 16.sp)
 
             }
@@ -208,7 +210,10 @@ fun LandscapeScreen(modifier: Modifier, allMembersInfo: List<MemberDetails>) {
                     Text(text = "Due: ${CURRENT_USER_DETAILS.contributionsDate}",
                         fontWeight = Bold)
                     Spacer(modifier = Modifier.padding(2.dp))
-                    Text(text = "Group Total: ${CommonVariables.CURRENCY} ${calculateTotalContributions(allMemberInformation)}",
+                    Text(text = "Group Total: ${CommonVariables.CURRENCY} ${allMemberInformation.value.fold(0){
+                            acc, member -> acc + member.totalAmount.toInt()
+                    }
+                    }",
                         fontWeight = Bold,fontSize = 16.sp)
                 }
                 LazyVerticalGrid(
@@ -239,7 +244,10 @@ fun LandscapeScreen(modifier: Modifier, allMembersInfo: List<MemberDetails>) {
                     Text(text = "Due: ${CURRENT_USER_DETAILS.contributionsDate}",
                         fontWeight = Bold)
                     Spacer(modifier = Modifier.padding(2.dp))
-                    Text(text = "Group Total: ${CommonVariables.CURRENCY} ${calculateTotalContributions(allMemberInformation)}",
+                    Text(text = "Group Total: ${CommonVariables.CURRENCY} ${allMemberInformation.value.fold(0){
+                            acc, member -> acc + member.totalAmount.toInt()
+                    }
+                    }",
                         fontWeight = Bold,fontSize = 16.sp)
                 }
                 LazyVerticalGrid(

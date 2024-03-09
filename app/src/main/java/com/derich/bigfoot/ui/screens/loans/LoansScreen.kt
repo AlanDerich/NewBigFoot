@@ -59,7 +59,7 @@ fun LoansComposable(modifier: Modifier = Modifier,
     //this screen contains details on loans history
 //get data from firebase firestone
     var showStatsDialog by remember { mutableStateOf(false) }
-    var totalOutstandingLoanAmount = 0
+    var totalOutstandingLoanAmount: Int
     var totalOutstandingLoans = 0
     val loans = allLoans.value
     if (showStatsDialog) {
@@ -75,19 +75,12 @@ fun LoansComposable(modifier: Modifier = Modifier,
         }
     }
     loans.let {
-//        totalOutstandingLoanAmount = it.fold(0){
-//                total, loan ->
-//            if (!loan.status && loan.type== LoanType.PERSONAL_LOAN){
-//                totalOutstandingLoans++
-//                total + loan.amountLoaned
-//            }
-//            total
-//        }
-        it.forEach {loanAmount ->
-            if (!loanAmount.status && loanAmount.type == LoanType.PERSONAL_LOAN){
-                totalOutstandingLoanAmount += loanAmount.amountLoaned
+        totalOutstandingLoanAmount = it.fold(0){
+                total, loan ->
+            if (!loan.status && loan.type== LoanType.PERSONAL_LOAN) {
                 totalOutstandingLoans++
-            }
+                total + loan.amountLoaned
+            } else total
         }
         //device is in portrait mode
         if(deviceWidthSize == WindowWidthSizeClass.Compact){

@@ -25,6 +25,13 @@ object CommonVariables {
     fun Context.showMessage(message:String){
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
+    fun String.toIntOrZero(): Int {
+        return try {
+            this.toInt()
+        } catch (e: NumberFormatException) {
+            0
+        }
+    }
 
     //calculate the resulting date
     fun calculateResultingDate(newUserAmount: Int): String {

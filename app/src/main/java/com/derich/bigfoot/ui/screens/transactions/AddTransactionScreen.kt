@@ -39,6 +39,7 @@ import com.derich.bigfoot.model.Transactions
 import com.derich.bigfoot.ui.common.composables.CommonLinearProgressBar
 import com.derich.bigfoot.ui.common.composables.CommonVariables.calculateResultingDate
 import com.derich.bigfoot.ui.common.composables.CommonVariables.showMessage
+import com.derich.bigfoot.ui.common.composables.CommonVariables.toIntOrZero
 import com.derich.bigfoot.ui.screens.home.ContributionsViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -142,7 +143,7 @@ fun AddTransactionPage(selectedMember: MemberDetails,
         modifier = Modifier.padding(top = 4.dp),
         isError = (transactionPaidBy == ""))
     OutlinedTextField(value = transactionAmountPaid.toString(),
-        onValueChange = { transactionAmountPaid = it.toInt() },
+        onValueChange = { transactionAmountPaid = it.toIntOrZero() },
         label = { Text(text = "Amount paid") },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         modifier = Modifier.padding(top = 4.dp),

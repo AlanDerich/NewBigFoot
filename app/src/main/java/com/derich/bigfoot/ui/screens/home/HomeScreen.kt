@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -87,7 +88,7 @@ fun ContributionCard(contribution: MemberDetails,
             verticalAlignment = Alignment.CenterVertically
         ) {
             GlideImage(model = contribution.profPicUrl,
-                contentDescription = "Profile pic",
+                contentDescription = stringResource(id = R.string.profile_image_description),
                 transition = CrossFade,
                 loading = placeholder(R.drawable.bigfut1),
                 failure = placeholder(R.drawable.bigfut1),
@@ -188,7 +189,8 @@ fun CompactScreen(modifier: Modifier, allMembersInfo: List<MemberDetails>){
                 items = allMembersInfo
             ) { contribution ->
                 ContributionCard(contribution = contribution,
-                    modifier = modifier.fillMaxWidth()
+                    modifier = modifier
+                        .fillMaxWidth()
                         .padding(top = 8.dp))
             }
         }

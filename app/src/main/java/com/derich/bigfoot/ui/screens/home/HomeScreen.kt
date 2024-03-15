@@ -2,7 +2,6 @@ package com.derich.bigfoot.ui.screens.home
 
 import android.app.Activity
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -30,11 +29,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight.Companion.Bold
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.rememberAsyncImagePainter
+import com.bumptech.glide.integration.compose.CrossFade
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
+import com.bumptech.glide.integration.compose.placeholder
 import com.derich.bigfoot.R
 import com.derich.bigfoot.allMemberInformation
 import com.derich.bigfoot.deviceWidthSize
@@ -74,6 +75,7 @@ fun HomeComposable(modifier: Modifier = Modifier,
 }
 
 //a model for member details
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun ContributionCard(contribution: MemberDetails,
                      modifier: Modifier
@@ -84,13 +86,22 @@ fun ContributionCard(contribution: MemberDetails,
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = rememberAsyncImagePainter(contribution.profPicUrl),
-                contentDescription = stringResource(R.string.profile_image_description),
-                Modifier
+            GlideImage(model = contribution.profPicUrl,
+                contentDescription = "Profile pic",
+                transition = CrossFade,
+                loading = placeholder(R.drawable.bigfut1),
+                failure = placeholder(R.drawable.bigfut1),
+                modifier = Modifier
                     .clip(MaterialTheme.shapes.medium)
                     .size(68.dp)
             )
+//            Image(
+//                painter = rememberAsyncImagePainter(contribution.profPicUrl),
+//                contentDescription = stringResource(R.string.profile_image_description),
+//                Modifier
+//                    .clip(MaterialTheme.shapes.medium)
+//                    .size(68.dp)
+//            )
             UsersColumn(contribution = contribution)
         }
     }

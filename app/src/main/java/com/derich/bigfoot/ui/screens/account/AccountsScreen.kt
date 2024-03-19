@@ -49,11 +49,13 @@ fun AccountsComposable(
     //display portrait screen
     if(deviceWidthSize == WindowWidthSizeClass.Compact) {
         Column(
+            //make screen scrollable in case it is small
             modifier = modifier.padding(8.dp).verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
-                //make screen scrollable in case it is small
+
         ) {
+            //a badge to edit prof pic
             BadgedBox(badge = {
                 Badge {
                     IconButton(content = {

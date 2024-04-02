@@ -1,6 +1,5 @@
 package com.derich.bigfoot.ui.screens.account
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,18 +23,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil.compose.rememberAsyncImagePainter
+import com.bumptech.glide.integration.compose.CrossFade
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
+import com.bumptech.glide.integration.compose.placeholder
+import com.derich.bigfoot.R
 import com.derich.bigfoot.deviceWidthSize
 import com.derich.bigfoot.ui.bottomnavigation.BottomNavItem
 import com.derich.bigfoot.ui.common.composables.CommonVariables.CURRENT_USER_DETAILS
 import com.derich.bigfoot.ui.common.composables.CommonVariables.MemberRole
 import com.derich.bigfoot.ui.screens.login.AuthViewModel
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun AccountsComposable(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier.fillMaxSize(),
     navController: NavController,
     authViewModel: AuthViewModel
 ) {
@@ -44,11 +49,13 @@ fun AccountsComposable(
     //display portrait screen
     if(deviceWidthSize == WindowWidthSizeClass.Compact) {
         Column(
-            modifier = modifier.padding(8.dp).verticalScroll(rememberScrollState()).fillMaxSize(),
+            //make screen scrollable in case it is small
+            modifier = modifier.padding(8.dp).verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
-                //make screen scrollable in case it is small
+
         ) {
+            //a badge to edit prof pic
             BadgedBox(badge = {
                 Badge {
                     IconButton(content = {
@@ -63,9 +70,18 @@ fun AccountsComposable(
                         onClick = { navController.navigate(BottomNavItem.ImageUploader.screenRoute) })
                 }
             },modifier=Modifier.padding(4.dp)) {
-                Image(
-                    painter = rememberAsyncImagePainter(memberDetails.profPicUrl),
-                    contentDescription = "App Icon",
+//                Image(
+//                    painter = rememberAsyncImagePainter(memberDetails.profPicUrl),
+//                    contentDescription = "App Icon",
+//                    modifier = Modifier
+//                        .size(140.dp)
+//                        .clip(MaterialTheme.shapes.medium)
+//                )
+                GlideImage(model = memberDetails.profPicUrl,
+                    contentDescription = stringResource(id = R.string.profile_image_description),
+                    transition = CrossFade,
+                    loading = placeholder(R.drawable.bigfut1),
+                    failure = placeholder(R.drawable.bigfut1),
                     modifier = Modifier
                         .size(140.dp)
                         .clip(MaterialTheme.shapes.medium)
@@ -126,7 +142,7 @@ fun AccountsComposable(
     }
     //display landscape screen
     else{
-        Row(modifier = modifier.fillMaxSize()){
+        Row(modifier = modifier){
             Column(
                 modifier = Modifier
                     .padding(8.dp).weight(1f)
@@ -147,12 +163,13 @@ fun AccountsComposable(
                             onClick = { navController.navigate(BottomNavItem.ImageUploader.screenRoute) })
                     }
                 }) {
-                    Image(
-                        painter = rememberAsyncImagePainter(memberDetails.profPicUrl),
-                        contentDescription = "App Icon",
+                    GlideImage(model = memberDetails.profPicUrl,
+                        contentDescription = stringResource(id = R.string.profile_image_description),
+                        transition = CrossFade,
+                        loading = placeholder(R.drawable.bigfut1),
+                        failure = placeholder(R.drawable.bigfut1),
                         modifier = Modifier
                             .size(140.dp)
-//                            .clip(MaterialTheme.shapes.medium)
                     )
                 }
             }

@@ -71,6 +71,7 @@ dependencies {
     implementation("androidx.compose.material3:material3-window-size-class-android:1.2.1")
 //    implementation("org.apache.poi:poi:5.2.5")
     implementation("org.apache.poi:poi-ooxml:5.2.5")
+    implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
 
 
     testImplementation("junit:junit:4.13.2")

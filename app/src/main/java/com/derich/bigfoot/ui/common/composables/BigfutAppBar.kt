@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -32,7 +32,7 @@ fun BigFutAppBar(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .padding(8.dp)
                     .size(40.dp)
-                    .clip(MaterialTheme.shapes.medium)
+                    .clip(CircleShape)
             )
         Text(
             buildAnnotatedString {

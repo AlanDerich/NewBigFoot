@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
@@ -64,7 +65,7 @@ fun AccountsComposable(
                             contentDescription = "Edit",
                             modifier = modifier
                                 .size(16.dp)
-                                .clip(MaterialTheme.shapes.medium)
+                                .clip(CircleShape)
                         )
                     },
                         onClick = { navController.navigate(BottomNavItem.ImageUploader.screenRoute) })
@@ -75,7 +76,7 @@ fun AccountsComposable(
 //                    contentDescription = "App Icon",
 //                    modifier = Modifier
 //                        .size(140.dp)
-//                        .clip(MaterialTheme.shapes.medium)
+//                        .clip(CircleShape)
 //                )
                 GlideImage(model = memberDetails.profPicUrl,
                     contentDescription = stringResource(id = R.string.profile_image_description),
@@ -84,7 +85,7 @@ fun AccountsComposable(
                     failure = placeholder(R.drawable.bigfut1),
                     modifier = Modifier
                         .size(140.dp)
-                        .clip(MaterialTheme.shapes.medium)
+                        .clip(CircleShape)
                 )
 
             }
@@ -157,7 +158,7 @@ fun AccountsComposable(
                                 contentDescription = "Edit",
                                 modifier = Modifier
                                     .size(16.dp)
-//                                    .clip(MaterialTheme.shapes.medium)
+//                                    .clip(CircleShape)
                             )
                         },
                             onClick = { navController.navigate(BottomNavItem.ImageUploader.screenRoute) })

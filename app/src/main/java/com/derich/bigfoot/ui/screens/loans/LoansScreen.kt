@@ -51,7 +51,6 @@ import com.derich.bigfoot.ui.theme.ErrorRed
 import com.derich.bigfoot.ui.theme.SuccessGreen
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-@OptIn(ExperimentalCoroutinesApi::class)
 @Composable
 fun LoansComposable(modifier: Modifier = Modifier,
                     loansViewModel: LoansViewModel

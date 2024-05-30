@@ -2,7 +2,7 @@
 <resources>
 
     <style name="Theme.BigFoot" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">@color/grey_50</item>
+        <item name="android:statusBarColor">@color/gray_50</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
 </resources>

@@ -72,7 +72,7 @@ fun AddTransactionScreen(
                 OutlinedTextField(
                     value = selectedMember.fullNames,
                     onValueChange = { selectedMember.fullNames = it },
-                    label = { Text(text = "TextFieldTitle") },
+                    label = { Text(text = "Member Name") },
                     modifier = Modifier.wrapContentWidth()
                 )
                 DropDownList(

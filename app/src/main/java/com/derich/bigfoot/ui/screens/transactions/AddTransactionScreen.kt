@@ -1,7 +1,6 @@
 package com.derich.bigfoot.ui.screens.transactions
 
 import android.app.DatePickerDialog
-import android.content.Context
 import android.widget.DatePicker
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -37,7 +36,6 @@ import androidx.navigation.NavController
 import com.derich.bigfoot.model.MemberDetails
 import com.derich.bigfoot.model.Transactions
 import com.derich.bigfoot.ui.common.composables.CommonLinearProgressBar
-import com.derich.bigfoot.ui.common.composables.CommonVariables.calculateResultingDate
 import com.derich.bigfoot.ui.common.composables.CommonVariables.showMessage
 import com.derich.bigfoot.ui.common.composables.CommonVariables.toIntOrZero
 import com.derich.bigfoot.ui.screens.home.ContributionsViewModel
@@ -173,7 +171,11 @@ fun AddTransactionPage(selectedMember: MemberDetails,
                 isDisplayed = true
                 //start upload process
                 runBlocking {
-                    val task = transactionsViewModel.addTransaction(
+
+                    val updateTask= transactionsViewModel.updateMemberContributions(
+                        selectedMember.phoneNumber,
+                        selectedMember.fullNames,
+                        amountPaid = transactionAmountPaid,
                         transactionDetails = Transactions(
                             transactionDate = dateOfTransaction,
                             depositFor = selectedMember.fullNames,
@@ -181,22 +183,50 @@ fun AddTransactionPage(selectedMember: MemberDetails,
                             transactionAmount = transactionAmountPaid,
                             transactionConfirmation = transactionConfirmation,
                             savedBy = Firebase.auth.currentUser!!.phoneNumber.toString()
-                        ))
-                    task.addOnSuccessListener {
-                //call this function to update member details if the upload of transaction was successful
-                        updateContributions(
-                            selectedMember.phoneNumber,
-                            selectedMember.fullNames,
-                            calculateResultingDate(selectedMember.totalAmount.toInt() + transactionAmountPaid),
-                            newUserAmount = (selectedMember.totalAmount.toInt() + transactionAmountPaid).toString(),
-                            transactionsViewModel,
-                            mContext,
-                            navController = navController)
+                        )
+                    )
+
+                    updateTask.addOnSuccessListener {
+                        isDisplayed= false
+                        //do this if the upload was successful
+                        mContext.showMessage("The transaction was updated successfully!")
+                        transactionsViewModel.launchTransactionScreen(navController = navController)
+
+
                     }
-                    task.addOnFailureListener{
-                //do this if the upload failed due to some reason
+                    updateTask.addOnFailureListener{
+                        isDisplayed= false
+                        //do this if the upload failed due to some reason
                         mContext.showMessage("An error occurred during upload ${it.message.toString()}!")
                     }
+//
+//                    val task = transactionsViewModel.addTransaction(
+//                        transactionDetails = Transactions(
+//                            transactionDate = dateOfTransaction,
+//                            depositFor = selectedMember.fullNames,
+//                            depositBy = transactionPaidBy,
+//                            transactionAmount = transactionAmountPaid,
+//                            transactionConfirmation = transactionConfirmation,
+//                            savedBy = Firebase.auth.currentUser!!.phoneNumber.toString()
+//                        ))
+//                    task.addOnSuccessListener {
+//                //call this function to update member details if the upload of transaction was successful
+//
+//
+//
+//                        updateContributions(
+//                            selectedMember.phoneNumber,
+//                            selectedMember.fullNames,
+//                            calculateResultingDate(selectedMember.totalAmount.toInt() + transactionAmountPaid),
+//                            newUserAmount = (selectedMember.totalAmount.toInt() + transactionAmountPaid).toString(),
+//                            transactionsViewModel,
+//                            mContext,
+//                            navController = navController)
+//                    }
+//                    task.addOnFailureListener{
+//                //do this if the upload failed due to some reason
+//                        mContext.showMessage("An error occurred during upload ${it.message.toString()}!")
+//                    }
                 }
             }
                 else {
@@ -212,30 +242,31 @@ fun AddTransactionPage(selectedMember: MemberDetails,
         CommonLinearProgressBar()
     }
 }
-fun updateContributions(memberPhoneNumber: String,
-                        memberFullNames: String,
-                        resultingDate: String,
-                        newUserAmount: String,
-                        transactionsViewModel: TransactionsViewModel,
-                        mContext: Context,
-                        navController: NavController) {
-    runBlocking {
-        val task = transactionsViewModel.updateContributions(memberPhoneNumber,memberFullNames,resultingDate, newUserAmount)
-        task.addOnSuccessListener {
-            isDisplayed= false
-            //do this if the upload was successful
-            mContext.showMessage("The transaction was updated successfully!")
-            transactionsViewModel.launchTransactionScreen(navController = navController)
-
-
-        }
-        task.addOnFailureListener{
-            isDisplayed= false
-            //do this if the upload failed due to some reason
-            mContext.showMessage("An error occurred during upload ${it.message.toString()}!")
-        }
-    }
-}
+//fun updateContributions(memberPhoneNumber: String,
+//                        memberFullNames: String,
+//                        resultingDate: String,
+//                        newUserAmount: String,
+//                        transactionsViewModel: TransactionsViewModel,
+//                        mContext: Context,
+//                        navController: NavController) {
+//    runBlocking {
+//
+//        val task = transactionsViewModel.updateContributions(memberPhoneNumber,memberFullNames,resultingDate, newUserAmount)
+//        task.addOnSuccessListener {
+//            isDisplayed= false
+//            //do this if the upload was successful
+//            mContext.showMessage("The transaction was updated successfully!")
+//            transactionsViewModel.launchTransactionScreen(navController = navController)
+//
+//
+//        }
+//        task.addOnFailureListener{
+//            isDisplayed= false
+//            //do this if the upload failed due to some reason
+//            mContext.showMessage("An error occurred during upload ${it.message.toString()}!")
+//        }
+//    }
+//}
 @Composable
 fun DropDownList(
     requestToOpen: Boolean = false,

@@ -4,6 +4,8 @@ import android.util.Log
 import com.derich.bigfoot.model.Loan
 import com.derich.bigfoot.model.MemberDetails
 import com.derich.bigfoot.model.Transactions
+import com.derich.bigfoot.ui.common.composables.CommonVariables.calculateResultingDate
+import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.channels.awaitClose
@@ -114,9 +116,37 @@ fun updateProfPic(
             "contributionsDate", resultingDate,
             "totalAmount", newUserAmount
         )
-fun uploadTransactions(transactionDetails: Transactions) = firestore.collection("Transactions")
+    fun uploadTransactions(transactionDetails: Transactions) = firestore.collection("Transactions")
         .document(currentDate)
         .collection("allTransactions")
         .document(currentTime)
         .set(transactionDetails)
+
+    //add new groupTransaction transaction
+    fun updateContributionsTrxn(memberPhoneNumber: String,
+                                memberFullNames: String,
+                                amountPaid: Int,
+                                transactionDetails: Transactions): Task<Void> {
+        // [START transactions]
+        val groupTransDoc= firestore.collection("Transactions")
+            .document(currentDate)
+            .collection("allTransactions")
+            .document(currentTime)
+        val contributionsDoc= firestore.collection("Members")
+            .document(memberPhoneNumber)
+            .collection("allMembers")
+            .document(memberFullNames)
+
+        return firestore.runTransaction { transaction ->
+            val contributionsSnap = transaction.get(contributionsDoc)
+            val currentContributions = (contributionsSnap.get("totalAmount") as? String)?.toInt() ?: 0
+            transaction.set(groupTransDoc, transactionDetails)
+            transaction.update(contributionsDoc,
+                "contributionsDate", calculateResultingDate(currentContributions + amountPaid),
+                "totalAmount", (amountPaid+currentContributions).toString()
+            )
+            null
+        }
+        // [END transactions]
+    }
 }

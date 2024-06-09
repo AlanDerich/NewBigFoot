@@ -43,11 +43,22 @@ class TransactionsViewModel (
     fun addTransaction(transactionDetails: Transactions): Task<Void> {
             return firebaseDataSource.uploadTransactions(transactionDetails)
     }
-    fun updateContributions(memberPhoneNumber: String,
+    fun updateMemberContributions(memberPhoneNumber: String,
                                     memberFullNames: String,
-                                    resultingDate: String,
-                                    newUserAmount: String): Task<Void> {
-            return firebaseDataSource.updateContributions(memberPhoneNumber,memberFullNames,resultingDate, newUserAmount)
+                                    amountPaid: Int,
+                                  transactionDetails: Transactions): Task<Void> {
+            return firebaseDataSource.updateContributionsTrxn(
+                memberPhoneNumber,
+                memberFullNames,
+                amountPaid,
+                transactionDetails
+                )
+    }
+    fun updateContributions(memberPhoneNumber: String,
+                            memberFullNames: String,
+                            resultingDate: String,
+                            newUserAmount: String): Task<Void> {
+        return firebaseDataSource.updateContributions(memberPhoneNumber,memberFullNames,resultingDate, newUserAmount)
     }
     fun updateProfilePic(memberPhoneNumber: String,
                          memberFullNames: String,
@@ -72,6 +83,7 @@ class TransactionsViewModel (
                 }
 
             }
+
     }
 
 }
